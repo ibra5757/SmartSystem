@@ -1,0 +1,66 @@
+﻿@model FinalYear.Models.product
+
+
+
+<form method="post" action="@Url.Action( "Create","ManageStock")">
+
+    <div class="form-horizontal" style="font-size:14px;">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProName, new { htmlAttributes = new { @class = "proname form-control" } })
+                @Html.ValidationMessageFor(model => model.ProName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatID, "CatID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CatID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SubCatID, "SubCatID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SubCatID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SubCatID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success">Create</button>
+                <a href="@Url.Action( "Index","ManageStock")" class="btn btn-dark">Close</a>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".proname").validate({
+            rules: {
+                ProName: {
+                    required: true,
+                },
+                messages: {
+                    ProName: {
+                        required: "Product Name Is Requide"
+                    },
+            },
+
+
+        });
+    });
+</script>

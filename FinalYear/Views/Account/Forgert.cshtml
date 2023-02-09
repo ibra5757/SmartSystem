@@ -1,0 +1,25 @@
+﻿@model FinalYear.Models.user
+
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.Title = "Forget";
+
+}
+                            <form action="/credentials/Forget" method="post">
+                                <h2 class="fw-bold mb-5">LOGIN TO CONTINUE</h2>
+                                <div class="col">
+                                    <div class="form-outline mb-4">
+                                        <input type="tel" id="form3Example3" name="username" class="form-control " />
+                                        <label class="form-label" for="form3Example3">C.N.I.C No</label>
+
+                                    </div>
+
+
+                                    <div class="form-check d-flex justify-content-center ">
+                                        <button type="submit" class="btn btn-primary mb-4 d-flex justify-content-center">
+                                            Forget
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>

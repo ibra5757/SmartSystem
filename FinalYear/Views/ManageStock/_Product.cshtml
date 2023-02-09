@@ -1,0 +1,44 @@
+﻿<script src="https://kit.fontawesome.com/ef9da11eab.js" crossorigin="anonymous"></script>
+
+<div class="card-body bg-glass">
+
+    <table class="table" id="example">
+        <thead>
+            <tr>
+                <th>
+                    ProductName
+                </th>
+                <th>
+                    CatagoryName
+                </th>
+                <th>
+                    Sub_CatagoryName
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.ProductPartial)
+            {
+
+                <tr>
+                    <td>
+                        @item.ProName
+                    </td>
+                    <td>
+                        @item.category.Catname
+                    </td>
+                    <td>
+                        @item.Subcategory.SubCatname
+                    </td>
+                    <td>
+                        <button href="#" class="anchorDetail btn" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                        <button href="#" class="anchorDetail btn " data-url="/ManageStock/Details" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-info"></i></button>
+                        <button href="#" class="adelete btn " data-url="/ManageStock/_Delete" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-minus"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

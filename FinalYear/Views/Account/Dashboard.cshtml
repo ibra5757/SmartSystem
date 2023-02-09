@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.pageTitle = "Sales Analysis";
+    var image = ViewBag.Data;
+
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
+
+@*<form action="/Account/show" method="post">*@
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <input id="date_picker1" required value="04/25/2014" width="150" class="form-control" name="startDate" />
+                    </div>
+                    <div class="col-2">
+                        <input id="date_picker2" required value="04/25/2019" width="150" class="form-control" name="endDate" />
+                    </div>
+                    <div class="col-3">
+                        <select class="form-control" required name="type" id="typeselect">
+                            <option>Weekly</option>
+                            <option>Monthly</option>
+                            <option>Yearly</option>
+
+                        </select>
+                    </div>
+                    <div class="col "><button class="btn btn-outline-success" id="save" type="submit">Submit</button></div>
+                </div>
+                <br />
+                <br />
+                @*@Html.Partial("show")*@
+                <div id="result"></div>
+                @*<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status" id="loading-image">
+                    <span class="visually-hidden"></span>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    @*<div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>*@
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+@*</form>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+    var url = '@Url.Action("show", "Account")';
+$('#save').click(function() {
+    var startDates = $('#date_picker1').val();
+    var endDates = $('#date_picker2').val();
+    var types = $('#typeselect').val();
+   
+    if (Date.parse(startDates) < Date.parse(endDates)) {
+        $('#result').load(url, { startDate: startDates, endDate: endDates, type: types });
+    }
+    else {
+
+        alert("Invalid Date Range");
+    }
+    
+})
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+<script>
+
+    var xyValues = [
+        { x: 50, y: 7 },
+        { x: 60, y: 8 },
+        { x: 70, y: 8 },
+        { x: 80, y: 9 },
+        { x: 90, y: 9 },
+        { x: 100, y: 9 },
+        { x: 110, y: 10 },
+        { x: 120, y: 11 },
+        { x: 130, y: 14 },
+        { x: 140, y: 14 },
+        { x: 150, y: 15 }
+    ];
+
+    new Chart("myChart", {
+        type: "scatter",
+        data: {
+            datasets: [{
+                pointRadius: 4,
+                pointBackgroundColor: "rgb(0,0,255)",
+                data: xyValues
+            }]
+        },
+        options: {
+            legend: { display: false },
+            scales: {
+                xAxes: [{ ticks: { min: 40, max: 160 } }],
+                yAxes: [{ ticks: { min: 6, max: 16 } }],
+            }
+        }
+    });
+</script>
+<script>
+    //radar
+    var ctxR = document.getElementById("radarChart").getContext('2d');
+    var myRadarChart = new Chart(ctxR, {
+        type: 'radar',
+        data: {
+            labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+            datasets: [{
+                label: "My First dataset",
+                data: [65, 59, 90, 81, 56, 55, 40],
+                backgroundColor: [
+                    'rgba(105, 0, 132, .2)',
+                ],
+                borderColor: [
+                    'rgba(200, 99, 132, .7)',
+                ],
+                borderWidth: 2
+            },
+            {
+                label: "My Second dataset",
+                data: [28, 48, 40, 19, 96, 27, 100],
+                backgroundColor: [
+                    'rgba(0, 250, 220, .2)',
+                ],
+                borderColor: [
+                    'rgba(0, 213, 132, .7)',
+                ],
+                borderWidth: 2
+            }
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    });</script>
+<script>
+    //pie
+    var ctxP = document.getElementById("pieChart").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+            labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
+            datasets: [{
+                data: [300, 50, 100, 40, 120],
+                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+@*<script>
+        $(document).ready(function () {
+
+            $("#save").click(function () {
+                $.ajax({
+                    url: 'http://192.168.67.116:105/getalls',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        startDate: $("#date_picker1").val()
+                        /*endDate: $("#EndDatePicker").val() */}
+    ,
+                    success: function (data, textStatus, xhr) {
+                        console.log(data);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log('Error in Operation');
+                    }
+                });
+            });
+        });
+    </script>*@
+<script src="~/Scripts/jquery-3.6.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

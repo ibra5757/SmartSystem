@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<FinalYear.Models.Supplier>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.pageTitle = "Supplier";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+<ul class="nav nav-tabs card-header-tabs " id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Supplier</a>
+    </li>
+
+</ul>
+<div class="tab-content" id="myTabContent" style="background-color:#ffffff; ">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="card-body bg-glass" style="width:60rem">
+            <h5 class="card-title">Add New Products</h5>
+            <button href="#" class="acreate btn btn-success" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal">Create</button>
+
+            <br />
+            <table class="table" id="example">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            @Html.ActionLink("Name", "Index")
+                        </th>
+                        <th scope="col">
+                            @Html.ActionLink("Conatct", "Index")
+                        </th>
+                        <th scope="col">
+                            @Html.ActionLink("Comapany Date", "Index")
+                        </th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td scope="row">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contact)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Company)
+                            </td>
+                            <td>
+                                <button href="#" class="anchorDetail btn btn-success btn-sm" data-url="/Supplier/_Edit" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Edit</button>
+
+                                <button href="#" class="anchorDetail btn btn-info btn-sm" data-url="/Supplier/Details" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Details</button>
+                                <button href="#" class="adelete btn btn-danger btn-sm" data-url="/Supplier/_Delete" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                <tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/ShowTbl.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.semanticui.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.semanticui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="~/Scripts/ShowTbl.js"></script>
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+﻿<button class="btn " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <i class="fa-solid fa-plus"></i>
+</button>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        @Html.Partial("~/Views/ProDetail/_create.cshtml")
+    </div>
+    </div>
+    <table class="table" id="prodetail">
+        <thead>
+            <tr>
+                <th>
+                    ProName
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    ProDuctUnit
+                </th>
+
+                <th>
+                    Quantity
+                </th>
+
+                <th>
+                    Packing
+                </th>
+                <th>
+                    Price
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.proDetails)
+                {
+            <tr>
+                <td>
+                    @item.product.ProName
+                </td>
+                <td>
+                    @item.Type
+                </td>
+                <td>
+                    @item.ProUnit
+                </td>
+
+                <td>
+                    @item.Quantity
+                </td>
+
+                <td>
+                    @item.Packing
+                </td>
+                <td>
+                    @item.U_Price
+                </td>
+
+                <td>
+                <button href="#" class="anchorDetail btn btn-success btn-sm" data-url="/ProDetail/Edit" data-id="@item.PDId"  data-bs-toggle="model" data-target="#myModal">Edit</button>
+
+                <button href="#" class="anchorDetail btn btn-info btn-sm" data-url="/ProDetail/Details" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Details</button>
+                <button href="#" class="adelete btn btn-danger btn-sm" data-url="/ProDetail/_Delete" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Delete</button>
+                </td>
+            </tr>
+                }
+        </tbody>
+    </table>
+    <script>
+
+    $(document).ready(function () {
+        $('#prodetail').DataTable();
+    });
+
+    </script>

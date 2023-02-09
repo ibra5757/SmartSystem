@@ -1,0 +1,31 @@
+﻿@model FinalYear.Models.product
+
+<div style="font-size:14px;">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProName)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.category.Catname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.Catname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subcategory.SubCatname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subcategory.SubCatname)
+        </dd>
+
+    </dl>
+</div>

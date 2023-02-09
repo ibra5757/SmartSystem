@@ -1,0 +1,42 @@
+﻿@model FinalYear.Models.product
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.category.Catname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.Catname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subcategory.SubCatname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subcategory.SubCatname)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

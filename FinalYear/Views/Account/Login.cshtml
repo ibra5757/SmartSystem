@@ -1,0 +1,79 @@
+﻿@model FinalYear.Models.user
+
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.Title = "Login";
+}
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<form action="/Account/login" method="post">
+    <h2 class="fw-bold mb-5">LOGIN TO CONTINUE</h2>
+    <div class="col">
+        <small> @TempData["loginerror"]</small>
+        <div class="form-outline mb-4">
+            <input type="text" id="form3Example3" name="username" class="form-control " />
+            <label class="form-label" for="form3Example3">UserName</label>
+
+        </div>
+        <label class="form-helper form-text" id="lbl_">@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })</label>
+
+
+        <!-- Password input -->
+        <div class="form-outline d-flex justify-content-center mb-4 ">
+            <input type="password" id="form3Example4" name="password" class="form-control " />
+            <label class="form-label" for="form3Example4">Password</label>
+        </div>
+        <label class="form-helper form-text" id="lbl_">@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })</label>
+
+
+        <div class="form-check d-flex justify-content-center ">
+            <button type="submit" class="btn btn-primary mb-4 d-flex justify-content-center" style="width:100px;">
+                Login
+            </button>
+            &nbsp;&nbsp;&nbsp;
+            <a href="@Url.Action("Register","Account")" class="btn btn-primary mb-4 d-flex justify-content-center" style="width:100px;">
+                Signup
+            </a>
+        </div>
+        <!-- Submit button -->
+        <!-- Checkbox -->
+        <div class="form-check d-flex justify-content-center mb-4">
+            <a href=@Url.Action("Account","login") class="link-secondary">Forget Password</a>
+        </div>
+    </div>
+</form>
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+
+
+            var error = '@TempData["LoginError"]';
+
+
+            document.getElementById("btn").innerHTML = error;
+            document.getElementById("btn").style.display = "block";
+            //if (error) {
+            //   // alert(error);
+            //    Swal.fire({
+            //        title: 'Error!',
+            //        text: 'Do you want to continue',
+            //        icon: 'error',
+            //        confirmButtonText: 'Cool'
+
+            //    })
+            //}
+
+</script>
+<script type="text/javascript">
+    function HideLabel() {
+        document.getElementById('lbl_').style.display = "none";
+    }
+    setTimeout("HideLabel();", 2000);
+</script>

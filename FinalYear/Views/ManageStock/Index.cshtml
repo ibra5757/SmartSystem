@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FinalYear.Models.product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.pageTitle = "Products";
+
+}
+
+
+<ul class="nav nav-tabs card-header-tabs " id="mytab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">product</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Catagory</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">sub catagory</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pro-tab" data-toggle="tab" href="#pro" role="tab" aria-controls="pro" aria-selected="false">ProductDetail</a>
+    </li>
+</ul>
+<div class="tab-content" id="mytabcontent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="card-body">
+
+            <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus">Product</i></a>
+
+
+            @Html.Partial("_Product")
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="card-body">
+
+            @Html.Partial("~/Views/categories/_index.cshtml")
+        </div>
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <div class="card-body">
+
+            @Html.Partial("~/Views/Subcategories/_index.cshtml")
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pro" role="tabpanel" aria-labelledby="pro-tab">
+        <div class="card-body">
+
+            @Html.Partial("~/Views/ProDetail/_ListProDetail.cshtml")
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/_delete.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.semanticui.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.semanticui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="~/Scripts/ShowTbl.js"></script>

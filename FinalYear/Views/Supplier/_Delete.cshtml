@@ -1,0 +1,41 @@
+﻿@model FinalYear.Models.Supplier
+
+<h6>Are you sure you want to delete this?</h6>
+<div>
+    <dl class="dl-horizontal"  style="font-size:14px; ">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Contact)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Contact)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("DeleteConfirmed/"+Model.SupplierID, "Supplier",FormMethod.Post)) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color align-item-end">
+
+            <button type="submit" value="Delete" class="btn btn-danger">Delete</button> 
+            <a href="@Url.Action("Back to List", "Index")" value="Delete" class="btn btn-dark">Close</a>  
+        </div>
+    }
+</div>

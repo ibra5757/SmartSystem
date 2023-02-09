@@ -1,0 +1,283 @@
+﻿
+@{
+
+    if (Session["UserID"] == null)
+    {
+        <script>window.location.href = "/Account/Login";</script>
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/Css/style.css" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/ef9da11eab.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="background-color:azure;">
+        <div class="container-fluid justify-content-center">
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-3 me-lg-1">
+                    <a class="nav-link d-sm-flex align-items-sm-center">
+
+                        <strong class="d-none d-sm-block ms-1" style="color:white;">@ViewBag.pageTitle</strong>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="container-fluid justify-content-end">
+            <ul class="navbar-nav flex-row">
+                @*<li class="nav-item me-3 me-lg-1">
+                        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+
+                            <strong class="d-none d-sm-block ms-1" style="color:white;">@ViewBag.pageTitle</strong>
+                        </a>
+                    </li>*@
+                <li class="nav-item me-3 me-lg-1  ">
+                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+
+                        <strong class="d-none d-sm-block ms-1">@Session["FullName"]</strong>
+                    </a>
+                </li>
+
+                <!--       <li class="nav-item dropdown me-3 me-lg-1">
+                        <a
+                          class="nav-link dropdown-toggle hidden-arrow"
+                          href="#"
+                          id="navbarDropdownMenuLink"
+                          role="button"
+                          data-mdb-toggle="dropdown"
+                          aria-expanded="false"
+                        > -->
+                <!--  <i class="fas fa-comments fa-lg"></i>
+
+                    <span class="badge rounded-pill badge-notification bg-danger">6</span>
+                  </a>
+                  <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="navbarDropdownMenuLink"
+                  >
+                    <li>
+                      <a class="dropdown-item" href="#">Some news</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Another news</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </li>
+                  </ul>
+                </li> -->
+                @*<li class="nav-item dropdown me-3 me-lg-1">
+                        <a class="nav-link dropdown-toggle hidden-arrow"
+                           href="#"
+                           id="navbarDropdownMenuLink"
+                           role="button"
+                           data-mdb-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="badge rounded-pill badge-notification bg-danger">12</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="#">Some news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Another news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown me-3 me-lg-1">
+                        <a class="nav-link dropdown-toggle hidden-arrow"
+                           href="#"
+                           id="navbarDropdownMenuLink"
+                           role="button"
+                           data-mdb-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="fas fa-chevron-circle-down fa-lg"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="#">Some news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Another news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </li>*@
+                <li class="nav-item me-3 me-lg-1">
+                    <a class="nav-link" href="@Url.Action("Logout","Account")">
+                        <span><img style="height:24px; width:24px; " src="~/Icons/logout.png" /></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    <!-- Navbar-->
+    <div class="sidebar"  style="z-index:10001 !important">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">Flint_INC.</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            @*<li>
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search...">
+                    <span class="tooltip">Search</span>
+                </li>*@
+            <li>
+                <a href="@Url.Action("Dashboard","Account")">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","ManageStock")">
+                    <i class='bx bx-user'></i>
+                    <span class="links_name">StockManage</span>
+                </a>
+                <span class="tooltip">Manage stock</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","purchases")">
+                    <i class='bx bx-chat'></i>
+                    <span class="links_name">Purchases</span>
+                </a>
+                <span class="tooltip">Purchases</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-pie-chart-alt-2'></i>
+                    <span class="links_name">Ledger</span>
+                </a>
+                <span class="tooltip">Ledger</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-folder'></i>
+                    <span class="links_name">Activity Log</span>
+                </a>
+                <span class="tooltip">Activity Log</span>
+            </li>
+            @*<li>
+                <a href="#">
+                    <i class='bx bx-cart-alt'></i>
+                    <span class="links_name">Staff</span>
+                </a>
+                <span class="tooltip">Staff</span>
+            </li>*@
+            <li>
+                <a href="@Url.Action("Index", "Supplier")">
+                    <i class='bx bxs-user'></i>
+                    <span class="links_name">Supplier</span>
+                </a>
+                <span class="tooltip">Supplier</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Indexuser","users")">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Setting</span>
+                </a>
+                <span class="tooltip">Setting</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Analysis</span>
+                </a>
+                <span class="tooltip">Analysis</span>
+            </li>
+
+        </ul>
+    </div>
+    <section class="home-section col d-flex justify-content-center background-radial-gradient" style="font-family:Roboto; font-size:14px; ">
+        <link href="~/Content/Css/blocks.css" rel="stylesheet" />
+        <div class="container px-1 py-2 px-md-1 text-lg-start my-5">
+            <div class="row gx-lg-5 align-items-center mb-5">
+
+                <div class="col-lg mb-5 mb-lg position-relative">
+                    <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                    <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+
+
+                    <div class="card bg-glass " style="width: 80rem;">
+                        <div class="card-header bg-glass" style="background-color:#ffffff;">
+                            @RenderBody()
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Supplier</h5>
+                    <button type="button" class="close" id="closbtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body" id='myModalContent'></div>
+
+
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/_CreateScript.js"></script>
+    <script src="~/Scripts/_delete.js"></script>
+    <script src="~/Scripts/_Detail.js"></script>
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();//calling the function(optional)
+        });
+
+        searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
+            sidebar.classList.toggle("open");
+            menuBtnChange(); //calling the function(optional)
+        });
+
+        // following are the code to change sidebar button(optional)
+        function menuBtnChange() {
+            if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+            } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
+            }
+        }
+    </script>
+</body>
+
+</html>

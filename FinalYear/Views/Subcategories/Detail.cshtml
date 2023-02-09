@@ -1,0 +1,28 @@
+﻿@model FinalYear.Models.Subcategory
+
+<div>
+    <h4>Subcategory</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SubCatname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubCatname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.category.Catname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.Catname)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SubCatID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

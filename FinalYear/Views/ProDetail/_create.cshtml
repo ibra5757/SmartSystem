@@ -1,0 +1,132 @@
+﻿<form action="@Url.Action("Create","ProDetail")" method="post" id="prodtl">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <table class="table">
+        <tr>
+            <td>
+
+                <div class="form-group">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <small class="form-label col-md" for="Allpro">Product</small>
+                    <select class="form-control" id="Allpro">
+                        @*<option value="" disabled selected hidden>Select your option</option>*@
+                        @if (ViewBag.ProCmb != null)
+                        {
+                            foreach (var item in ViewBag.ProCmb)
+                            {
+                                <option value="@item.ProID">@item.ProName</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+                <small class="form-label col-md" for="Allpro"></small>
+                <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus">Product</i></a>
+
+                @*<input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example" aria-describedby="btnGroupAddon">*@
+            </td>
+            <td>
+
+
+                <div class="form-group">
+                    <small class="form-label col-md-2">Types</small>
+
+                    <select class="form-control" name="Type">
+                        @*<option value="" disabled selected hidden>Select your option</option>*@
+                        @if (ViewBag.Pd_type != null)
+                        {
+                            foreach (var item in ViewBag.Pd_type)
+                            {
+                                <option value="@item.PDId">@item.Type</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <small class="control-label col-md-2">Unit</small>
+
+                    <input type="text" placeholder="Unit" class="form-control" required="" name="ProUnit"/>
+
+                </div>
+
+            </td>
+            <td>
+
+
+                <div class="form-group">
+                    <small class="control-label col-md-2">Packing</small>
+
+                    <input type="number" placeholder="Packing" class="form-control"required="" min="1" name="Packing"/>
+                </div>
+
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <small class="control-label col-md-2">Price</small>
+
+                    <input type="number" placeholder="Price" class="form-control" required="" min="1" name="Price" />
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+</form>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".prodtl").validate({
+            rules: {
+                ProUnit: {
+                    required: true,
+                },
+                Price: {
+                    required: true,
+                    min:1,
+                },
+                Packing: {
+                    required: true,
+                    min: 1,
+                },
+                Allpro: {
+                    requred: {
+                        depends: function (element) {
+                            return $("#Allpro").val() == "Select your option";
+                        }
+                    }
+                }
+
+            },
+            messages: {
+                SubCatname: {
+                    required: "SubcatagoryName"
+                },
+                Allpro: {
+                    required: "Please select an option from the list, if none are appropriate please select 'Other'",
+                },
+
+            }
+
+        });
+    });
+</script>
