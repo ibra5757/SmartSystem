@@ -1,0 +1,132 @@
+﻿@model FinalYear.Models.Product
+<form method="post" id="productform">
+
+    <div class="form-horizontal" style="font-size:14px;">
+
+        <div class="form-group">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <label class="control-label col-md-2">ProductName</label>
+                       <input name="ProName" value="@Model.ProName" id="ProName" type="text" class="form-control col-md-9" />
+                    </div>
+                    <div class="col">
+                        <label class="control-label col-md-2">Code</label>
+                        <input name="Code" id="Code" type="number" value="@Model.Code" class="form-control col-md-6" hidden />
+                        <input name="ProID" id="ProID" type="number" value="@Model.ProID" class="form-control col-md-6" hidden />
+                        <p id="sessionval">@Model.Code</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatID, "CatID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CatID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SubCatID, "SubCatID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SubCatID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SubCatID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success">Create</button>
+                <button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var isValidated = false;
+        $.validator.addMethod("uniqueproduct", function (value, element) {
+            var data = $('#ProName').val();
+            debugger
+            var isValid = false;
+            $.ajax({
+                url: '/ManageStock/FindByName',
+                type: 'POST',
+                data: { ProName: data },
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    isValid = response.isUnique;
+                }
+
+            });
+            return isValid;
+        }, "Product Name already exists.");
+
+        $("#productform").validate({
+            rules: {
+                ProName: {
+                    required: true,
+                    uniqueproduct: true
+                },
+                Code: {
+                    required: true,
+                },
+
+            },
+
+            submitHandler: function (form) {
+                $.ajax({
+
+                    url: "/ManageStock/Edit",
+                    type: 'POST',
+                    data: $('#productform').serialize(),
+                    success: function (data) {
+                        if (data.success) {
+
+                            $("#ProName").val("");
+                            toastr["success"](data.message);
+                        }
+                        else {
+                            toastr["danger"](data.message);
+                        }
+
+                    }
+                });
+            }
+            //errorPlacement: function (error, element) {
+            //    $("#message").html(error.text());
+            //}
+
+        });
+        $("#Catname").on("keyup", function () {
+            // Validate the form agai
+            if (!isValidated) {
+                $("#productform").validate().element("#ProName");
+                // Update the error message if the validation is successful
+                if ($("#productform").validate().element("#ProName")) {
+                    $("#message").html("");
+                }
+            } else {
+                // Validate the form
+                $("#productform").valid();
+                console.log("not");
+            }
+        });
+    });
+
+</script>

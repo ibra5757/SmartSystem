@@ -1,4 +1,4 @@
-﻿@model FinalYear.Models.Subcategory
+﻿@model FinalYear.Models.SubCategory
 
 <div>
     <h4>Subcategory</h4>
@@ -13,16 +13,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.category.Catname)
+            @Html.DisplayNameFor(model => model.Category.Catname)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.category.Catname)
+            @Html.DisplayFor(model => model.Category.Catname)
         </dd>
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.SubCatID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+<script src="~/Scripts/Closebtn.js"></script>

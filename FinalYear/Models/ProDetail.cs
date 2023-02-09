@@ -11,34 +11,34 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ProDetail
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProDetail()
         {
-            this.Batches = new HashSet<Batch>();
-            this.purchasesitems = new HashSet<purchasesitem>();
-            this.returneditems = new HashSet<returneditem>();
-            this.salesitems = new HashSet<salesitem>();
+            this.SODetails = new HashSet<SODetail>();
+            this.PODetails = new HashSet<PODetail>();
         }
     
         public int PDId { get; set; }
-        public string ProUnit { get; set; }
         public Nullable<int> ProId { get; set; }
-        public int Quantity { get; set; }
-        public string Type { get; set; }
-        public string Packing { get; set; }
-        public int U_Price { get; set; }
+        [Required]
+        public string ProductUnit { get; set; }
+        [Required]
+        public string ProductType { get; set; }
+        [Required]
+        public Nullable<int> Packing { get; set; }
+        [Required]
+        public Nullable<long> CostPrice { get; set; }
+        [Required]
+        public Nullable<long> UnitPrice { get; set; }
     
+        public virtual Product Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Batch> Batches { get; set; }
-        public virtual product product { get; set; }
+        public virtual ICollection<SODetail> SODetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<purchasesitem> purchasesitems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<returneditem> returneditems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<salesitem> salesitems { get; set; }
+        public virtual ICollection<PODetail> PODetails { get; set; }
     }
 }

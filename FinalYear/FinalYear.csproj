@@ -173,6 +173,7 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Closebtn.js" />
     <Content Include="Scripts\Datatablesetting.js" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -223,16 +224,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="img\JqueryDatatableParam.cs" />
-    <Compile Include="Models\Batch.cs">
+    <Compile Include="Models\6digitRand.cs" />
+    <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\category.cs">
+    <Compile Include="Models\Company.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\customer.cs">
+    <Compile Include="Models\Customer.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\imagebuffer.cs" />
+    <Compile Include="Models\DbcontextPO.cs" />
+    <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\JqueryDatatableParam.cs" />
     <Compile Include="Models\LoginHelper.cs" />
     <Compile Include="Models\Model1.Context.cs">
@@ -250,46 +253,37 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\PODetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PredictedValue.cs" />
     <Compile Include="Models\ProDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\product.cs">
+    <Compile Include="Models\Product.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\purchase.cs">
+    <Compile Include="Models\PurchaseOrderMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\purchaseledger.cs">
+    <Compile Include="Models\SalesOrderMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\purchasesitem.cs">
+    <Compile Include="Models\SODetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\returneditem.cs">
+    <Compile Include="Models\SubCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sale.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\salesitem.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\salesledger.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Subcategory.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Supplier.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\summary.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\user.cs">
+    <Compile Include="Models\URLClass.cs" />
+    <Compile Include="Models\User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\userlog.cs">
+    <Compile Include="Models\UserLog.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WebRoleProvider.cs" />
@@ -350,24 +344,29 @@
     <Content Include="Views\purchasesitems\Create.cshtml" />
     <Content Include="Views\purchasesitems\Delete.cshtml" />
     <Content Include="Views\purchasesitems\Details.cshtml" />
-    <Content Include="Views\purchasesitems\Edit.cshtml" />
     <Content Include="Views\purchasesitems\Index.cshtml" />
     <Content Include="Views\purchases\_List.cshtml" />
     <Content Include="Views\ProDetail\_create.cshtml" />
     <Content Include="Views\ProDetail\Edit.cshtml" />
     <Content Include="Views\ProDetail\_ListProDetail.cshtml" />
     <Content Include="Views\users\Indexuser.cshtml" />
-    <Content Include="Views\users\_createuser.cshtml" />
     <Content Include="Views\users\_list.cshtml" />
     <Content Include="Views\users\_currentuser.cshtml" />
     <Content Include="Views\users\View.cshtml" />
     <Content Include="Views\Supplier\_Edit.cshtml" />
     <Content Include="Views\Analysis\Index.cshtml" />
     <Content Include="Views\Account\show.cshtml" />
-    <Content Include="Views\Subcategories\_Create.cshtml" />
+    <Content Include="Views\Subcategories\Create.cshtml" />
     <Content Include="Views\userlogs\_list.cshtml" />
     <Content Include="Views\Subcategories\Edit.cshtml" />
     <Content Include="Views\Subcategories\Detail.cshtml" />
+    <Content Include="Views\Analysis\_ShowAnalysis.cshtml" />
+    <Content Include="Views\Account\_piechartview.cshtml" />
+    <Content Include="Views\Analysis\_Aftergradientdecent.cshtml" />
+    <Content Include="Views\ManageStock\_Edit.cshtml" />
+    <Content Include="Views\purchases\_Detail.cshtml" />
+    <Content Include="Views\purchases\Edit.cshtml" />
+    <Content Include="Views\purchasesitems\_Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -13,7 +13,7 @@ namespace FinalYear.Controllers
 {
     public class SupplierController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: Supplier
         public ActionResult Index(string Sorting_Order, string Search_Data, string Filter_Value, int? Page_No)
@@ -33,26 +33,23 @@ namespace FinalYear.Controllers
 
             ViewBag.FilterValue = Search_Data;
 
-            var students = from stu in db.Suppliers select stu;
+            var students = from stu in db.Companies select stu;
 
             if (!String.IsNullOrEmpty(Search_Data))
             {
-                students = students.Where(stu => stu.Name.ToUpper().Contains(Search_Data.ToUpper())
-                    || stu.Contact.ToUpper().Contains(Search_Data.ToUpper())||stu.Company.ToUpper().Contains(Search_Data.ToUpper()));
+                students = students.Where(stu => stu.CompanyName.ToUpper().Contains(Search_Data.ToUpper())
+                    || stu.Contact.ToUpper().Contains(Search_Data.ToUpper()));
             }
                 switch (Sorting_Order)
                 {
                     case "Name_Description":
-                        students = students.OrderByDescending(stu => stu.Name);
+                        students = students.OrderByDescending(stu => stu.CompanyName);
                         break;
                     case "Date_Enroll":
                         students = students.OrderBy(stu => stu.Contact);
                         break;
-                    case "Date_Description":
-                        students = students.OrderByDescending(stu => stu.Company);
-                        break;
                     default:
-                        students = students.OrderBy(stu => stu.Name);
+                        students = students.OrderBy(stu => stu.CompanyName);
                         break;
                 }
 
@@ -68,7 +65,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Supplier supplier = db.Suppliers.Find(id);
+            Company supplier = db.Companies.Find(id);
             if (supplier == null)
             {
                 return HttpNotFound();
@@ -87,11 +84,11 @@ namespace FinalYear.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SupplierID,Name,Contact,Company")] Supplier supplier)
+        public ActionResult Create(Company supplier)
         {
             if (ModelState.IsValid)
             {
-                db.Suppliers.Add(supplier);
+                db.Companies.Add(supplier);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -106,7 +103,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Supplier supplier = db.Suppliers.Find(id);
+            Company supplier = db.Companies.Find(id);
             if (supplier == null)
             {
                 return HttpNotFound();
@@ -119,7 +116,7 @@ namespace FinalYear.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult _Edit([Bind(Include = "SupplierID,Name,Contact,Company")] Supplier supplier)
+        public ActionResult _Edit(Company supplier)
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +134,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Supplier supplier = db.Suppliers.Find(id);
+            Company supplier = db.Companies.Find(id);
             if (supplier == null)
             {
                 return HttpNotFound();
@@ -147,13 +144,13 @@ namespace FinalYear.Controllers
 
         // POST: Supplier/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public JsonResult DeleteConfirmed(int id)
         {
-            Supplier supplier = db.Suppliers.Find(id);
-            db.Suppliers.Remove(supplier);
+            Company supplier = db.Companies.Find(id);
+            db.Companies.Remove(supplier);
             db.SaveChanges();
-            return RedirectToAction("Index", "Supplier");
+
+            return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

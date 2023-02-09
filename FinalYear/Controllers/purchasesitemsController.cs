@@ -12,37 +12,31 @@ namespace FinalYear.Controllers
 {
     public class purchasesitemsController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: purchasesitems
         public ActionResult Index()
         {
-            var purchasesitems = db.purchasesitems.Include(p => p.ProDetail).Include(p => p.product).Include(p => p.purchase).Include(p => p.Supplier);
+            var purchasesitems = db.PODetails.Include(p => p.ProDetail).Include(p => p.ProDetail.ProId).Include(p => p.PurchaseOrderMaster);
             return View(purchasesitems.ToList());
         }
 
         // GET: purchasesitems/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            purchasesitem purchasesitem = db.purchasesitems.Find(id);
-            if (purchasesitem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(purchasesitem);
+            
+                ViewBag.purchasesitemsList = db.PODetails.Where(x=>x.POID==id).ToList();
+            
+            return PartialView();
         }
 
         // GET: purchasesitems/Create
         public ActionResult Create()
         {
             ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit");
-            ViewBag.ProID = new SelectList(db.products, "ProID", "ProName");
-            ViewBag.PurchaseId = new SelectList(db.purchases, "PurchaseId", "PurchaseId");
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name");
+            ViewBag.ProID = new SelectList(db.Products, "ProID", "ProName");
+            ViewBag.PurchaseId = new SelectList(db.PurchaseOrderMasters, "PurchaseId", "PurchaseId");
+            ViewBag.SupplierID = new SelectList(db.Companies, "SupplierID", "Name");
             return View();
         }
 
@@ -51,19 +45,19 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,PurchaseId,ProID,PDId,Quantity,SupplierID")] purchasesitem purchasesitem)
+        public ActionResult Create([Bind(Include = "ID,PurchaseId,ProID,PDId,Quantity,SupplierID")] PODetail purchasesitem)
         {
             if (ModelState.IsValid)
             {
-                db.purchasesitems.Add(purchasesitem);
+                db.PODetails.Add(purchasesitem);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit", purchasesitem.PDId);
-            ViewBag.ProID = new SelectList(db.products, "ProID", "ProName", purchasesitem.ProID);
-            ViewBag.PurchaseId = new SelectList(db.purchases, "PurchaseId", "PurchaseId", purchasesitem.PurchaseId);
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name", purchasesitem.SupplierID);
+            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit", purchasesitem.PODetail_Id);
+            ViewBag.ProID = new SelectList(db.Products, "ProID", "ProName", purchasesitem.ProDetail);
+            ViewBag.PurchaseId = new SelectList(db.PurchaseOrderMasters, "PurchaseId", "PurchaseId", purchasesitem.POID);
+          //  ViewBag.SupplierID = new SelectList(db.Companies, "SupplierID", "Name", purchasesitem.c);
             return View(purchasesitem);
         }
 
@@ -74,16 +68,16 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            purchasesitem purchasesitem = db.purchasesitems.Find(id);
+           PODetail  purchasesitem = db.PODetails.Find(id);
             if (purchasesitem == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit", purchasesitem.PDId);
-            ViewBag.ProID = new SelectList(db.products, "ProID", "ProName", purchasesitem.ProID);
-            ViewBag.PurchaseId = new SelectList(db.purchases, "PurchaseId", "PurchaseId", purchasesitem.PurchaseId);
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name", purchasesitem.SupplierID);
-            return View(purchasesitem);
+            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProductUnit", purchasesitem.PODetail_Id);
+            ViewBag.ProID = new SelectList(db.Products, "ProID", "ProName", purchasesitem.POID);
+            ViewBag.POID = new SelectList(db.PurchaseOrderMasters, "POID", "POID", purchasesitem.POID);
+
+            return PartialView("_Edit",purchasesitem);
         }
 
         // POST: purchasesitems/Edit/5
@@ -91,7 +85,7 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,PurchaseId,ProID,PDId,Quantity,SupplierID")] purchasesitem purchasesitem)
+        public ActionResult Edit([Bind(Include = "ID,PurchaseId,ProID,PDId,Quantity,SupplierID")] PODetail purchasesitem)
         {
             if (ModelState.IsValid)
             {
@@ -99,10 +93,10 @@ namespace FinalYear.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit", purchasesitem.PDId);
-            ViewBag.ProID = new SelectList(db.products, "ProID", "ProName", purchasesitem.ProID);
-            ViewBag.PurchaseId = new SelectList(db.purchases, "PurchaseId", "PurchaseId", purchasesitem.PurchaseId);
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name", purchasesitem.SupplierID);
+            ViewBag.PDId = new SelectList(db.ProDetails, "PDId", "ProUnit", purchasesitem.PODetail_Id);
+            ViewBag.ProID = new SelectList(db.Products, "ProID", "ProName", purchasesitem.POID);
+            ViewBag.PurchaseId = new SelectList(db.PurchaseOrderMasters, "PurchaseId", "PurchaseId", purchasesitem.POID);
+
             return View(purchasesitem);
         }
 
@@ -113,7 +107,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            purchasesitem purchasesitem = db.purchasesitems.Find(id);
+            PODetail purchasesitem = db.PODetails.Find(id);
             if (purchasesitem == null)
             {
                 return HttpNotFound();
@@ -126,8 +120,8 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            purchasesitem purchasesitem = db.purchasesitems.Find(id);
-            db.purchasesitems.Remove(purchasesitem);
+            PODetail purchasesitem = db.PODetails.Find(id);
+            db.PODetails.Remove(purchasesitem);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

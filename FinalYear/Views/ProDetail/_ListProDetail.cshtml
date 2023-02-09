@@ -1,77 +1,81 @@
-﻿<button class="btn " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    <i class="fa-solid fa-plus"></i>
-</button>
-<div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        @Html.Partial("~/Views/ProDetail/_create.cshtml")
-    </div>
-    </div>
-    <table class="table" id="prodetail">
+﻿
+<div class="card card-body">
+    @Html.Partial("~/Views/ProDetail/_create.cshtml")
+
+
+    <table class="display compact" id="example1">
+
         <thead>
             <tr>
                 <th>
                     ProName
                 </th>
                 <th>
-                    Type
+                    ProductType
                 </th>
                 <th>
-                    ProDuctUnit
-                </th>
-
-                <th>
-                    Quantity
+                    ProductUnit
                 </th>
 
                 <th>
                     Packing
                 </th>
                 <th>
-                    Price
+                    UnitPrice
                 </th>
-
-                <th></th>
+                <th>
+                    CostPrice
+                </th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in ViewBag.proDetails)
-                {
-            <tr>
-                <td>
-                    @item.product.ProName
-                </td>
-                <td>
-                    @item.Type
-                </td>
-                <td>
-                    @item.ProUnit
-                </td>
+            {
+                <tr>
+                    <td>
+                        @item.Product.ProName
+                    </td>
+                    <td>
+                        @item.ProductType
+                    </td>
+                    <td>
+                        @item.ProductUnit
+                    </td>
 
-                <td>
-                    @item.Quantity
-                </td>
+                    <td>
+                        @item.Packing
+                    </td>
+                    <td>
+                        @item.UnitPrice
+                    </td>
+                    <td>
+                        @item.CostPrice
+                    </td>
+                    <td>
+                        <button href="#" class="anchorDetail btn  btn-sm" data-url="/ProDetail/Edit" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button href="#" class="anchorDetail btn btn-sm" data-url="/ProDetail/Details" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">
 
-                <td>
-                    @item.Packing
-                </td>
-                <td>
-                    @item.U_Price
-                </td>
+                            <i class="fa-solid fa-circle-info"></i>
+                        </button>
+                        @*<button href="#" class="adelete btn btn-danger btn-sm" data-url="/ProDetail/_Delete" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Delete</button>*@
+                    </td>
 
-                <td>
-                <button href="#" class="anchorDetail btn btn-success btn-sm" data-url="/ProDetail/Edit" data-id="@item.PDId"  data-bs-toggle="model" data-target="#myModal">Edit</button>
-
-                <button href="#" class="anchorDetail btn btn-info btn-sm" data-url="/ProDetail/Details" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Details</button>
-                <button href="#" class="adelete btn btn-danger btn-sm" data-url="/ProDetail/_Delete" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Delete</button>
-                </td>
-            </tr>
-                }
+                </tr>
+            }
         </tbody>
     </table>
-    <script>
+</div>
 
+<script>
     $(document).ready(function () {
-        $('#prodetail').DataTable();
+        $('#example1').DataTable();
     });
+</script>
 
-    </script>
+
+<script src="~/Scripts/_CreateScript.js"></script>
+<script src="~/Scripts/_delete.js"></script>
+<script src="~/Scripts/_Detail.js"></script>

@@ -12,21 +12,18 @@ namespace FinalYear.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class salesitem
+    public partial class SODetail
     {
-        public int ID { get; set; }
-        public string SalesID { get; set; }
-        public string Brand { get; set; }
-        public string SubBrand { get; set; }
-        public Nullable<int> ProID { get; set; }
-        public Nullable<int> PDId { get; set; }
-        public int Quantity { get; set; }
-        public decimal price { get; set; }
+        public int SODetail_Id { get; set; }
+        public int SOID { get; set; }
+        public int PDID { get; set; }
+        public int S_Quantity { get; set; }
+        public string BatchIdNo { get; set; }
+        public decimal U_price { get; set; }
         public decimal Discount { get; set; }
-        public decimal Total { get; set; }
+        public decimal TotalPrice { get; set; }
     
         public virtual ProDetail ProDetail { get; set; }
-        public virtual product product { get; set; }
-        public virtual sale sale { get; set; }
+        public virtual SalesOrderMaster SalesOrderMaster { get; set; }
     }
 }

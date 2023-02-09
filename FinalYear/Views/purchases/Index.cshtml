@@ -1,20 +1,16 @@
-﻿@model IEnumerable<FinalYear.Models.purchase>
+﻿@model IEnumerable<FinalYear.Models.PurchaseOrderMaster>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.pageTitle = "Purchase Management";
+
 }
 
 
 <ul class="nav nav-tabs card-header-tabs " id="mytab" role="tablist">
     <li class="nav-item">
         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Purchase</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">PurchasesedItem</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">?????????</a>
     </li>
 
 </ul>
@@ -51,18 +47,15 @@
 
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.semanticui.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/dataTables.semanticui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="~/Scripts/ShowTbl.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/_delete.js"></script>
+<script src="~/Scripts/_Detail.js"></script>
+<script src="~/Scripts/_CreateScript.js"></script>
+
 <script>
         $(document).ready(function () {
         });
@@ -73,27 +66,28 @@
             var url = "@Url.Content("~/purchases/cmb")";
 
         $.getJSON(url, { name: $("#product__").val() }, function (data) {
-            $("#typ").empty();
-            $("#typ").append("<option disabled selected hidden>Select your option</option>");
-                $.each(data, function (index, optionData) {
-                    var option = "<option value=" + optionData.ProId + ">" + optionData.Type + "</option>";
-                    $("#typ").append(option);
+            $("#ProductType").empty();
+            $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+            $.each(data, function (index, optionData) {
+
+                    var option = "<option value=" + optionData.ProId + ">" + optionData.ProductType + "</option>";
+                    $("#ProductType").append(option);
                 });
             })
 
 
         });
-    $("#typ").change(function () {
+    $("#ProductType").change(function () {
 
             var url = "@Url.Content("~/purchases/pro")";
 
-        $.getJSON(url, { name: $("#typ").val(), type: $("#typ").children("option").filter(":selected").text()}, function (data) {
-            $("#unt").empty();
-            $("#unt").append("<option disabled selected hidden>Select your option</option>");
+        $.getJSON(url, { name: $("#ProductType").val(), type: $("#ProductType").children("option").filter(":selected").text()}, function (data) {
+            $("#ProductUnit").empty();
+            $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
                 $.each(data, function (index, optionData) {
-                    var option = "<option value=" + optionData.PDId + ">" + optionData.ProUnit + "</option>";
+                    var option = "<option value=" + optionData.PDId + ">" + optionData.ProductUnit + "</option>";
                     console.log(option);
-                    $("#unt").append(option);
+                    $("#ProductUnit").append(option);
                 });
             })
             });
@@ -101,6 +95,5 @@
 
 
 </script>
-
 
 

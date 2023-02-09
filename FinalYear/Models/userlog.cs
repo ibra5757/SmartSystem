@@ -12,13 +12,13 @@ namespace FinalYear.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class userlog
+    public partial class UserLog
     {
         public int LogID { get; set; }
         public Nullable<int> UserID { get; set; }
         public string Activity { get; set; }
         public System.DateTime Date { get; set; }
     
-        public virtual user user { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading;
+using System.IO;
 
 namespace FinalYear.Controllers
 {
@@ -19,7 +20,8 @@ namespace FinalYear.Controllers
     {
         // GET: credentials
 
-        public string Baseurl = "http://192.168.67.116:105/";
+        public string Baseurl = "http://192.168.0.108:105/";
+
         public ActionResult Login()
         {
             return View();
@@ -31,7 +33,7 @@ namespace FinalYear.Controllers
             if (ModelState.IsValid)
             {
                 var f_password = LoginHelper.GetMD5(password);
-                using (INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities())
+                using (SmartInventoryEntities db = new SmartInventoryEntities())
                 {
                     if (username.Trim() == "" && password.Trim() == "")
                     {
@@ -48,15 +50,15 @@ namespace FinalYear.Controllers
                     }
                     else if (username.Trim()!="" &&password.Trim()!="")
                     {
-                        var obj = db.users.Where(a => a.UserName.Equals(username) && a.Password.Equals(f_password)).FirstOrDefault();
-                        var unamecheck = db.users.Where(a => a.Password.Equals(username)).FirstOrDefault();
-                        var upasswordcheck = db.users.Where(a => a.Password.Equals(f_password)).FirstOrDefault();
+                        var obj = db.Users.Where(a => a.UserName.Equals(username) && a.Password.Equals(f_password)&& a.IsActive == true).FirstOrDefault();
+                        var unamecheck = db.Users.Where(a => a.Password.Equals(username)).FirstOrDefault();
+                        var upasswordcheck = db.Users.Where(a => a.Password.Equals(f_password)).FirstOrDefault();
 
                         if (obj != null)
                         {
 
                             userlogsController userlog = new userlogsController();
-                            userlog userlogs = new userlog();
+                            UserLog userlogs = new UserLog();
                             userlogs.Activity = obj.Name.ToString() + " Register  Sucessfull";
                             userlogs.UserID = obj.UserID;
                             userlogs.Date = DateTime.Now;
@@ -111,15 +113,15 @@ namespace FinalYear.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Register(user user)
+        public ActionResult Register(User user)
         {
             user.Role = "NO";
             user.IsActive = false;
             if (ModelState.IsValid)
             {
-                using (INVENTORY_SYSTEMEntities _db = new INVENTORY_SYSTEMEntities())
+                using (SmartInventoryEntities _db = new SmartInventoryEntities())
                 {
-                    var check = _db.users.FirstOrDefault(s => s.UserName == user.UserName);
+                    var check = _db.Users.FirstOrDefault(s => s.UserName == user.UserName);
                     if (check == null)
                     {
 
@@ -131,7 +133,7 @@ namespace FinalYear.Controllers
                         //userlog.Create(userlogs);
                         user.Password = LoginHelper.GetMD5(user.Password);
                         _db.Configuration.ValidateOnSaveEnabled = false;
-                        _db.users.Add(user);
+                        _db.Users.Add(user);
                         _db.SaveChanges();
                         return RedirectToAction("Login");
                     }
@@ -159,16 +161,18 @@ namespace FinalYear.Controllers
         [AllowAnonymous]
         public string CheckUserName(string input)
         {
-            bool ifuser = WebSecurity.UserExists(input);
-            if (ifuser == false)
+            using (SmartInventoryEntities _db = new SmartInventoryEntities())
             {
-                return "Available";
+                var ifuser = _db.Users.Where(x => x.UserName == input).FirstOrDefault();
+                if (ifuser == null)
+                {
+                    return "Available";
+                }
+                else
+                {
+                    return "Not Available";
+                }
             }
-            if (ifuser == true)
-            {
-                return "Not Available";   
-            }
-            return "";
         }
         [HttpPost]
         public  async Task<ActionResult> show(string startDate, string endDate, string type)
@@ -190,9 +194,6 @@ namespace FinalYear.Controllers
                 type=type
             };
             var myContent = JsonConvert.SerializeObject(mydata);
-
-            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-            var byteContent = new ByteArrayContent(buffer);
             var EmpRespons = "";
 
             using (var client = new HttpClient())
@@ -219,6 +220,32 @@ namespace FinalYear.Controllers
                     //}
                 }
                 return EmpRespons;
+            }
+        }
+        [HttpGet]
+        public  async Task<ActionResult> GetVs()
+        {
+            using (var client = new HttpClient())
+            {
+
+                
+                
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync(Baseurl + "image");
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        var imageData = memoryStream.ToArray();
+                        var imageDataString = Convert.ToBase64String(imageData);
+                        var model = new ImageModel { ImageData = imageDataString };
+                        return PartialView("_piechartview",model);
+                    }
+                    // Use the Image object
+                }
             }
         }
         //public async Task<string> get()

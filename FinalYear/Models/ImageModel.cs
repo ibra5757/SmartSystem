@@ -5,9 +5,8 @@ using System.Web;
 
 namespace FinalYear.Models
 {
-    public class imagebuffer
+    public class ImageModel
     {
-        public static byte[] imageBuffe { get; set; }
-        public string image { get; set; }
+        public string ImageData { get; set; }
     }
 }

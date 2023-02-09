@@ -1,4 +1,4 @@
-﻿@model FinalYear.Models.user
+﻿@model FinalYear.Models.User
 
 @{
     ViewBag.Title = "Register";
@@ -18,15 +18,17 @@
         </div>
         <div class="col-md-6 mb-4">
             <div class="form-outline">
-                <input type="text" name="UserName" id="form3Example2" class="form-control" />
+                <input type="text" name="UserName" id="form3Example2" class="UserName form-control" />
                 <label class="form-label" for="form3Example2">UserName</label>
                 <label class="form-helper form-text text-danger" id="form3Example2">@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })</label>
-                <span id="result"></span>
-                @if (ViewBag.error != null)
-                {
-                    <span class="badge badge-danger">@ViewBag.error</span>
-                }
+
+
             </div>
+            @if (ViewBag.error != null)
+            {
+                <span class="badge badge-danger">@ViewBag.error</span>
+            }
+            <span id="result"></span>
         </div>
     </div>
 
@@ -34,24 +36,28 @@
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="form-outline">
-                <input type="password" name="Password" id="form3Example3" class="form-control" />
+                <input type="password" name="Password" id="form3Example3" class="password form-control" />
                 <label class="form-label" for="form3Example3">Password</label>
                 <label class="form-helper form-text text-danger" id="form3Example3">@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })</label>
             </div>
         </div>
         <div class="col-md-6 mb-4">
             <div class="form-outline">
-                <input type="password" id="form3Example3" class="form-control" />
+                <input type="password" id="form3Example3" class="ConfirmPassword form-control" />
                 <label class="form-label" for="form3Example3">Confirm Password</label>
+
                 @*<label class="form-helper form-text text-danger" id="lbl_">@Html.ValidationMessageFor(m => m.ConfirmPassword)</label>*@
             </div>
+            <small  id="message"></small>
         </div>
     </div>
     <!-- cnnic  input -->
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="form-outline mb-4">
+
                 <input type="tel" name="Contact" id="form3Example3" class="form-control" />
+                <label class="form-label" for="form3Example3">Contact NO</label>
                 <label class="form-helper form-text text-danger" id="lbl_">@Html.ValidationMessageFor(m => m.Contact, "", new { @class = "text-danger" })</label>
             </div>
         </div>
@@ -78,12 +84,10 @@
 
 
 </form>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
-<script src="~/Scripts/jquery.validate.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script type="text/javascript">
     function HideLabel() {
         document.getElementById('lbl_').style.display = "none";
@@ -107,18 +111,35 @@
 
 <script type="text/jscript">
 
-    $('#UserName').blur(function () {
+    $(".UserName").on("input", function () {
+        
         var url = "/Account/CheckUserName";
-        var name = $('#UserName').val();
+        var name = $('.UserName').val();
         $.get(url, { input: name }, function (data) {
             if (data == "Available") {
                 $("#result").html("<span style='color:green'>Available</span>");
-                $("#UserName").css('background-color', '');
+                $(".UserName").css('background-color', '');
             }
             else {
                 $("#result").html("<span style='color:red'>Not Available</span>");
-                $("#UserName").css('background-color', '#e97878');
+                $(".UserName").css('background-color', '#e97878');
             }
         });
     })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".ConfirmPassword").on("input", function () {
+
+            var password = $(".password").val();
+            var confirmPassword = $(".ConfirmPassword").val();
+            console.log(confirmPassword)
+            if (password == confirmPassword) {
+                $("#message").html("<span style='color:green'>Match</span>");
+            } else {
+                $("#message").html("<span style='color:red'>Not Match</span>");
+            }
+        });
+    });
 </script>

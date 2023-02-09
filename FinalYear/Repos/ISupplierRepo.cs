@@ -8,10 +8,10 @@ namespace FinalYear.Repos
 {
     public interface ISupplierRepo
     {
-            Task<int> AddNewSupplier(Supplier model);
-            Task<List<Supplier>> GetAllSupplier();
-            Task<Supplier> GetSupplierById(int id);
-             Task<List<Supplier>> SearchSupplier(string Search);
+            Task<int> AddNewSupplier(Company model);
+            Task<List<Company>> GetAllSupplier();
+            Task<Company> GetSupplierById(int id);
+             Task<List<Company>> SearchSupplier(string Search);
         
         
     }

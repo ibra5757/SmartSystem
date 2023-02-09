@@ -1,0 +1,120 @@
+﻿@model FinalYear.Models.SubCategory
+
+<form method="post" id="subcataform">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">SubCatname</label>
+            <div class="col-md-10">
+                <input name="SubCatname" type="text" id="SubCatname" class="form-control " />
+
+                <span id="message"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatID, "CatID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CatID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" id="submit" class="btn btn-success" />
+
+                <button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+                <script src="~/Scripts/Closebtn.js"></script>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var isValidated = false;
+        $.validator.addMethod("uniqueSubCatname", function (value, element) {
+            var data = $('#SubCatname').val();
+            var isValid = false;
+            $.ajax({
+                url: '/Subcategories/FindByName',
+                type: 'POST',
+                data: $("#subcataform").serialize(),
+                async: false,
+                success: function (response) {
+                    isValid = response.isUnique;
+                }
+
+            });
+
+            return isValid;
+        }, "SubCategory name already exists.");
+
+        $("#subcataform").validate({
+            rules: {
+                SubCatname: {
+                    required: true,
+                    uniqueSubCatname: true
+                },
+
+            },
+
+            submitHandler: function (form) {
+                $.ajax({
+
+                    url: "/Subcategories/Create",
+                    type: 'POST',
+                    data: $('#subcataform').serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            toastr["success"](data.message);
+                        }
+                        else {
+                            toastr["danger"](data.message);
+                        }
+
+                    }
+                });
+            }
+            //errorPlacement: function (error, element) {
+            //    $("#message").html(error.text());
+            //}
+
+        });
+        $("#SubCatname").on("keyup", function () {
+            // Validate the form agai
+            if (!isValidated) {
+                console.log("Valid");
+                $("#subcataform").validate().element("#SubCatname");
+                // Update the error message if the validation is successful
+                if ($("#subcataform").validate().element("#SubCatname")) {
+                    $("#message").html("");
+                }
+            } else {
+                // Validate the form
+                $("#subcataform").valid();
+                console.log("not");
+            }
+        });
+    });
+
+</script>
+
+
+
+<script>
+        $(document).ready(function () {
+            $('#message').each(function () {
+                setTimeout(function () {
+                    $(this).fadeOut();
+                }, 3000);
+            });
+        });
+    </script>
+
+

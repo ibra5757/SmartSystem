@@ -8,12 +8,21 @@
 }
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+<script src="~/Scripts/jquery-3.6.1.js"></script>
+<!-- Include Bootstrap CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
 
-@*<form action="/Account/show" method="post">*@
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script>
+
+<!-- Include Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Include Bootstrap Datepicker library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
@@ -37,51 +46,75 @@
                 </div>
                 <br />
                 <br />
-                @*@Html.Partial("show")*@
                 <div id="result"></div>
-                @*<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status" id="loading-image">
-                    <span class="visually-hidden"></span>
-                </div>*@
             </div>
         </div>
     </div>
-    @*<div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="pieChart"></canvas>
-                </div>
-            </div>
-        </div>*@
 </div>
 <br />
 <br />
 <div class="row">
-    <div class="col-sm-6">
+
+    <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <canvas id="myChart"></canvas>
 
+                <div class="" id="partialview-container"></div>
+                <div id="page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(255,255,255,0.5); z-index:1050;"></div>
+                <div id="spinner" class="spinner-grow" style="width: 3rem; height: 3rem; display:none;position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1051;" role="status">
 
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <canvas id="pieChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 </div>
-@*</form>*@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "GetVs",
+            beforeSend: function () {
+                $('#page-overlay').show();
+                $('#spinner').show();
+            },
+            success: function (data) {
+                $('#page-overlay').hide();
+                $('#spinner').hide();
+                $('#partialview-container').html(data);
+
+            },
+            error: function (xhr, status, error) {
+
+                $('#page-overlay').hide();
+                $('#spinner').hide();
+                $('#partialview-container').html(error);
+            }
+
+        });
+    });
+</script>
+
+
+
+<!-- daterangepicker JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#date_picker1').datepicker();
+
+        $('#date_picker2').datepicker();
+    });
+</script>
 <script>
     var url = '@Url.Action("show", "Account")';
 $('#save').click(function() {
     var startDates = $('#date_picker1').val();
     var endDates = $('#date_picker2').val();
     var types = $('#typeselect').val();
-   
+
     if (Date.parse(startDates) < Date.parse(endDates)) {
         $('#result').load(url, { startDate: startDates, endDate: endDates, type: types });
     }
@@ -89,100 +122,10 @@ $('#save').click(function() {
 
         alert("Invalid Date Range");
     }
-    
+
 })
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous"></script>
 
-<script>
-
-    var xyValues = [
-        { x: 50, y: 7 },
-        { x: 60, y: 8 },
-        { x: 70, y: 8 },
-        { x: 80, y: 9 },
-        { x: 90, y: 9 },
-        { x: 100, y: 9 },
-        { x: 110, y: 10 },
-        { x: 120, y: 11 },
-        { x: 130, y: 14 },
-        { x: 140, y: 14 },
-        { x: 150, y: 15 }
-    ];
-
-    new Chart("myChart", {
-        type: "scatter",
-        data: {
-            datasets: [{
-                pointRadius: 4,
-                pointBackgroundColor: "rgb(0,0,255)",
-                data: xyValues
-            }]
-        },
-        options: {
-            legend: { display: false },
-            scales: {
-                xAxes: [{ ticks: { min: 40, max: 160 } }],
-                yAxes: [{ ticks: { min: 6, max: 16 } }],
-            }
-        }
-    });
-</script>
-<script>
-    //radar
-    var ctxR = document.getElementById("radarChart").getContext('2d');
-    var myRadarChart = new Chart(ctxR, {
-        type: 'radar',
-        data: {
-            labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-            datasets: [{
-                label: "My First dataset",
-                data: [65, 59, 90, 81, 56, 55, 40],
-                backgroundColor: [
-                    'rgba(105, 0, 132, .2)',
-                ],
-                borderColor: [
-                    'rgba(200, 99, 132, .7)',
-                ],
-                borderWidth: 2
-            },
-            {
-                label: "My Second dataset",
-                data: [28, 48, 40, 19, 96, 27, 100],
-                backgroundColor: [
-                    'rgba(0, 250, 220, .2)',
-                ],
-                borderColor: [
-                    'rgba(0, 213, 132, .7)',
-                ],
-                borderWidth: 2
-            }
-            ]
-        },
-        options: {
-            responsive: true
-        }
-    });</script>
-<script>
-    //pie
-    var ctxP = document.getElementById("pieChart").getContext('2d');
-    var myPieChart = new Chart(ctxP, {
-        type: 'pie',
-        data: {
-            labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
-            datasets: [{
-                data: [300, 50, 100, 40, 120],
-                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-</script>
 @*<script>
         $(document).ready(function () {
 
@@ -205,6 +148,3 @@ $('#save').click(function() {
             });
         });
     </script>*@
-<script src="~/Scripts/jquery-3.6.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

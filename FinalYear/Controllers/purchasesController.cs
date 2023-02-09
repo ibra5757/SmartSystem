@@ -13,16 +13,16 @@ namespace FinalYear.Controllers
 {
     public class purchasesController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: purchases
         public ActionResult Index()
         {
-            ViewBag.Unit = db.ProDetails.Select(x => x.ProUnit).Distinct().ToList();
-            ViewBag.Type = db.ProDetails.Select(x => x.Type).Distinct().ToList();
-            ViewBag.AllProduct = db.products.ToList();
-            ViewBag.SupplierID = db.Suppliers.ToList();
-            var purchases = db.purchases.ToList();
+            ViewBag.Unit = db.ProDetails.Select(x => x.ProductUnit).Distinct().ToList();
+            ViewBag.Type = db.ProDetails.Select(x => x.ProductType).Distinct().ToList();
+            ViewBag.AllProduct = db.Products.ToList();
+            ViewBag.SupplierID = db.Companies.ToList();
+            var purchases = db.PurchaseOrderMasters.ToList();
             return View(purchases.ToList());
         }
 
@@ -38,7 +38,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            purchase purchase = db.purchases.Find(id);
+            PurchaseOrderMaster purchase = db.PurchaseOrderMasters.Find(id);
             if (purchase == null)
             {
                 return HttpNotFound();
@@ -54,13 +54,13 @@ namespace FinalYear.Controllers
         }
         public JsonResult  cmb(int name) {
             db.Configuration.ProxyCreationEnabled = false;
-            var SUBID = db.ProDetails.Where(x=>x.ProId ==name).Select(x=>new { x.Type ,x.ProId }).Distinct().ToList();
+            var SUBID = db.ProDetails.Where(x=>x.ProId ==name).Select(x=>new { x.ProductType ,x.ProId }).Distinct().ToList();
             return Json(SUBID,JsonRequestBehavior.AllowGet);
         }
         public JsonResult pro(int name,string type)
         {
             db.Configuration.ProxyCreationEnabled = false;
-            var pro_ = db.ProDetails.Where(x => x.ProId == name && x.Type==type).ToList();
+            var pro_ = db.ProDetails.Where(x => x.ProId == name && x.ProductType==type).ToList();
 
             return Json(pro_, JsonRequestBehavior.AllowGet);
 
@@ -70,70 +70,67 @@ namespace FinalYear.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(string SupplierID,string ProName,string Quantity,string Type,string ProUnit,string BatchId)
+        public ActionResult Create(PODetail pODetail,PurchaseOrderMaster purchaseOrderMaster,string ProductUnit,string ProName)
         {
             try
             {
-                var UserID = Session["UserID"].ToString();
+                //using (var context = new MyDbContext())
+                //{
+
+                //}
+
+                    var UserID = Session["UserID"].ToString();
 
                 if (ModelState.IsValid)
-                {
-                    if (ProName != string.Empty  && Type != string.Empty)
-                    {
-                        int pid = int.Parse(ProName);
-                        int pdid = int.Parse(ProUnit);
-                        
-                        var quantity = db.ProDetails.Where(x => x.ProId == pid && x.PDId == pdid).Select(x => x.Quantity).FirstOrDefault();
-                        if (quantity != 0)
-                        {
 
-                            ProDetail pd = db.ProDetails.Where(x => x.ProId == pid && x.PDId == pdid).FirstOrDefault();
-                            pd.Quantity = quantity + int.Parse(Quantity);
-                            db.Entry(pd).State = EntityState.Modified;
-                            
-                        }
-                        db.SaveChanges();
-                        purchase purchase = new purchase();
-                        purchase.UserID = int.Parse(UserID);
-                        purchase.SupplierID = int.Parse(SupplierID);
-                        purchase.Date = DateTime.Now;
-                        db.purchases.Add(purchase);
-                        db.SaveChanges();
-                        purchasesitem purchasesitem = new purchasesitem();
-                        purchasesitem.PurchaseId = purchase.PurchaseId;
-                        purchasesitem.ProID = int.Parse(ProName);
-                        purchasesitem.PDId = int.Parse(ProUnit);
-                        purchasesitem.Quantity = int.Parse(Quantity);
-                        purchasesitem.SupplierID = int.Parse(SupplierID);
-                        db.purchasesitems.Add(purchasesitem);
-                        db.SaveChanges();
-                    }
-                    else
+                {
+                    purchaseOrderMaster.UserID = int.Parse(UserID);
+                    purchaseOrderMaster.CompanyId = int.Parse(purchaseOrderMaster.CompanyId.ToString());
+                    purchaseOrderMaster.Date = DateTime.Now;
+                    purchaseOrderMaster.PODetails = new List<PODetail>
                     {
+                        new PODetail
+                        {
+                    POID = purchaseOrderMaster.POID,
+                    PDID = int.Parse(ProductUnit),
+                    Quantity = int.Parse(pODetail.Quantity.ToString()),
+                    BatchNo= pODetail.BatchNo.ToString()
+                        }
+
+                        };
+                    
+                    db.PurchaseOrderMasters.Add(purchaseOrderMaster);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Purcase Register Sucessfully."});
+
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string z=string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }
-            catch (DbEntityValidationException e)
-            {
-            }
-            return RedirectToAction("Index");
+            return Json(new { success = false, message = "Purchase UnSucessfully." });
         }
 
         // GET: purchases/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            purchase purchase = db.purchases.Find(id);
-            if (purchase == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name", purchase.UserID);
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name", purchase.SupplierID);
-            return View(purchase);
+
+            var POdetao = db.PODetails.Where(x => x.POID == id).FirstOrDefault();
+            ViewBag.Unit = db.ProDetails.Select(x => x.ProductUnit).Distinct().ToList();
+            ViewBag.Type = db.ProDetails.Select(x => x.ProductType).Distinct().ToList();
+            ViewBag.AllProduct = db.Products.ToList();
+            return PartialView(POdetao);
         }
 
         // POST: purchases/Edit/5
@@ -141,7 +138,7 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,PurchaseId,Date,UserID,SupplierID")] purchase purchase)
+        public ActionResult Edit( PurchaseOrderMaster purchase)
         {
             if (ModelState.IsValid)
             {
@@ -149,8 +146,8 @@ namespace FinalYear.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name", purchase.UserID);
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name", purchase.SupplierID);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", purchase.UserID);
+            ViewBag.SupplierID = new SelectList(db.Companies, "SupplierID", "Name", purchase.CompanyId);
             return View(purchase);
         }
 
@@ -161,7 +158,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            purchase purchase = db.purchases.Find(id);
+            PurchaseOrderMaster purchase = db.PurchaseOrderMasters.Find(id);
             if (purchase == null)
             {
                 return HttpNotFound();
@@ -174,8 +171,8 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            purchase purchase = db.purchases.Find(id);
-            db.purchases.Remove(purchase);
+            PurchaseOrderMaster purchase = db.PurchaseOrderMasters.Find(id);
+            db.PurchaseOrderMasters.Remove(purchase);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

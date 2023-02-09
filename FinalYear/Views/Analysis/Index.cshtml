@@ -1,21 +1,160 @@
-﻿
+﻿@model FinalYear.Models.summary
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int al =10;
+
 
 }
-
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @for (int i = 0; i < al; i++)
-    {
-        <div class="col">
-            <div class="card">
-                <img src="..." class="card-img-top" alt="...">
-
-            </div>
-        </div>
+<style>
+    #page-overlay {
+        pointer-events: none;
     }
+</style>
+@*<div class="row row-cols-1 row-cols-md-3 g-4">
+        @for (int i = 0; i < al; i++)
+        {
+            <div class="col">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
 
-  
+                </div>
+            </div>
+        }
+
+
+    </div>*@
+
+<select class="form-control dropdown col-4 " id="Find">
+
+    <option value="M01AB">Panadol--M01AB</option>
+    <option value="M01AE">Calpol--M01AE</option>
+    <option value="N02BA">Kestine--N02BA</option>
+    <option value="N02BE">Declroran--N02BE</option>
+    <option value="N05B">Bruffen--N05B</option>
+    <option value="N05C">Ponstan--N05B</option>
+    <option value="R03">Risk--R03</option>
+    <option value="R06">Hydraline--R03</option>
+
+</select>
+<br /><br />
+
+<div class="" id="partialview-container"></div>
+<div id="page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(255,255,255,0.5); z-index:1050;"></div>
+<div id="spinner" class="spinner-grow" style="width: 3rem; height: 3rem; display:none;position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1051;" role="status">
+
 </div>
+<div class="row">
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Temperature" id="Temperature">
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Dew_Point" id="Dew_Point">
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Wind_Speed" id="Wind_Speed">
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Humidity" id="Humidity">
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Pressure" id="Pressure">
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Condition_int" id="Condition_int">
+    </div>
+    
+    <div class="col-2">
+        <select class="form-control dropdown " id="Finds">
+            <option value="M01AB">Panadol--M01AB</option>
+            <option value="M01AE">Calpol--M01AE</option>
+            <option value="N02BA">Kestine--N02BA</option>
+            <option value="N02BE">Declroran--N02BE</option>
+            <option value="N05B">Bruffen--N05B</option>
+            <option value="N05C">Ponstan--N05B</option>
+            <option value="R03">Risk--R03</option>
+            <option value="R06">Hydraline--R03</option>
+
+
+        </select>
+    </div>
+    <div class="col-2">
+        <select class="form-control" required name="type" id="typeselect">
+            <option>Weekly</option>
+            <option>Monthly</option>
+            <option>Yearly</option>
+
+        </select>
+    </div>
+    <button id="gradient" type="button" class=" btn btn-success">GradientDecent</button>
+</div>
+
+<div class="" id="partial-container"></div>
+
+
+<script src="~/Scripts/jquery-3.6.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
+
+<script>
+    $(document).ready(function () {
+    });
+    $("#Find").change(function () {
+        MedName = $("#Find").children("option").filter(":selected").val();
+        $.ajax({
+            type: "POST",
+            url: "Getdata",
+            data: { MedName: MedName },
+            beforeSend: function () {
+                $('#page-overlay').show();
+                $('#spinner').show();
+            },
+            success: function (data) {
+                $('#page-overlay').hide();
+                $('#spinner').hide();
+                $('#partialview-container').html(data);
+
+            }
+
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+    });
+    $("#gradient").click(function () {
+        MedName = $("#Finds").children("option").filter(":selected").val();
+        typeselect = $("#typeselect").children("option").filter(":selected").val();
+        Temperature = $("#Temperature").val();
+        Dew_Point = $("#Dew_Point").val();
+        Wind_Speed = $("#Wind_Speed").val();
+        Humidity = $("#Humidity").val();
+        Pressure = $("#Pressure").val();
+        Condition_int = $("#Condition_int").val();
+
+        $.ajax({
+            type: "POST",
+            url: "GetPrediction",
+            data: { MedName: MedName, typeselect: typeselect, Temperature: Temperature, Dew_Point: Dew_Point, Wind_Speed: Wind_Speed, Humidity: Humidity, Pressure: Pressure, Condition_int: Condition_int },
+            beforeSend: function () {
+                $('#page-overlay').show();
+                $('#spinner').show();
+            },
+            success: function (data) {
+                $('#page-overlay').hide();
+                $('#spinner').hide();
+                $('#partial-container').html(data);
+
+            },
+            error: function (xhr) {
+
+                $('#page-overlay').hide();
+                $('#spinner').hide();
+
+                $('#partial-container').html("SomeThing Happened");
+            }
+
+
+        });
+    });
+</script>

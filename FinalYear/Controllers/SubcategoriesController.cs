@@ -12,7 +12,7 @@ namespace FinalYear.Controllers
 {
     public class SubcategoriesController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: Subcategories
         public ActionResult _index()
@@ -20,49 +20,25 @@ namespace FinalYear.Controllers
             
             return PartialView();
         }
-        //public ActionResult Getdata(JqueryDatatableParam param)
-        //{
+        public PartialViewResult subcatlist()
+        {
+            ViewBag.Subcatagory = db.SubCategories.ToList();
+            return PartialView("~/Views/Subcategories/_index.cshtml");
+        }
+        [HttpPost]
+        public JsonResult FindByName(string SubCatname)
+        {
 
-        //    var subcategories = db.Subcategories.Include(s => s.category).ToList();
-        //    if (!string.IsNullOrEmpty(param.sSearch))
-        //    {
-        //        subcategories = subcategories.Where(x => x.SubCatname.ToLower().Contains(param.sSearch.ToLower())
-        //                                      || x.category.Catname.ToLower().Contains(param.sSearch.ToLower())
-        //                                      ).ToList();
-        //    }
-        //    var sortColumnIndex = Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);
-        //    var sortDirection = HttpContext.Request.QueryString["sSortDir_0"];
-        //     if (sortColumnIndex == 3)
-        //    {
-        //        subcategories = sortDirection == "asc" ? subcategories.OrderBy(c => c.SubCatname).ToList() : subcategories.OrderByDescending(c => c.SubCatname).ToList();
-        //    }
-        //    else if (sortColumnIndex == 4)
-        //    {
-        //        subcategories = sortDirection == "asc" ? subcategories.OrderBy(c => c.category.Catname).ToList() : subcategories.OrderByDescending(c => c.category.Catname).ToList();
-        //    }
+            var Category = db.SubCategories.Where(x => x.SubCatname == SubCatname).FirstOrDefault();
 
-        //    else
-        //    {
-        //        Func<Subcategory, string> orderingFunction = e => sortColumnIndex == 0 ? e.SubCatname :
-        //                                                       sortColumnIndex == 1 ? e.category.Catname :
-        //                                                       e.SubCatname;
+            bool isUnique = false;
+            if (Category == null)
+            {
+                isUnique = true;
+            }
+            return Json(new { isUnique = isUnique, JsonRequestBehavior.AllowGet });
 
-        //        subcategories = sortDirection == "asc" ? subcategories.OrderBy(orderingFunction).ToList() : subcategories.OrderByDescending(orderingFunction).ToList();
-        //    }
-        //    var displayResult = subcategories.Skip(param.iDisplayStart)
-        //                .Take(param.iDisplayLength).ToList();
-        //    var totalRecords = subcategories.Count();
-
-        //    return Json(new
-        //    {
-        //        param.sEcho,
-        //        iTotalRecords = totalRecords,
-        //        iTotalDisplayRecords = totalRecords,
-        //        aaData = displayResult
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
-
-
+        }
 
         // GET: Subcategories/Details/5
         public ActionResult Details(int? id)
@@ -71,36 +47,40 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Subcategory subcategory = db.Subcategories.Find(id);
+            SubCategory subcategory = db.SubCategories.Find(id);
             if (subcategory == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(subcategory);
+            return PartialView("Detail",subcategory);
         }
 
         // GET: Subcategories/Create
-        public ActionResult _Create()
+        public ActionResult Create()
         {
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname");
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname");
             return PartialView();
         }
 
         // POST: Subcategories/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Create([Bind(Include = "SubCatID,SubCatname,CatID")] Subcategory subcategory)
+
+       [HttpPost]
+        public JsonResult Create(SubCategory subcategory)
         {
             if (ModelState.IsValid)
             {
-                db.Subcategories.Add(subcategory);
+                db.SubCategories.Add(subcategory);
                 db.SaveChanges();
-                return RedirectToAction("Index", "ManageStock");
+
+                return Json(new { success = true, message = "Category Sucessfully." });
             }
 
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", subcategory.CatID);
-            return View("Index","ManageStock");
+
+            return Json(new { success = false, message = "Category False." });
+
+
         }
 
         // GET: Subcategories/Edit/5
@@ -110,12 +90,12 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Subcategory subcategory = db.Subcategories.Find(id);
+            SubCategory subcategory = db.SubCategories.Find(id);
             if (subcategory == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", subcategory.CatID);
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname", subcategory.CatID);
             return PartialView(subcategory);
         }
 
@@ -124,7 +104,7 @@ namespace FinalYear.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SubCatID,SubCatname,CatID")] Subcategory subcategory)
+        public ActionResult Edit([Bind(Include = "SubCatID,SubCatname,CatID")] SubCategory subcategory)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +112,7 @@ namespace FinalYear.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index","ManageStock");
             }
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", subcategory.CatID);
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname", subcategory.CatID);
             return PartialView(subcategory);
         }
 
@@ -142,8 +122,8 @@ namespace FinalYear.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {
-            Subcategory subcategory = db.Subcategories.Find(id);
-            db.Subcategories.Remove(subcategory);
+            SubCategory subcategory = db.SubCategories.Find(id);
+            db.SubCategories.Remove(subcategory);
             db.SaveChanges();
             return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
 

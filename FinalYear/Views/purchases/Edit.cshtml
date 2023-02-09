@@ -1,0 +1,139 @@
+﻿@model FinalYear.Models.PODetail
+<form method="post" id="formPurchase">
+
+
+    <table class="table">
+
+        <tr>
+            <td scope="col">
+                <small class="control-label col-md-2">Product</small>
+                <div class="col-md-10">
+                    <small>Previous:@Model.ProDetail.Product.ProName</small>
+                    <select class="form-control" id="product__" name="ProName" >
+                        <option value="" disabled selected hidden>Select your option</option>
+                        @if (ViewBag.AllProduct != null)
+                        {
+
+                            foreach (var item in ViewBag.AllProduct)
+                            {
+                                <option value="@item.ProID"  @(Model.ProDetail.Product.ProName == item.ProName ? "selected" : "")>@item.ProName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md-2" >Quantity</small>
+                <div class="col-md-10">
+                    <input class="form-control" value="@Model.Quantity" name="Quantity" id="Quantity" type="number" min="1" placeholder="Quantity" />
+
+
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td scope="col">
+                <small class="control-label col-md-2">ProductType</small>
+                <div class="col-md-10">
+                    <select class="form-control" name="ProductType" id="ProductType" value="@Model.ProDetail.ProductType">
+                        <option value="" disabled selected hidden>Select your option</option>
+
+                    </select>
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md-2">ProductUnit</small>
+                <div class="col-md-10">
+                    <select class="form-control" name="ProductUnit" id="ProductUnit" value="@Model.ProDetail.ProductUnit">
+                        <option value="" disabled selected hidden>Select your option</option>
+
+                    </select>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td scope="col">
+                <small class="control-label col-md-2">Batch No #</small>
+                <div class="col-md-10">
+                    <input type="number" placeholder="BatchNo" class="form-control" min="1" id="BatchNo" name="BatchNo"  value="@Model.BatchNo"/>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td scope="col">  <button type="submit" class="btn btn-success col-md-2">Make</button></td>
+        </tr>
+    </table>
+</form>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+<script>
+    $("#formPurchase").validate({
+        rules:
+        {
+
+            CompanyID:
+            {
+                required: true,
+            },
+            Quantity:
+            {
+                required: true,
+            },
+
+            BatchNo: {
+                required: true,
+            },
+            ProName:
+            {
+                required: true,
+            },
+            ProductType:
+            {
+                required: true,
+            },
+            ProductUnit:
+            {
+                required: true,
+            },
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: "/purchases/Create",
+                type: 'POST',
+                data: $('#formPurchase').serialize(),
+                async: false,
+                success: function (data) {
+
+                    if (data.success) {
+
+                        toastr["success"](data.message);
+                    }
+                    else {
+                        toastr["danger"](data.message);
+                    }
+                }
+
+            });
+        }
+
+
+    });
+
+
+</script>
+

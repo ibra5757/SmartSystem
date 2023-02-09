@@ -12,13 +12,14 @@ namespace FinalYear.Controllers
 {
     public class userlogsController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: userlogs
         public ActionResult Index()
         {
-            var userlogs = db.userlogs.Include(u => u.user);
-            return View(userlogs.ToList());
+            int Userid= Convert.ToInt32(Session["UserID"].ToString());
+            var userlogs = db.UserLogs.Where(x => x.UserID == Userid);
+            return View("_list",userlogs.ToList());
         }
 
         // GET: userlogs/Details/5
@@ -28,7 +29,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            userlog userlog = db.userlogs.Find(id);
+            UserLog userlog = db.UserLogs.Find(id);
             if (userlog == null)
             {
                 return HttpNotFound();
@@ -39,7 +40,7 @@ namespace FinalYear.Controllers
         // GET: userlogs/Create
         public ActionResult Create()
         {
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name");
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name");
             return View();
         }
 
@@ -48,16 +49,16 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LogID,UserID,Activity,Date")] userlog userlog)
+        public ActionResult Create([Bind(Include = "LogID,UserID,Activity,Date")] UserLog userlog)
         {
             if (ModelState.IsValid)
             {
-                db.userlogs.Add(userlog);
+                db.UserLogs.Add(userlog);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name", userlog.UserID);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", userlog.UserID);
             return View(userlog);
         }
 
@@ -68,12 +69,12 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            userlog userlog = db.userlogs.Find(id);
+            UserLog userlog = db.UserLogs.Find(id);
             if (userlog == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name", userlog.UserID);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", userlog.UserID);
             return View(userlog);
         }
 
@@ -82,7 +83,7 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LogID,UserID,Activity,Date")] userlog userlog)
+        public ActionResult Edit([Bind(Include = "LogID,UserID,Activity,Date")] UserLog userlog)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +91,7 @@ namespace FinalYear.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserID = new SelectList(db.users, "UserID", "Name", userlog.UserID);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", userlog.UserID);
             return View(userlog);
         }
 
@@ -101,7 +102,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            userlog userlog = db.userlogs.Find(id);
+            UserLog userlog = db.UserLogs.Find(id);
             if (userlog == null)
             {
                 return HttpNotFound();
@@ -114,8 +115,8 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            userlog userlog = db.userlogs.Find(id);
-            db.userlogs.Remove(userlog);
+            UserLog userlog = db.UserLogs.Find(id);
+            db.UserLogs.Remove(userlog);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

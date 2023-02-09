@@ -13,10 +13,10 @@ namespace FinalYear.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class INVENTORY_SYSTEMEntities : DbContext
+    public partial class SmartInventoryEntities : DbContext
     {
-        public INVENTORY_SYSTEMEntities()
-            : base("name=INVENTORY_SYSTEMEntities")
+        public SmartInventoryEntities()
+            : base("name=SmartInventoryEntities")
         {
         }
     
@@ -25,22 +25,18 @@ namespace FinalYear.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<category> categories { get; set; }
-        public virtual DbSet<customer> customers { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<ProDetail> ProDetails { get; set; }
-        public virtual DbSet<product> products { get; set; }
-        public virtual DbSet<purchase> purchases { get; set; }
-        public virtual DbSet<purchaseledger> purchaseledgers { get; set; }
-        public virtual DbSet<purchasesitem> purchasesitems { get; set; }
-        public virtual DbSet<sale> sales { get; set; }
-        public virtual DbSet<salesledger> salesledgers { get; set; }
-        public virtual DbSet<Subcategory> Subcategories { get; set; }
-        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<SalesOrderMaster> SalesOrderMasters { get; set; }
+        public virtual DbSet<SODetail> SODetails { get; set; }
+        public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<userlog> userlogs { get; set; }
-        public virtual DbSet<user> users { get; set; }
-        public virtual DbSet<Batch> Batches { get; set; }
-        public virtual DbSet<returneditem> returneditems { get; set; }
-        public virtual DbSet<salesitem> salesitems { get; set; }
+        public virtual DbSet<UserLog> UserLogs { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<PurchaseOrderMaster> PurchaseOrderMasters { get; set; }
+        public virtual DbSet<PODetail> PODetails { get; set; }
     }
 }

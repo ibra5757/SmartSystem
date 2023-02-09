@@ -12,14 +12,20 @@ namespace FinalYear.Controllers
 {
     public class ProDetailController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: ProDetail
         public ActionResult _ListProDetail()
         {
             return PartialView();
         }
-
+        public PartialViewResult prodetail()
+        {
+            ViewBag.ProCmb = db.Products;
+            ViewBag.Pd_type = db.ProDetails;
+            ViewBag.proDetails = db.ProDetails.Include(p => p.Product);
+            return PartialView("~/Views/ProDetail/_ListProDetail.cshtml");
+        }
         // GET: ProDetail/Details/5
         public ActionResult Details(int? id)
         {
@@ -38,7 +44,7 @@ namespace FinalYear.Controllers
         // GET: ProDetail/Create
         public ActionResult _create()
         {
-            ViewBag.ProId = new SelectList(db.products, "ProID", "ProName");
+            ViewBag.ProId = new SelectList(db.Products, "ProID", "ProName");
             return View();
         }
 
@@ -46,17 +52,20 @@ namespace FinalYear.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "PDId,ProUnit,ProId,BatchId,Quantity,Type,Packing,U_Price")] ProDetail proDetail)
+        public JsonResult Create(ProDetail proDetail)
         {
             if (ModelState.IsValid)
             {
                 db.ProDetails.Add(proDetail);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.ProCmb = db.Products;
+                ViewBag.Pd_type = db.ProDetails;
+                return Json(new { success = true, message = "ProductDetail Register Sucessfully." });
             }
-
-            ViewBag.ProId = new SelectList(db.products, "ProID", "ProName", proDetail.ProId);
-            return View(proDetail);
+            ViewBag.ProCmb = db.Products;
+            ViewBag.Pd_type = db.ProDetails;
+            ViewBag.ProId = new SelectList(db.Products, "ProID", "ProName", proDetail.ProId);
+            return Json(new { success = false, message = "ProductDetail Register Fail."});
         }
 
         // GET: ProDetail/Edit/5
@@ -71,7 +80,7 @@ namespace FinalYear.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProId = new SelectList(db.products, "ProID", "ProName", proDetail.ProId);
+            ViewBag.ProId = new SelectList(db.Products, "ProID", "ProName", proDetail.ProId);
             return PartialView(proDetail);
         }
 
@@ -88,7 +97,7 @@ namespace FinalYear.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProId = new SelectList(db.products, "ProID", "ProName", proDetail.ProId);
+            ViewBag.ProId = new SelectList(db.Products, "ProID", "ProName", proDetail.ProId);
             return View(proDetail);
         }
 

@@ -1,39 +1,74 @@
-﻿@model FinalYear.Models.category
+﻿@model FinalYear.Models.Category
 
-
-<form action="@Url.Action("Create","categories")" method="post" id="catform">
+<style>
+    .field-validation-error {
+        display: none;
+    }
+</style>
+<form method="post" id="catform">
 
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
 
         <div class="form-group">
-            <label class = "control-label col-md-2">Catagory</label>
+            <label class="control-label col-md-2">Catagory</label>
             <div class="col-md-10">
-                <input type="text" name="Catname" value=""  minlength="3" required="" class="form-control"/>
+                <input type="text" name="Catname" id="Catname" value="" minlength="3" required="" class="form-control" />
+                <span id="message"></span>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" id="submit_btn" />
+
+                <button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+                <script src="~/Scripts/Closebtn.js"></script>
             </div>
         </div>
     </div>
 </form>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-<script src="~/Scripts/jquery-1.7.1.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('#message').each(function () {
+            setTimeout(function () {
+                $(this).fadeOut();
+            }, 3000);
+        });
+    });
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var isValidated = false;
+        $.validator.addMethod("uniqueCatname", function (value, element) {
+            var data = $('#Catname').val();
+            var isValid = false;
+            $.ajax({
+                url: '/categories/FindByName',
+                type: 'POST',
+                data: { Name: data },
+                async: false,
+                success: function (response) {
+                    console.log(response);
+                    isValid = response.isUnique;
+                }
+
+            });
+            return isValid;
+        }, "Category name already exists.");
+
         $("#catform").validate({
             rules: {
                 Catname: {
                     required: true,
-                    minlength: 3
+                    minlength: 3,
+                    uniqueCatname: true
                 },
 
             },
@@ -42,8 +77,44 @@
                     minlength: "bnda bn ja characters"
                 },
 
+            },
+            submitHandler: function (form) {
+                $.ajax({
+
+                    url: "/categories/Create",
+                    type: 'POST',
+                    data: $('#catform').serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            toastr["success"](data.message);
+                        }
+                        else {
+                            toastr["danger"](data.message);
+                        }
+
+                    }
+                });
             }
+            //errorPlacement: function (error, element) {
+            //    $("#message").html(error.text());
+            //}
 
         });
+        $("#Catname").on("keyup", function () {
+            // Validate the form agai
+            if (!isValidated) {
+                console.log("Valid");
+                $("#catform").validate().element("#Catname");
+                // Update the error message if the validation is successful
+                if ($("#catform").validate().element("#Catname")) {
+                    $("#message").html("");
+                }
+            } else {
+                // Validate the form
+                $("#catform").valid();
+                console.log("not");
+            }
+        });
     });
+
 </script>

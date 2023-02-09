@@ -12,14 +12,21 @@ namespace FinalYear.Controllers
 {
     public class usersController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: users
         public ActionResult Indexuser()
         {
-            return View(db.users.ToList());
+            return View(db.Users.ToList());
         }
-
+        [HttpPost]
+        public JsonResult UpdateStatus(int id, bool isActive)
+        {
+            User user = db.Users.FirstOrDefault(u => u.UserID == id);
+            user.IsActive = isActive;
+            db.SaveChanges();
+            return Json(new { success = true });
+        }
         // GET: users/Details/5
         public ActionResult Details(int? id)
         {
@@ -27,7 +34,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = db.users.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -46,11 +53,11 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserID,Name,UserName,Password,CNIC,Contact,Role,IsActive")] user user)
+        public ActionResult Create([Bind(Include = "UserID,Name,UserName,Password,CNIC,Contact,Role,IsActive")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.users.Add(user);
+                db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -67,7 +74,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = db.users.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -85,7 +92,7 @@ namespace FinalYear.Controllers
             if (oldpassword != null)
             {
                 oldpassword = LoginHelper.GetMD5(oldpassword);
-                var check = db.users.Where(x => x.Password == oldpassword).FirstOrDefault();
+                var check = db.Users.Where(x => x.Password == oldpassword).FirstOrDefault();
                 if (check != null)
                 {
                     var ids = Session["Userid"];
@@ -93,7 +100,7 @@ namespace FinalYear.Controllers
 
                     if (ModelState.IsValid)
                     {
-                        var chng = db.users.Where(x => x.Password == oldpassword).First();
+                        var chng = db.Users.Where(x => x.Password == oldpassword).First();
                         chng.Password = newpassword;
                         db.SaveChanges();
                         return RedirectToAction("Index");
@@ -110,7 +117,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = db.users.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -123,15 +130,15 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            user user = db.users.Find(id);
-            db.users.Remove(user);
+            User user = db.Users.Find(id);
+            db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
         public ActionResult checkbox(bool chkbox)
         {
-            user user = db.users.Find(chkbox);
-            db.users.Remove(user);
+            User user = db.Users.Find(chkbox);
+            db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

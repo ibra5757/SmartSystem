@@ -17,39 +17,117 @@ namespace FinalYear.Controllers
     public class AnalysisController : Controller
     {
         // GET: Analysis
-        public async Task<ActionResult> Index()
+
+        string Baseurl = "http://192.168.0.108:105/";
+
+        [HttpGet]
+        public ActionResult Index()
         {
-            //string Baseurl = "http://192.168.43.236:105/";
-            //using (var client = new HttpClient())
-            //{
-            //    client.BaseAddress = new Uri(Baseurl);
-            //    client.DefaultRequestHeaders.Clear();
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //    HttpResponseMessage Res =await client.GetAsync("data");
-            //    if (Res.IsSuccessStatusCode)
-            //    {
-            //        var EmpRespons = Res.Content.ReadAsStringAsync().Result;
-                    
-            //        //EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
-            //        //var myfilename = string.Format(@"{0}", Guid.NewGuid());
-            //        //EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
-
-            //       // ViewBag.MyString = EmpRespons;
-                    
-            //        ////Generate unique filename
-            //        //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
-            //        //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
-                    
-            //        //using (var imageFile = new FileStream(filepath, FileMode.Create))
-            //        //{
-            //        //    imageFile.Write(bytess, 0, bytess.Length);
-            //        //    imageFile.Flush();
-            //        //}
-            //    }
-                return View();
-
-            
+            return View();
         }
-        
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> Getdata(string MedName)
+        {
+            //var myfilename = string.Format(@"{0}", Guid.NewGuid());
+            //EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
+
+            using (var client = new HttpClient())
+            {
+
+                object mydat2a = new
+                {
+                    MedName = MedName
+
+                };
+                var myContent = JsonConvert.SerializeObject(mydat2a);
+                
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage Res = await client.PostAsJsonAsync(Baseurl+"data",mydat2a);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
+
+                    var news = Datagotfromapi.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+
+                    var summaries = JsonConvert.DeserializeObject<summary>(news);
+
+                    summary summarys = new summary() {
+
+                        Coefficients=summaries.Coefficients,
+                        Intercept=summaries.Intercept,
+                        meansquareerror=summaries.meansquareerror
+
+                    };
+
+                    
+
+
+                    ViewBag.Summary = summaries ;
+
+                    ////Generate unique filename
+                    //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
+                    //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
+
+                }
+                return PartialView("_ShowAnalysis");
+
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> GetPrediction(string MedName, string typeselect, string Temperature,string Dew_Point, string Wind_Speed, string Humidity, string Pressure,string Condition_int)
+        {
+            //var myfilename = string.Format(@"{0}", Guid.NewGuid());
+            //EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
+
+            using (var client = new HttpClient())
+            {
+
+                object mydat2a = new
+                {
+                    MedName=MedName, typeselect= typeselect, Temperature= Temperature, Dew_Point= Dew_Point, Wind_Speed= Wind_Speed, Humidity= Humidity, Pressure= Pressure, Condition_int= Condition_int
+                };
+                var myContent = JsonConvert.SerializeObject(mydat2a);
+
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage Res = await client.PostAsJsonAsync(Baseurl + "Applygradientdecent", mydat2a);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
+
+                    var news = Datagotfromapi.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+
+                    var predition = JsonConvert.DeserializeObject<PredictedValue>(news);
+
+                    PredictedValue PredictedValues = new PredictedValue()
+                    {
+                        
+                        PredictedValues = predition.PredictedValues
+
+                    };
+
+
+
+                    ViewBag.predicted = null;
+                    ViewBag.predicted = predition;
+
+                    ////Generate unique filename
+                    //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
+                    //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
+
+                }
+                return PartialView("_Aftergradientdecent");
+
+            }
+        }
+
+
     }
+
 }

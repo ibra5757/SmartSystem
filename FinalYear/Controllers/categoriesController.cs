@@ -12,24 +12,42 @@ namespace FinalYear.Controllers
 {
     public class categoriesController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Catname")] category category)
+        public ActionResult Create(Category Category)
         {
             if (ModelState.IsValid)
             {
-                db.categories.Add(category);
+                db.Categories.Add(Category);
                 db.SaveChanges();
-                return RedirectToAction("Index","ManageStock");
+                return Json(new { success = true , message = "Category Sucessfully." });
             }
 
-            return View(category);
+            return Json(new { success = false , message = "Category False." });
         }
         // GET: categories
+        public PartialViewResult catagorylistrlist()
+        {
+            ViewBag.list = db.Categories.ToList();
+            return PartialView("~/Views/categories/_index.cshtml");
+        }
         public ActionResult _index()
         {
             return PartialView();
+        }
+        public JsonResult FindByName(string Name)
+        {
+
+            var Category = db.Categories.Where(x => x.Catname == Name).FirstOrDefault();
+
+            bool isUnique = false;
+            if (Category == null)
+            {
+                isUnique = true;
+            }
+            return Json(new {isUnique= isUnique, JsonRequestBehavior.AllowGet});
+
         }
 
         // GET: categories/Details/5
@@ -39,12 +57,12 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            category category = db.categories.Find(id);
-            if (category == null)
+            Category Category = db.Categories.Find(id);
+            if (Category == null)
             {
                 return HttpNotFound();
             }
-            return PartialView("_Detail",category);
+            return PartialView("_Detail",Category);
         }
         
         // GET: categories/Create
@@ -65,12 +83,12 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            category category = db.categories.Find(id);
-            if (category == null)
+            Category Category = db.Categories.Find(id);
+            if (Category == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(category);
+            return PartialView(Category);
         }
 
         // POST: categories/Edit/5
@@ -78,15 +96,15 @@ namespace FinalYear.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CatID,Catname")] category category)
+        public ActionResult Edit([Bind(Include = "CatID,Catname")] Category Category)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
+                db.Entry(Category).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index","ManageStock");
             }
-            return PartialView(category);
+            return PartialView(Category);
         }
 
         // GET: categories/Delete/5
@@ -96,20 +114,20 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            category category = db.categories.Find(id);
-            if (category == null)
+            Category Category = db.Categories.Find(id);
+            if (Category == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(category);
+            return PartialView(Category);
         }
 
         // POST: categories/Delete/5
         [HttpPost]
         public JsonResult DeleteConfirmed(int id)
         {
-            category category = db.categories.Find(id);
-            db.categories.Remove(category);
+            Category Category = db.Categories.Find(id);
+            db.Categories.Remove(Category);
             db.SaveChanges();
             return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
         }

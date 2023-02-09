@@ -14,8 +14,7 @@ $(function () {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-
-
+                
                 // Ajax config
                 $.ajax({
                     type: "POST", //we are using GET method to get data from server side

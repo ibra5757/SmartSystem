@@ -4,9 +4,9 @@
             }
 
             #radius-shape-1 {
-                height: 220px;
-                width: 220px;
-                top: -60px;
+                height: 120px;
+                width: 120px;
+               top: -60px;
                 left: -130px;
                 background: radial-gradient(#44006b, #ad1fff);
                 overflow: hidden;
@@ -26,3 +26,16 @@
                 background-color: hsla(0, 0%, 100%, 0.9) !important;
                 backdrop-filter: saturate(200%) blur(25px);
             }
+@media (min-width: 990px) {
+
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        /**optional offset 
+            from top**/
+        top: 2%;
+        z-index:1111!important;
+        position:absolute;
+    }
+}

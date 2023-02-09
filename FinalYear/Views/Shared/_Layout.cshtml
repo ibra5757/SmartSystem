@@ -9,7 +9,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
@@ -25,6 +24,7 @@
 </head>
 <body>
 
+
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="background-color:azure;">
         <div class="container-fluid justify-content-center">
             <ul class="navbar-nav flex-row">
@@ -38,12 +38,7 @@
         </div>
         <div class="container-fluid justify-content-end">
             <ul class="navbar-nav flex-row">
-                @*<li class="nav-item me-3 me-lg-1">
-                        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
 
-                            <strong class="d-none d-sm-block ms-1" style="color:white;">@ViewBag.pageTitle</strong>
-                        </a>
-                    </li>*@
                 <li class="nav-item me-3 me-lg-1  ">
                     <a class="nav-link d-sm-flex align-items-sm-center" href="#">
 
@@ -51,81 +46,9 @@
                     </a>
                 </li>
 
-                <!--       <li class="nav-item dropdown me-3 me-lg-1">
-                        <a
-                          class="nav-link dropdown-toggle hidden-arrow"
-                          href="#"
-                          id="navbarDropdownMenuLink"
-                          role="button"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                        > -->
-                <!--  <i class="fas fa-comments fa-lg"></i>
-
-                    <span class="badge rounded-pill badge-notification bg-danger">6</span>
-                  </a>
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="navbarDropdownMenuLink"
-                  >
-                    <li>
-                      <a class="dropdown-item" href="#">Some news</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">Another news</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </li>
-                  </ul>
-                </li> -->
-                @*<li class="nav-item dropdown me-3 me-lg-1">
-                        <a class="nav-link dropdown-toggle hidden-arrow"
-                           href="#"
-                           id="navbarDropdownMenuLink"
-                           role="button"
-                           data-mdb-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="fas fa-bell fa-lg"></i>
-                            <span class="badge rounded-pill badge-notification bg-danger">12</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <a class="dropdown-item" href="#">Some news</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Another news</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown me-3 me-lg-1">
-                        <a class="nav-link dropdown-toggle hidden-arrow"
-                           href="#"
-                           id="navbarDropdownMenuLink"
-                           role="button"
-                           data-mdb-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down fa-lg"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <a class="dropdown-item" href="#">Some news</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Another news</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </li>
-                        </ul>
-                    </li>*@
                 <li class="nav-item me-3 me-lg-1">
                     <a class="nav-link" href="@Url.Action("Logout","Account")">
-                        <span><img style="height:24px; width:24px; " src="~/Icons/logout.png" /></span>
+                        <i class='bx bx-log-out' style="color:white"></i>
                     </a>
                 </li>
             </ul>
@@ -140,11 +63,7 @@
             <i class='bx bx-menu' id="btn"></i>
         </div>
         <ul class="nav-list">
-            @*<li>
-                    <i class='bx bx-search'></i>
-                    <input type="text" placeholder="Search...">
-                    <span class="tooltip">Search</span>
-                </li>*@
+
             <li>
                 <a href="@Url.Action("Dashboard","Account")">
                     <i class='bx bx-grid-alt'></i>
@@ -166,27 +85,15 @@
                 </a>
                 <span class="tooltip">Purchases</span>
             </li>
+
             <li>
-                <a href="#">
-                    <i class='bx bx-pie-chart-alt-2'></i>
-                    <span class="links_name">Ledger</span>
+                <a href="@Url.Action("Index","userlogs")">
+                    <i class='bx bx-file'></i>
+                    <span class="links_name">User Log</span>
                 </a>
-                <span class="tooltip">Ledger</span>
+                <span class="tooltip">User Log</span>
             </li>
-            <li>
-                <a href="#">
-                    <i class='bx bx-folder'></i>
-                    <span class="links_name">Activity Log</span>
-                </a>
-                <span class="tooltip">Activity Log</span>
-            </li>
-            @*<li>
-                <a href="#">
-                    <i class='bx bx-cart-alt'></i>
-                    <span class="links_name">Staff</span>
-                </a>
-                <span class="tooltip">Staff</span>
-            </li>*@
+
             <li>
                 <a href="@Url.Action("Index", "Supplier")">
                     <i class='bx bxs-user'></i>
@@ -202,16 +109,23 @@
                 <span class="tooltip">Setting</span>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-cog'></i>
+                <a href="@Url.Action("Index","Analysis")">
+                    <i class='bx bx-line-chart'></i>
                     <span class="links_name">Analysis</span>
                 </a>
                 <span class="tooltip">Analysis</span>
             </li>
+            <li>
+                <a href="@Url.Action("Logout","Account")">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">LogOut</span>
+                </a>
+                <span class="tooltip">LogOut</span>
+            </li>
 
         </ul>
     </div>
-    <section class="home-section col d-flex justify-content-center background-radial-gradient" style="font-family:Roboto; font-size:14px; ">
+    <section class="home-section col d-flex justify-content-center background-radial-gradient">
         <link href="~/Content/Css/blocks.css" rel="stylesheet" />
         <div class="container px-1 py-2 px-md-1 text-lg-start my-5">
             <div class="row gx-lg-5 align-items-center mb-5">
@@ -222,8 +136,8 @@
 
 
 
-                    <div class="card bg-glass " style="width: 80rem;">
-                        <div class="card-header bg-glass" style="background-color:#ffffff;">
+                    <div class="card bg-glass " style="width: 60rem;">
+                        <div class="card-body bg-glass" style="background-color:#ffffff;">
                             @RenderBody()
 
                         </div>
@@ -235,21 +149,28 @@
     <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Supplier</h5>
+                <div class="modal-body">
                     <button type="button" class="close" id="closbtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
                 </div>
 
-                <div class="modal-body" id='myModalContent'></div>
+                <div class="modal-body" id='myModalContent'>
 
-
-                <div class="modal-footer">
                 </div>
+
+
             </div>
         </div>
     </div>
+    <script>
+        $(function () {
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+    </script>
 
     <script src="~/Scripts/_CreateScript.js"></script>
     <script src="~/Scripts/_delete.js"></script>
@@ -264,10 +185,7 @@
             menuBtnChange();//calling the function(optional)
         });
 
-        searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
-            sidebar.classList.toggle("open");
-            menuBtnChange(); //calling the function(optional)
-        });
+
 
         // following are the code to change sidebar button(optional)
         function menuBtnChange() {

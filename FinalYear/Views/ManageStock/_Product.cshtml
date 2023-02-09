@@ -1,8 +1,9 @@
-﻿<script src="https://kit.fontawesome.com/ef9da11eab.js" crossorigin="anonymous"></script>
-
-<div class="card-body bg-glass">
-
-    <table class="table" id="example">
+﻿
+<div class="card card-body ">
+    <p>
+        <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus"></i></a>
+    </p>
+    <table class="display compact" id="example1">
         <thead>
             <tr>
                 <th>
@@ -26,19 +27,138 @@
                         @item.ProName
                     </td>
                     <td>
-                        @item.category.Catname
+                        @item.Category.Catname
                     </td>
                     <td>
-                        @item.Subcategory.SubCatname
+                        @item.SubCategory.SubCatname
                     </td>
                     <td>
-                        <button href="#" class="anchorDetail btn" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button href="#" class="anchorDetail btn  btn-sm" data-url="/ManageStock/Edit" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button href="#" class="anchorDetail btn btn-sm" data-url="/ManageStock/Details" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-info"></i></button>
+                        @*<button href="#" class="adelete btn " data-url="/ManageStock/_Delete" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-trash-can"></i></button>*@
 
-                        <button href="#" class="anchorDetail btn " data-url="/ManageStock/Details" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-info"></i></button>
-                        <button href="#" class="adelete btn " data-url="/ManageStock/_Delete" data-id="@item.ProID" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-minus"></i></button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#example1').DataTable();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+<script src="~/Scripts/_CreateScript.js"></script>
+<script src="~/Scripts/_delete.js"></script>
+<script src="~/Scripts/_Detail.js"></script>
+@*<script>
+        var createBtn = $(".anchorDetail");
+        if (createBtn) {
+
+            createBtn.click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id');
+                var TeamDetailPostBackURL = $buttonClicked.attr('data-url');
+                $.ajax({
+                    type: "GET",
+                    url: TeamDetailPostBackURL,
+                    //contentType: "application/json; charset=utf-8",
+                    data: { id: id },
+                    success: function (data) {
+                        Swal.fire({
+                            html: data,
+                            showCloseButton: true,
+                            showCancelButton: true,
+                            focusConfirm: false,
+                            confirmButtonText: 'Save',
+                            confirmButtonAriaLabel: 'Save',
+                            cancelButtonText: 'Cancel',
+                            cancelButtonAriaLabel: 'Cancel',
+                            onOpen: function () {
+                                $(document).ready(function () {
+                                    var isValidated = false;
+                                    $.validator.addMethod("uniqueproduct", function (value, element) {
+                                        var data = $('#ProName').val();
+                                        debugger
+                                        var isValid = false;
+                                        $.ajax({
+                                            url: '/ManageStock/FindByName',
+                                            type: 'POST',
+                                            data: { ProName: data },
+                                            async: false,
+                                            success: function (response) {
+                                                console.log(response);
+                                                isValid = response.isUnique;
+                                            }
+
+                                        });
+                                        return isValid;
+                                    }, "Product Name already exists.");
+
+                                    $("#productform").validate({
+                                        rules: {
+                                            ProName: {
+                                                required: true,
+                                                uniqueproduct: true
+                                            },
+                                            Code: {
+                                                required: true,
+                                            },
+
+                                        },
+
+                                        submitHandler: function (form) {
+                                            $.ajax({
+
+                                                url: "/ManageStock/Create",
+                                                type: 'POST',
+                                                data: $('#productform').serialize(),
+                                                success: function (data) {
+                                                    if (data.success) {
+
+                                                        $("#ProName").val("");
+                                                        $("#sessionval").html(data.dig);
+                                                        toastr["success"](data.message);
+                                                    }
+                                                    else {
+                                                        $("#sessionval").html(data.dig);
+                                                        toastr["danger"](data.message);
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                        //errorPlacement: function (error, element) {
+                                        //    $("#message").html(error.text());
+                                        //}
+
+                                    });
+                                    $("#Catname").on("keyup", function () {
+                                        // Validate the form agai
+                                        if (!isValidated) {
+                                            $("#productform").validate().element("#ProName");
+                                            // Update the error message if the validation is successful
+                                            if ($("#productform").validate().element("#ProName")) {
+                                                $("#message").html("");
+                                            }
+                                        } else {
+                                            // Validate the form
+                                            $("#productform").valid();
+                                            console.log("not");
+                                        }
+                                    });
+                                });
+
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+    </script>*@

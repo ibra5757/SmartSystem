@@ -1,11 +1,15 @@
-﻿@model PagedList.IPagedList<FinalYear.Models.Supplier>
+﻿@model PagedList.IPagedList<FinalYear.Models.Company>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.pageTitle = "Supplier";
 }
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 
 <ul class="nav nav-tabs card-header-tabs " id="myTab" role="tablist">
     <li class="nav-item">
@@ -13,25 +17,23 @@
     </li>
 
 </ul>
-<div class="tab-content" id="myTabContent" style="background-color:#ffffff; ">
+<div class="tab-content" id="myTabContent"  >
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="card-body bg-glass" style="width:60rem">
-            <h5 class="card-title">Add New Products</h5>
-            <button href="#" class="acreate btn btn-success" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal">Create</button>
+        <div class="card card-body">
+            <button href="#" class="acreate btn btn-lg" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-plus"></i></button>
 
             <br />
-            <table class="table" id="example">
+            <table class="display compact" id="example">
                 <thead>
                     <tr>
-                        <th scope="col">
-                            @Html.ActionLink("Name", "Index")
-                        </th>
-                        <th scope="col">
-                            @Html.ActionLink("Conatct", "Index")
-                        </th>
-                        <th scope="col">
-                            @Html.ActionLink("Comapany Date", "Index")
-                        </th>
+                        <th scope="col">Comapny Name</th>
+
+                        <th scope="col">Conatact</th>
+
+                        <th scope="col">Address</th>
+
+                        <th scope="col">Balance</th>
+
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -40,19 +42,30 @@
                     {
                         <tr>
                             <td scope="row">
-                                @Html.DisplayFor(modelItem => item.Name)
+                                @Html.DisplayFor(modelItem => item.CompanyName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Contact)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Company)
+                                @Html.DisplayFor(modelItem => item.Address)
                             </td>
                             <td>
-                                <button href="#" class="anchorDetail btn btn-success btn-sm" data-url="/Supplier/_Edit" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Edit</button>
+                                @Html.DisplayFor(modelItem => item.Balance)
+                            </td>
+                            <td>
+                                <button href="#" class="anchorDetail btn  btn-sm" data-url="/Supplier/_Edit" data-id="@item.CompanyID" data-bs-toggle="model" data-target="#myModal">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
 
-                                <button href="#" class="anchorDetail btn btn-info btn-sm" data-url="/Supplier/Details" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Details</button>
-                                <button href="#" class="adelete btn btn-danger btn-sm" data-url="/Supplier/_Delete" data-id="@item.SupplierID" data-bs-toggle="model" data-target="#myModal">Delete</button>
+                                <button href="#" class="anchorDetail btn  btn-sm" data-url="/Supplier/Details" data-id="@item.CompanyID" data-bs-toggle="model" data-target="#myModal">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </button>
+                                <button id="Delete" class="btn btn-sm" data-url="/Supplier/DeleteConfirmed/" data-id="@item.CompanyID">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script src="~/Scripts/_delete.js"></script>
                             </td>
                         </tr>
                     }
@@ -62,24 +75,16 @@
     </div>
 </div>
 
-<script src="~/Scripts/ShowTbl.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.semanticui.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/dataTables.semanticui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="~/Scripts/ShowTbl.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
 
 
 
 
-
-
-
+<script src="~/Scripts/_delete.js"></script>
+<script src="~/Scripts/_Detail.js"></script>
+<script src="~/Scripts/_CreateScript.js"></script>

@@ -1,4 +1,4 @@
-﻿@model FinalYear.Models.product
+﻿@model FinalYear.Models.Product
 
 <div style="font-size:14px;">
     <dl class="dl-horizontal">
@@ -12,20 +12,23 @@
 
 
         <dt>
-            @Html.DisplayNameFor(model => model.category.Catname)
+            @Html.DisplayNameFor(model => model.Category.Catname)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.category.Catname)
+            @Html.DisplayFor(model => model.Category.Catname)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Subcategory.SubCatname)
+            @Html.DisplayNameFor(model => model.SubCategory.SubCatname)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Subcategory.SubCatname)
+            @Html.DisplayFor(model => model.SubCategory.SubCatname)
         </dd>
 
     </dl>
 </div>
+
+<button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+<script src="~/Scripts/Closebtn.js"></script>

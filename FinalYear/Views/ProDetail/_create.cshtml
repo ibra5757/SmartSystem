@@ -1,13 +1,15 @@
-﻿<form action="@Url.Action("Create","ProDetail")" method="post" id="prodtl">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <table class="table">
+﻿
+
+
+<form id="proform" method="post">
+    <table class="table" id="prodetailtable">
         <tr>
             <td>
 
                 <div class="form-group">
-                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <small class="form-label col-md" for="Allpro">Product</small>
-                    <select class="form-control" id="Allpro">
+
+                    <select class="form-control" name="ProId">
                         @*<option value="" disabled selected hidden>Select your option</option>*@
                         @if (ViewBag.ProCmb != null)
                         {
@@ -20,7 +22,7 @@
 
                 </div>
                 <small class="form-label col-md" for="Allpro"></small>
-                <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus">Product</i></a>
+                <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus"></i></a>
 
                 @*<input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example" aria-describedby="btnGroupAddon">*@
             </td>
@@ -28,18 +30,18 @@
 
 
                 <div class="form-group">
-                    <small class="form-label col-md-2">Types</small>
-
-                    <select class="form-control" name="Type">
+                    <small class="form-label col-md-2">ProductType</small>
+                    <input type="text" list="options" id="ProductType" class="form-control" name="ProductType" required="" placeholder="ProductType">
+                    <datalist id="options">
                         @*<option value="" disabled selected hidden>Select your option</option>*@
                         @if (ViewBag.Pd_type != null)
                         {
                             foreach (var item in ViewBag.Pd_type)
                             {
-                                <option value="@item.PDId">@item.Type</option>
+                                <option id="@item.PDId">@item.ProductType</option>
                             }
                         }
-                    </select>
+                    </datalist>
 
                 </div>
 
@@ -47,9 +49,9 @@
 
             <td>
                 <div class="form-group">
-                    <small class="control-label col-md-2">Unit</small>
+                    <small class="control-label col-md-2">ProductUnit</small>
 
-                    <input type="text" placeholder="Unit" class="form-control" required="" name="ProUnit"/>
+                    <input type="text" placeholder="ProductUnit" class="form-control" id="ProductUnit" name="ProductUnit" required="" />
 
                 </div>
 
@@ -60,16 +62,25 @@
                 <div class="form-group">
                     <small class="control-label col-md-2">Packing</small>
 
-                    <input type="number" placeholder="Packing" class="form-control"required="" min="1" name="Packing"/>
+                    <input type="number" placeholder="Packing" class="form-control" name="Packing" id="Packing" required="" min="1" />
                 </div>
 
 
             </td>
             <td>
                 <div class="form-group">
-                    <small class="control-label col-md-2">Price</small>
+                    <small class="control-label col-md-2">CostPrice</small>
 
-                    <input type="number" placeholder="Price" class="form-control" required="" min="1" name="Price" />
+                    <input type="number" placeholder="CostPrice" class="form-control" name="CostPrice" id="CostPrice" required="" min="0" />
+
+                </div>
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <small class="control-label col-md-2">UnitPrice</small>
+
+                    <input type="number" placeholder="UnitPrice" class="form-control" name="UnitPrice" id="UnitPrice" required="" min="1" />
 
                 </div>
 
@@ -79,54 +90,94 @@
 
         <tr>
             <td>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-outline-success" />
-                    </div>
-                </div>
+                <button type="submit" id="clicks" class="btn btn-outline-success">Submit</button>
+
             </td>
         </tr>
     </table>
 
 
 </form>
-<script src="~/Scripts/jquery-1.7.1.js"></script>
+
 <script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        $(".prodtl").validate({
-            rules: {
-                ProUnit: {
-                    required: true,
+    $("#proform").validate({
+        rules:
+        {
+            ProductType:
+            {
+                required: true,
+            },
+            ProductUnit:
+            {
+                required: true,
+            },
+            CostPrice:
+            {
+                required: true,
+            },
+            UnitPrice:
+            {
+                required: true,
+            },
+            Packing:
+            {
+                required: true,
+            },
+            Allpro:
+            {
+                required:
+                {
+                    depends: function (element) {
+                        return $("#Allpro").val() == "Select your option";
+                    }
                 },
-                Price: {
-                    required: true,
-                    min:1,
-                },
-                Packing: {
-                    required: true,
-                    min: 1,
-                },
-                Allpro: {
-                    requred: {
-                        depends: function (element) {
-                            return $("#Allpro").val() == "Select your option";
-                        }
+            },
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: "/ProDetail/Create",
+                type: 'POST',
+                data: $('#proform').serialize(),
+                async: false,
+                success: function (data) {
+
+                    if (data.success) {
+
+                        toastr["success"](data.message);
+                    }
+                    else {
+                        toastr["danger"](data.message);
                     }
                 }
 
-            },
-            messages: {
-                SubCatname: {
-                    required: "SubcatagoryName"
-                },
-                Allpro: {
-                    required: "Please select an option from the list, if none are appropriate please select 'Other'",
-                },
+            });
+        }
 
+
+    });
+
+
+</script>
+<script>
+    const input = document.getElementById("ProductType");
+    input.addEventListener("input", function () {
+        const options = document.querySelectorAll("#options option");
+        let selectedId = 0;
+        for (const option of options) {
+            if (option.value === input.value) {
+                selectedId = option.id;
+                break;
             }
-
-        });
+        }
+        console.log("Selected id: ", selectedId);
     });
 </script>
+

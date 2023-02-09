@@ -11,32 +11,28 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class product
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public product()
+        public Product()
         {
             this.ProDetails = new HashSet<ProDetail>();
-            this.salesitems = new HashSet<salesitem>();
-            this.purchasesitems = new HashSet<purchasesitem>();
-            this.returneditems = new HashSet<returneditem>();
         }
     
         public int ProID { get; set; }
+        [Required]
         public string ProName { get; set; }
-        public int CatID { get; set; }
-        public int SubCatID { get; set; }
+        [Required]
+        public Nullable<int> CatID { get; set; }
+        [Required]
+        public Nullable<int> SubCatID { get; set; }
+        public string Code { get; set; }
     
-        public virtual category category { get; set; }
+        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProDetail> ProDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<salesitem> salesitems { get; set; }
-        public virtual Subcategory Subcategory { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<purchasesitem> purchasesitems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<returneditem> returneditems { get; set; }
+        public virtual SubCategory SubCategory { get; set; }
     }
 }

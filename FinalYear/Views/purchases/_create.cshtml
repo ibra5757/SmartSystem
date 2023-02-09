@@ -1,48 +1,30 @@
 ﻿
-<form action="@Url.Action("Create","purchases")" method="post">
+<form method="post" id="formPurchase">
 
 
     <table class="table">
         <tr>
             <td scope="col">
                 <div class="col-md-10">
-                    @Session["FullName"]
+                  <h3 style="color:green">@Session["FullName"]</h3>
+
                 </div>
 
             </td>
             <td scope="col">
-                <small class="control-label col-md-2"> Supplier</small>
+                <small class="control-label col-md-2"> Company</small>
                 <div class="col-md-10">
-                    <select id="cat" class="form-control" name="SupplierID">
+                    <select id="CompanyID" class="form-control" name="CompanyID">
                         <option value="" disabled selected hidden>Select your option</option>
                         @foreach (var item in ViewBag.SupplierID)
                         {
-                            <option value="@item.SupplierID">@item.Name</option>
+                            <option value="@item.CompanyID">@item.CompanyName</option>
                         }
                     </select>
                 </div>
             </td>
         </tr>
-        @*<tr>
-            <td scope="col">
-                <small class="control-label col-md-2">Catagory </small>
-                <div class="col-md-10">
-                    <select id="cat" class="form-control" name="Catname">
-                        <option value="" disabled selected hidden>Select your option</option>
-                        @foreach (var item in ViewBag.Cataids)
-                        {
-                            <option value="@item.CatID">@item.Catname</option>
-                        }
-                    </select>
-                </div>
-            </td>
-            <td scope="col">
-                <small class="control-label col-md-2">SubCatagory</small>
-                <div class="col-md-10">
-                    <select class="form-control" id="subcat" name="SubCatname"></select>
-                </div>
-            </td>
-        </tr>*@
+
         <tr>
             <td scope="col">
                 <small class="control-label col-md-2">Product</small>
@@ -52,10 +34,10 @@
                         @if (ViewBag.AllProduct != null)
                         {
 
-                        foreach (var item in ViewBag.AllProduct)
-                        {
-                            <option value="@item.ProID">@item.ProName</option>
-                        }
+                            foreach (var item in ViewBag.AllProduct)
+                            {
+                                <option value="@item.ProID">@item.ProName</option>
+                            }
                         }
                     </select>
                 </div>
@@ -63,92 +45,116 @@
             <td scope="col">
                 <small class="control-label col-md-2">Quantity</small>
                 <div class="col-md-10">
-                    <input class="form-control" type="number" placeholder="Quantity"  name="Quantity"/>
+                    <input class="form-control" name="Quantity" id="Quantity" type="number" min="1" placeholder="Quantity" />
+
+
                 </div>
             </td>
+
         </tr>
         <tr>
             <td scope="col">
-                <small class="control-label col-md-2">Type</small>
+                <small class="control-label col-md-2">ProductType</small>
                 <div class="col-md-10">
-                    <select class="form-control" name="Type" id="typ">
+                    <select class="form-control" name="ProductType" id="ProductType">
                         <option value="" disabled selected hidden>Select your option</option>
-                     
+
                     </select>
                 </div>
             </td>
             <td scope="col">
-                <small class="control-label col-md-2">unit</small>
+                <small class="control-label col-md-2">ProductUnit</small>
                 <div class="col-md-10">
-                    <select class="form-control" name="ProUnit" id="unt">
+                    <select class="form-control" name="ProductUnit" id="ProductUnit">
                         <option value="" disabled selected hidden>Select your option</option>
-                     
+
                     </select>
                 </div>
             </td>
 
         </tr>
         <tr>
-            <td scope="col">
-                <small class="control-label col-sm-2">Batch Id</small>
-                <div class="col-md-10">
-                    <input type="number" placeholder="BatchID" class="form-control" min="0"  name="BatchId"/>
-                </div>
 
-            </td>
-            @*<td scope="col">
-                <small class="control-label col-md-2">Price</small>
+            <td scope="col">
+                <small class="control-label col-md-2">Batch No #</small>
                 <div class="col-md-10">
-                    <input type="number" placeholder="Price" class="form-control" min="0" name="U_Price"/>
+                    <input type="number" placeholder="BatchNo" class="form-control" min="1" id="BatchNo" name="BatchNo" />
                 </div>
-            </td>*@
+            </td>
 
         </tr>
         <tr>
-            <td scope="col">  <button type="submit" class="btn btn-success">Make</button></td>
+            <td scope="col">  <button type="submit" class="btn btn-success col-md-2">Make</button></td>
         </tr>
     </table>
 </form>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
 <script>
-        $(document).ready(function () {
-        });
+    $("#formPurchase").validate({
+        rules:
+        {
 
+            CompanyID:
+            {
+                required: true,
+            },
+            Quantity:
+            {
+                required: true,
+            },
 
-    $("#product__").change(function () {
+            BatchNo: {
+                required: true,
+            },
+            ProName:
+            {
+                required: true,
+            },
+            ProductType:
+            {
+                required: true,
+            },
+            ProductUnit:
+            {
+                required: true,
+            },
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: "/purchases/Create",
+                type: 'POST',
+                data: $('#formPurchase').serialize(),
+                async: false,
+                success: function (data) {
 
-            var url = "@Url.Content("~/purchases/cmb")";
+                    if (data.success == true) {
 
-        $.getJSON(url, { name: $("#product__").val() }, function (data) {
-            $("#typ").empty();
-            $("#typ").append("<option disabled selected hidden>Select your option</option>");
-                $.each(data, function (index, optionData) {
-                    var option = "<option value=" + optionData.ProId + ">" + optionData.Type + "</option>";
-                    $("#typ").append(option);
-                });
-            })
+                        toastr["success"](data.message);
+                    }
+                    else {
+                        toastr["danger"](data.message);
+                    }
+                }
 
-
-        });
-    $("#typ").change(function () {
-
-            var url = "@Url.Content("~/purchases/pro")";
-
-        $.getJSON(url, { name: $("#typ").val(), type: $("#typ").children("option").filter(":selected").text()}, function (data) {
-            $("#unt").empty();
-            $("#unt").append("<option disabled selected hidden>Select your option</option>");
-                $.each(data, function (index, optionData) {
-                    var option = "<option value=" + optionData.PDId + ">" + optionData.ProUnit + "</option>";
-                    console.log(option);
-                    $("#unt").append(option);
-                });
-            })
             });
+        }
 
+
+    });
 
 
 </script>
-
-
 

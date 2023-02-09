@@ -13,22 +13,67 @@ namespace FinalYear.Controllers
 {
     public class ManageStockController : Controller
     {
-        private INVENTORY_SYSTEMEntities db = new INVENTORY_SYSTEMEntities();
+        private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: ManageStock
-
+        _6digitRand _6DigitRand = new _6digitRand();
+        long dig=0;
         public ActionResult Index()
         {
-            ViewBag.ProCmb = db.products;
+            
+             dig= _6DigitRand.GenerateRnd();
+            Session["Rnd"] = dig;
+            ViewBag.ProCmb = db.Products;
             ViewBag.Pd_type = db.ProDetails;
-
-            ViewBag.proDetails = db.ProDetails.Include(p => p.product);
-            ViewBag.ProductPartial = db.products.Include(p => p.category).Include(p => p.Subcategory);
-            ViewBag.list = db.categories.ToList();
-            ViewBag.Subcatagory= db.Subcategories.ToList();
+            
+            
             return View();
         }
+        
+        public PartialViewResult productlist()
+        {
+            ViewBag.ProductPartial = db.Products.Include(p => p.Category).Include(p => p.SubCategory);
+            return PartialView("_Product");
+        }
+        public ActionResult TabList(string tab)
+        {
+            switch (tab)
+            {
+                case "#tab2":
+                    categoriesController categoriesController = new categoriesController();
+                    var catlist = categoriesController.catagorylistrlist();
+                    return catlist ;
+                case "#tab3":
+                    SubcategoriesController subcategoriesController = new SubcategoriesController();
+                    var subcatlist = subcategoriesController.subcatlist();
+                    return subcatlist;
+                case "#tab4":
+                    ProDetailController proDetailController = new ProDetailController();
+                    var prodetaillisy = proDetailController.prodetail();
+                    return prodetaillisy;
+                default:
+                    ManageStockController manageStockController = new ManageStockController();
+                    var plist = manageStockController.productlist();
+                    return plist;
+            }
 
+
+            
+        }
+        [HttpPost]
+        public JsonResult FindByName(string ProName)
+        {
+
+            var Category = db.Products.Where(x => x.ProName == ProName).FirstOrDefault();
+
+            bool isUnique = false;
+            if (Category == null)
+            {
+                isUnique = true;
+            }
+            return Json(new { isUnique = isUnique, JsonRequestBehavior.AllowGet });
+
+        }
 
         // GET: ManageStock/Details/5
         public ActionResult Details(int? id)
@@ -38,7 +83,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            product product = db.products.Find(id);
+            Product product = db.Products.Find(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -49,9 +94,9 @@ namespace FinalYear.Controllers
         // GET: ManageStock/Create
         public ActionResult _create()
         {
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname");
-            ViewBag.SubCatID = new SelectList(db.Subcategories, "SubCatID", "SubCatname");
-            ViewBag.SupplierID = new SelectList(db.Suppliers, "SupplierID", "Name");
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname");
+            ViewBag.SubCatID = new SelectList(db.SubCategories, "SubCatID", "SubCatname");
+            ViewBag.SupplierID = new SelectList(db.Companies, "SupplierID", "Name");
             return PartialView();
         }
 
@@ -59,18 +104,22 @@ namespace FinalYear.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "ProName,CatID,SubCatID")] product product)
+        public JsonResult Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
-                db.products.Add(product);
+                db.Products.Add(product);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                dig = _6DigitRand.GenerateRnd();
+                Session["Rnd"] = dig;
+                return Json(new { success = true, message = "Product Register Sucessfully." ,dig=dig});
             }
 
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", product.CatID);
-            ViewBag.SubCatID = new SelectList(db.Subcategories, "SubCatID", "SubCatname", product.SubCatID);
-            return View(product);
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname", product.CatID);
+            ViewBag.SubCatID = new SelectList(db.SubCategories, "SubCatID", "SubCatname", product.SubCatID);
+            dig = _6DigitRand.GenerateRnd();
+            Session["Rnd"] = dig;
+            return Json(new { success = false, message = "Product Register Fail.", dig = dig });
         }
 
 
@@ -78,35 +127,34 @@ namespace FinalYear.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
+            { 
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            product product = db.products.Find(id);
+            Product product = db.Products.Find(id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", product.CatID);
-            ViewBag.SubCatID = new SelectList(db.Subcategories, "SubCatID", "SubCatname", product.SubCatID);
-            return PartialView(product);
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname", product.CatID);
+            ViewBag.SubCatID = new SelectList(db.SubCategories, "SubCatID", "SubCatname", product.SubCatID);
+            return PartialView("_Edit",product);
         }
 
         // POST: ManageStock/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProID,ProName,Quantity,price,packing,Date,CatID,SubCatID,SupplierID")] product product)
+        public ActionResult Edit( Product product)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Product Register Sucessfully."});
             }
-            ViewBag.CatID = new SelectList(db.categories, "CatID", "Catname", product.CatID);
-            ViewBag.SubCatID = new SelectList(db.Subcategories, "SubCatID", "SubCatname", product.SubCatID);
-            return View(product);
+            ViewBag.CatID = new SelectList(db.Categories, "CatID", "Catname", product.CatID);
+            ViewBag.SubCatID = new SelectList(db.SubCategories, "SubCatID", "SubCatname", product.SubCatID);
+            return Json(new { success = false, message = "Product Register UnSucessfully."});
         }
 
         // GET: ManageStock/Delete/5
@@ -116,7 +164,7 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            product product = db.products.Find(id);
+            Product product = db.Products.Find(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -129,8 +177,8 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            product product = db.products.Find(id);
-            db.products.Remove(product);
+            Product product = db.Products.Find(id);
+            db.Products.Remove(product);
             db.SaveChanges();
             return RedirectToAction("Index","ManageStock");
         }

@@ -11,21 +11,24 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Subcategory
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class SubCategory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subcategory()
+        public SubCategory()
         {
-            this.products = new HashSet<product>();
+            this.Products = new HashSet<Product>();
         }
     
         public int SubCatID { get; set; }
+        [Required]
         public string SubCatname { get; set; }
+        [Required]
         public Nullable<int> CatID { get; set; }
     
-        public virtual category category { get; set; }
+        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<product> products { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

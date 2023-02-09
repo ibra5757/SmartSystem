@@ -12,33 +12,26 @@ namespace FinalYear.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class sale
+    public partial class SalesOrderMaster
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public sale()
+        public SalesOrderMaster()
         {
-            this.returneditems = new HashSet<returneditem>();
-            this.salesitems = new HashSet<salesitem>();
+            this.SODetails = new HashSet<SODetail>();
         }
     
-        public int ID { get; set; }
-        public string SalesId { get; set; }
-        public string InvoiceId { get; set; }
+        public System.DateTime Date { get; set; }
+        public int SOID { get; set; }
         public string BillNo { get; set; }
         public Nullable<int> CusID { get; set; }
         public decimal TotalAmount { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Status { get; set; }
         public decimal Discount { get; set; }
         public decimal GrandTotal { get; set; }
-        public decimal PaidAmount { get; set; }
         public Nullable<int> UserID { get; set; }
     
-        public virtual customer customer { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<returneditem> returneditems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<salesitem> salesitems { get; set; }
-        public virtual user user { get; set; }
+        public virtual ICollection<SODetail> SODetails { get; set; }
     }
 }

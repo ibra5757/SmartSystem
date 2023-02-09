@@ -1,51 +1,42 @@
-﻿@model FinalYear.Models.purchasesitem
+﻿@model FinalYear.Models.PODetail
+                    <h5 style="color:royalblue;">Detail Of Purchases</h5>
+@foreach (var item in ViewBag.purchasesitemsList)
+                
+{              <dt>CategoryName</dt>
+            <dd>
+                @item.ProDetail.Product.Category.Catname
+            </dd>
+            <dt>SubCategoryName</dt>
+            <dd>
+                @item.ProDetail.Product.SubCategory.SubCatname
+            </dd>
+            <dt>ProductName</dt>
+            <dd>
+                @item.ProDetail.Product.ProName
+            </dd>
+            <dt>ProductType</dt>
+            <dd>
+                @item.ProDetail.ProductType
+            </dd>
+            <dt>ProductUnit</dt>
+            <dd>
+                @item.ProDetail.ProductUnit
+            </dd>
+            <dt>CostPrice</dt>
+            <dd>
+                @item.ProDetail.CostPrice
+            </dd>
+            <dt>SalePrice</dt>
+            <dd>
+                @item.ProDetail.UnitPrice
+            </dd>
+            <dt>ProductCode</dt>
+            <dd>
+                @item.ProDetail.Product.Code
+            </dd>
 
-@{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>purchasesitem</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ProDetail.ProUnit)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProDetail.ProUnit)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.product.ProName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.product.ProName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.purchase.PurchaseId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.purchase.PurchaseId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Supplier.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Supplier.Name)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<button type="button" class="btn btn-dark" id="sclosbtn" data-dismiss="modal" aria-label="Close">Close</button>
+<script src="~/Scripts/Closebtn.js"></script>

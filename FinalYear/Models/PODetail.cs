@@ -12,17 +12,15 @@ namespace FinalYear.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class salesledger
+    public partial class PODetail
     {
-        public int ID { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Explanation { get; set; }
-        public decimal Debit { get; set; }
-        public decimal Credit { get; set; }
-        public decimal Balance { get; set; }
-        public Nullable<int> CusID { get; set; }
-        public string Status { get; set; }
+        public int PODetail_Id { get; set; }
+        public int POID { get; set; }
+        public int PDID { get; set; }
+        public int Quantity { get; set; }
+        public string BatchNo { get; set; }
     
-        public virtual customer customer { get; set; }
+        public virtual ProDetail ProDetail { get; set; }
+        public virtual PurchaseOrderMaster PurchaseOrderMaster { get; set; }
     }
 }

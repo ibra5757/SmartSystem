@@ -48,9 +48,9 @@ namespace FinalYear.Models
 
         public override string[] GetRolesForUser(string username)
         {
-            using (var context = new INVENTORY_SYSTEMEntities())
+            using (var context = new SmartInventoryEntities())
             {
-                var result = (from user in context.users where user.UserName == username select user.Role).ToArray();
+                var result = (from user in context.Users where user.UserName == username select user.Role).ToArray();
                 return result;
             }
            

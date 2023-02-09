@@ -10,45 +10,44 @@ namespace FinalYear.Repos
 {
     public class SupplierRepo: ISupplierRepo
     {
-        private readonly INVENTORY_SYSTEMEntities context; 
+        private readonly SmartInventoryEntities context; 
         public SupplierRepo()
         {
-            context = new INVENTORY_SYSTEMEntities();
+            context = new SmartInventoryEntities();
         }
-        public SupplierRepo(INVENTORY_SYSTEMEntities context)
+        public SupplierRepo(SmartInventoryEntities context)
         {
             context = this.context;
         }
-        public async Task<int> AddNewSupplier(Supplier model)
+        public async Task<int> AddNewSupplier(Company model)
         {
-            var newSupplier = new Supplier()
+            var newSupplier = new Company()
             {
-                Name = model.Name,
+                CompanyName = model.CompanyName,
                 Contact = model.Contact,
-                Company = model.Company
             };
 
 
-            context.Suppliers.Add(newSupplier);
+            context.Companies.Add(newSupplier);
             await context.SaveChangesAsync();
 
-            return newSupplier.SupplierID;
+            return newSupplier.CompanyID;
         }
-        public async Task<List<Supplier>> GetAllSupplier()
+        public async Task<List<Company>> GetAllSupplier()
         {
 
 
-            var sup = new List<Supplier>();
-            var data = await context.Suppliers.ToListAsync();
+            var sup = new List<Company>();
+            var data = await context.Companies.ToListAsync();
             if (data?.Any() == true)
             {
                 foreach (var item in data)
                 {
-                    sup.Add(new Supplier()
+                    sup.Add(new Company()
                     {
-                        Name = item.Name,
+                        CompanyName = item.CompanyName,
                         Contact = item.Contact,
-                        Company = item.Company
+
 
 
                     });
@@ -60,22 +59,21 @@ namespace FinalYear.Repos
 
 
 
-        public async Task<Supplier> GetSupplierById(int id)
+        public async Task<Company> GetSupplierById(int id)
         {
-            return await context.Suppliers.Where(x => x.SupplierID == id).Select(_Supplier => new Supplier()
+            return await context.Companies.Where(x => x.CompanyID == id).Select(_Supplier => new Company()
             {
-                Name = _Supplier.Name,
+                CompanyName = _Supplier.CompanyName,
                 Contact = _Supplier.Contact,
-                Company = _Supplier.Company
 
             }).FirstOrDefaultAsync();
 
         }
 
 
-        public  async Task<List<Supplier>> SearchSupplier(string Search)
+        public  async Task<List<Company>> SearchSupplier(string Search)
         {
-            return await  context.Suppliers.Where(x => x.Company.ToUpper().Contains(Search) || x.Contact.ToUpper().Contains(Search) || x.Name.ToUpper().Contains(Search) || Search == null).ToListAsync();
+            return await  context.Companies.Where(x=>x.Contact.ToUpper().Contains(Search) || x.CompanyName.ToUpper().Contains(Search) || Search == null).ToListAsync();
 
 
         }
