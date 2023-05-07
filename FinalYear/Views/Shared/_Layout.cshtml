@@ -24,37 +24,6 @@
 </head>
 <body>
 
-
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="background-color:azure;">
-        <div class="container-fluid justify-content-center">
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link d-sm-flex align-items-sm-center">
-
-                        <strong class="d-none d-sm-block ms-1" style="color:white;">@ViewBag.pageTitle</strong>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="container-fluid justify-content-end">
-            <ul class="navbar-nav flex-row">
-
-                <li class="nav-item me-3 me-lg-1  ">
-                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-
-                        <strong class="d-none d-sm-block ms-1">@Session["FullName"]</strong>
-                    </a>
-                </li>
-
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link" href="@Url.Action("Logout","Account")">
-                        <i class='bx bx-log-out' style="color:white"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </nav>
     <!-- Navbar-->
     <div class="sidebar"  style="z-index:10001 !important">
         <div class="logo-details">
@@ -114,6 +83,20 @@
                     <span class="links_name">Analysis</span>
                 </a>
                 <span class="tooltip">Analysis</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","SalesOrderMasters")">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">Sales</span>
+                </a>
+                <span class="tooltip">Sales</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Ledgers")">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">LedgerBook</span>
+                </a>
+                <span class="tooltip">LedgerBook</span>
             </li>
             <li>
                 <a href="@Url.Action("Logout","Account")">

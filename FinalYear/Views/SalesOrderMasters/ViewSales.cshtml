@@ -1,0 +1,205 @@
+﻿@model IEnumerable<FinalYear.Models.SalesOrderMaster>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.semanticui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.semanticui.min.css" />
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" integrity="your-integrity-value-here" crossorigin="anonymous">
+<script src="~/Scripts/_delete.js"></script>
+<script src="~/Scripts/_Detail.js"></script>
+<script src="~/Scripts/_CreateScript.js"></script>
+<script src="~/Scripts/ShowTbl.js"></script>
+
+<style>
+    .borderless td, .borderless th {
+        border: none;
+    }
+</style>
+<style>
+    .table-xs {
+        font-size: 12px;
+    }
+
+    .table-xm {
+        font-size: 14px;
+    }
+</style>
+<br />
+    <div class="row">
+        <div class="col-4">
+            <table class="table-sm table-xm" id="examp">
+                <thead>
+                    <tr>
+
+                        <td>
+                            BillNo#
+                        </td>
+
+                        <td>
+                            CustomerName
+                        </td>
+                        <td>Ac</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" class="link-item" data-id="@item.SOID">
+                                    @item.BillNo
+                                </a>
+                            </td>
+                            <td>
+                                @item.Customer.Name
+                            </td>
+                            <td>
+                                <button href="#" class="anchorDetail btn btn-sm" data-url="/purchases/Edit" data-id="@item.SOID" data-bs-toggle="model" data-target="#myModal">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+
+                                @*<button href="#" class="anchorDetail btn btn-sm" data-url="/purchasesitems/Details" data-id="@item.POID" data-bs-toggle="model" data-target="#myModal">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </button>*@
+                                @*<button href="#" class="adelete btn btn-danger btn-sm" data-url="/purchases/_Delete" data-id="@item.PurchaseId" data-bs-toggle="model" data-target="#myModal">Delete</button>*@
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    <div class="col-md-8">
+        <div class="d-flex align-items-center">
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">Date: </small>
+                    <small class="form-label" style="color:orangered" id="Date">---------</small>
+                </div>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">UserName: </small>
+                    <small class="form-label" id="UserName" style="color:orangered">----------</small>
+                </div>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">Customer : </small>
+                    <small class="form-label" style="color:orangered" id="CompanyName">------------</small>
+                </div>
+            </div>
+        </div><br />
+        <div class="d-flex align-items-center">
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">TotalAmount: </small>
+                    <small class="form-label" style="color:orangered" id="TotalAmount">---------</small>
+                </div>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">Discount% : </small>
+                    <small class="form-label" id="Dis" style="color:orangered">----------</small>
+                </div>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="form-input">
+                <div class="form-input">
+                    <small class="form-label d-inline-block">GrandTotal : </small>
+                    <small class="form-label" style="color:orangered" id="GrandTotal">------------</small>
+                </div>
+            </div>
+        </div>
+        <table id="Sale-list" class="table table-striped table-xs borderless" style="border: none; width: 100%; overflow-x: auto;">
+            <thead>
+                <tr>
+                    <th>ProName</th>
+                    <th>Quantity</th>
+                    <th>ProductUnit</th>
+                    <th>ProductType</th>
+                    <th>Packing</th>
+                    <th>UnitPrice</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('#examp').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": false
+        });
+    });
+
+</script>
+<script>
+
+    $(document).ready(function () {
+        $('#examp').on('click', '.link-item', function (event) {
+            event.preventDefault();
+            
+            var id = $(this).data('id');
+
+            var url = '/SalesOrderMasters/Details/' + id; // replace with your detail page URL
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+
+                    var POID = data[0].SOID;
+                    var Daate = data[0].Date;
+                    var UserID = data[0].UserID;
+                    var Name = data[0].Name;
+                    var BillNo = data[0].BillNo;
+                    var TotalAmount = data[0].TotalAmount;
+                    var GrandTotal = data[0].GrandTotal;
+                    var discount = data[0].Discount;
+
+                    var date = new Date(parseInt(Daate.substr(6)));
+                    var formattedDate = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
+
+                    $("#Date").text(formattedDate);
+                    $("#UserName").text(UserID);
+                    $("#CompanyName").text(Name);
+                    $("#TotalAmount").text(TotalAmount);
+                    $("#Dis").text(discount);
+                    $("#GrandTotal").text(GrandTotal);
+
+
+                    $("#Sale-list tbody").empty();
+
+                    $.each(data, function (index, item) {
+
+                        var row = "<tr>";
+                        row += "<td>" + item.Prodetail.ProName + "</td>";
+                        row += "<td>" + item.Prodetail.Quantity + "</td>";
+                        row += "<td>" + item.Prodetail.ProductUnit + "</td>";
+                        row += "<td>" + item.Prodetail.ProductType + "</td>";
+                        row += "<td>" + item.Prodetail.Packing + "</td>";
+                        row += "<td>" + item.Prodetail.UnitPrice + "</td>";
+                        row += "</tr>";
+                        $("#Sale-list tbody").append(row);
+                    });
+
+
+                },
+                error: function (xhr, status, error) {
+
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

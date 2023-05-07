@@ -68,6 +68,7 @@ namespace FinalYear.Controllers
                             Session["UserID"] = obj.UserID.ToString();
                             Session["UserName"] = obj.UserName.ToString();
                             return RedirectToAction("Dashboard");
+                            //return RedirectToAction("Index", "purchases");
                         }
                         else
                         {
@@ -100,7 +101,9 @@ namespace FinalYear.Controllers
         {
             if (Session["UserID"] != null)
             {
-                return View("Dashboard");
+                  return View("Dashboard");
+                
+
             }
             else
             {
@@ -124,13 +127,6 @@ namespace FinalYear.Controllers
                     var check = _db.Users.FirstOrDefault(s => s.UserName == user.UserName);
                     if (check == null)
                     {
-
-                        //userlogsController userlog = new userlogsController();
-                        //userlog userlogs = new userlog();
-                        //userlogs.Activity = check.Name.ToString() + " Register  Sucessfull";
-                        //userlogs.UserID = check.UserID;
-                        //userlogs.Date = DateTime.Now;
-                        //userlog.Create(userlogs);
                         user.Password = LoginHelper.GetMD5(user.Password);
                         _db.Configuration.ValidateOnSaveEnabled = false;
                         _db.Users.Add(user);

@@ -1,0 +1,49 @@
+﻿@model List<FinalYear.Models.Company>
+<br />
+<button href="#" class="acreate btn btn-lg" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-plus"></i></button>
+
+<br />
+<table class="table" id="example">
+    <thead>
+        <tr>
+            <th >Comapny Name</th>
+
+            <th >Conatact</th>
+
+            <th >Address</th>
+
+
+            <th >Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td >
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    <button href="#" class="anchorDetail btn  btn-sm" data-url="/Supplier/_Edit" data-id="@item.CompanyID" data-bs-toggle="model" data-target="#myModal">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+
+                    <button href="#" class="anchorDetail btn  btn-sm" data-url="/Supplier/Details" data-id="@item.CompanyID" data-bs-toggle="model" data-target="#myModal">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                    <button id="Delete" class="btn btn-sm" data-url="/Supplier/DeleteConfirmed/" data-id="@item.CompanyID">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script src="~/Scripts/_delete.js"></script>
+                </td>
+            </tr>
+        }
+    <tbody>
+</table>

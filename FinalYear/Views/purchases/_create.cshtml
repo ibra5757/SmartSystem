@@ -5,15 +5,26 @@
     <table class="table">
         <tr>
             <td scope="col">
-                <div class="col-md-10">
-                  <h3 style="color:green">@Session["FullName"]</h3>
+                <div class="form-group col-md">
+                    <small class="form-group">UserName</small>
+                    <h6 style="color:green">@Session["FullName"]</h6>
 
                 </div>
 
             </td>
             <td scope="col">
-                <small class="control-label col-md-2"> Company</small>
-                <div class="col-md-10">
+                <div class="form-group col-md">
+                    <small class="form-group">PurchaseNo</small>
+                    <h6 style="color:mediumvioletred" id="" name="PNo">@Session["Pno"]</h6>
+                    <input type="hidden" name="PNo" id="PNo" value="@Session["Pno"]">
+
+
+                </div>
+
+            </td>
+            <td scope="col">
+                <small class="control-label col-md"> Company</small>
+                <div class="col-md">
                     <select id="CompanyID" class="form-control" name="CompanyID">
                         <option value="" disabled selected hidden>Select your option</option>
                         @foreach (var item in ViewBag.SupplierID)
@@ -23,12 +34,10 @@
                     </select>
                 </div>
             </td>
-        </tr>
 
-        <tr>
             <td scope="col">
-                <small class="control-label col-md-2">Product</small>
-                <div class="col-md-10">
+                <small class="control-label col-md">Product</small>
+                <div class="col-md">
                     <select class="form-control" id="product__" name="ProName">
                         <option value="" disabled selected hidden>Select your option</option>
                         @if (ViewBag.AllProduct != null)
@@ -42,20 +51,14 @@
                     </select>
                 </div>
             </td>
-            <td scope="col">
-                <small class="control-label col-md-2">Quantity</small>
-                <div class="col-md-10">
-                    <input class="form-control" name="Quantity" id="Quantity" type="number" min="1" placeholder="Quantity" />
 
-
-                </div>
-            </td>
 
         </tr>
+
         <tr>
             <td scope="col">
-                <small class="control-label col-md-2">ProductType</small>
-                <div class="col-md-10">
+                <small class="control-label col-md">ProductType</small>
+                <div class="col-md">
                     <select class="form-control" name="ProductType" id="ProductType">
                         <option value="" disabled selected hidden>Select your option</option>
 
@@ -63,34 +66,56 @@
                 </div>
             </td>
             <td scope="col">
-                <small class="control-label col-md-2">ProductUnit</small>
-                <div class="col-md-10">
+                <small class="control-label col-md">ProductUnit</small>
+                <div class="col-md">
                     <select class="form-control" name="ProductUnit" id="ProductUnit">
                         <option value="" disabled selected hidden>Select your option</option>
 
                     </select>
                 </div>
             </td>
-
-        </tr>
-        <tr>
-
             <td scope="col">
-                <small class="control-label col-md-2">Batch No #</small>
-                <div class="col-md-10">
+                <small class="control-label col-md">Quantity</small>
+                <div class="col-md">
+                    <input class="form-control" name="Quantity" id="Quantity" type="number" min="1" placeholder="Quantity" />
+                    <small class="control-label col-md" style="color:red" id="avaq"></small>
+
+
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md">Batch No #</small>
+                <div class="col-md">
                     <input type="number" placeholder="BatchNo" class="form-control" min="1" id="BatchNo" name="BatchNo" />
                 </div>
             </td>
-
         </tr>
+
         <tr>
-            <td scope="col">  <button type="submit" class="btn btn-success col-md-2">Make</button></td>
+            <td>  <button type="submit" id="addRow" class="btn btn-success col-md">Add To Cart</button></td>
         </tr>
     </table>
+    <input class="form-control" hidden name="Price" id="Prices" type="number" min="1" placeholder="UnitPricePrice" />
+
+    <label hidden name="PDID" id="PDID"></label>
 </form>
+@*<button type="submit" id="addRow" class="btn btn-success col-md-2">Add To Cart</button>*@
+<table id="ptable" class="display-compact">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Type</th>
+            <th>Unit</th>
+            <th>Button</th>
+        </tr>
+    </thead>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</table>
+<div class="form-group">
 
+    <button type="submit" id="Purchase" class="btn btn-success col-md-2">Purchase</button>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -99,10 +124,80 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/Closebtn.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<head>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+</head>
 
 <script>
+        $(document).ready(function () {
+        });
+
+  
+    $("#product__").change(function () {
+
+            var url = "@Url.Content("~/purchases/cmb")";
+
+        $.getJSON(url, { name: $("#product__").val() }, function (data) {
+            $("#ProductType").empty();
+            $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+            $.each(data, function (index, optionData) {
+
+                    var option = "<option value=" + optionData.ProId + ">" + optionData.ProductType + "</option>";
+                    $("#ProductType").append(option);
+                });
+            })
+
+
+        });
+    $("#ProductType").change(function () {
+
+            var url = "@Url.Content("~/purchases/pro")";
+
+        $.getJSON(url, { name: $("#ProductType").val(), type: $("#ProductType").children("option").filter(":selected").text()}, function (data) {
+            $("#ProductUnit").empty();
+            $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
+                $.each(data, function (index, optionData) {
+                    var option = "<option value=" + optionData.PDId + ">" + optionData.ProductUnit + "</option>";
+                    $("#ProductUnit").append(option);
+
+                });
+            })
+            });
+
+     $("#ProductUnit").change(function () {
+
+            var url = "@Url.Content("~/purchases/CheckQuantity/")";
+
+         $.getJSON(url, { name: $("#ProductType").val(), type: $("#ProductType").children("option").filter(":selected").text(), unit: $("#ProductUnit").children("option").filter(":selected").text() }, function (data) {
+
+             $.each(data, function (index, optionData) {
+
+                 $("#avaq").empty();
+                 $("#Price").empty();
+                 $("#PDID").empty();
+                 $("#avaq").append("Available Quantity: " + optionData.TotalQuantity);
+                 $("#PDID").append(optionData.PDID);
+                 quanttt = optionData.TotalQuantity;
+                 $("#Prices").val(optionData.Price);
+                });
+            })
+         });
+
+
+    var t = $('#ptable').DataTable();
+    var deletedRows = [];
+    var Tprice = 0;
+
+    $("#ptable").on('click', '.deleteRow', function () {
+        var row = $(this).parents('tr');
+        var rowData = t.row(row).data();
+        var quantity = rowData[1];
+        var price = rowData[4];
+        Tprice -= quantity * price;
+        deletedRows.push(rowData);
+        t.row(row).remove().draw(false);
+        toastr["success"]("Deleted Sucessfull");
+    });
     $("#formPurchase").validate({
         rules:
         {
@@ -133,28 +228,161 @@
             },
         },
         submitHandler: function (form) {
+
+            //$.ajax({
+            //    url: "/purchases/Create",
+            //    type: 'POST',
+            //    data: $('#formPurchase').serialize(),
+            //    async: false,
+            //    success: function (data) {
+
+            //        if (data.success == true) {
+            //            $('#PNo').text(data.dig);
+
+            //            // Reset the form
+            //            $('#formPurchase')[0].reset();
+            //            toastr["success"](data.message);
+            //        }
+            //        else {
+            //            toastr["danger"](data.message);
+            //        }
+            //    }
+
+            //});
+            //$('#addRow').on('click', function ()
+            //{
+
+                    event.preventDefault();
+                    var product = $("#product__").val();
+                    var quantity = $("#Quantity").val();
+                    var productType = $("#ProductType").val();
+                    var productUnit = $("#ProductUnit").val();
+                    var prices = $("#Prices").val();
+                    var pdid = $("#PDID").text();
+                    if (product && quantity && productType && productUnit && prices) {
+                        var newRowData = [$("#product__").children("option").filter(":selected").text(), $("#Quantity").val(), $("#ProductType").children("option").filter(":selected").text(), $("#ProductUnit").children("option").filter(":selected").text(), '<a href="#" class="deleteRow">Remove</a>', '<input hidden value= "' + $("#Prices").val() + '"/>', '<a hidden value="' + pdid + '" "></a>', '<input hidden value= "' + $("#BatchNo").val()+ '"/>'];
+
+                        var exists = t.rows().data().toArray().some(function (row) {
+                            return row[0] === newRowData[0] && row[2] === newRowData[2] && row[3] === newRowData[3];
+                        });
+                        var deletedIndex = deletedRows.findIndex(function (row) {
+                            return row[0] === newRowData[0] && row[2] === newRowData[2] && row[3] === newRowData[3];
+                        });
+
+                        if (!exists && deletedIndex === -1) {
+                            t.row.add(newRowData).draw(false);
+
+                            var dd = t.rows().data().toArray();
+
+                            $.each(dd, function (index, value) {
+
+                                var quantity = value[1];
+                                var price = parseFloat($(value[5]).val());
+                                Tprice += quantity * price;
+                            });
+
+                        } else if (deletedIndex !== -1) {
+                            t.row.add(deletedRows[deletedIndex]).draw(false);
+                            deletedRows.splice(deletedIndex, 1);
+                        }
+                        else {
+                            toastr.warning("Already In Cart");
+                        }
+                    }
+                    else {
+                        toastr.warning("Please select all options and enter valid quantity");
+
+
+                    }
+
+
+
+
+
+            //});
+        }
+
+
+    });
+    $("#Purchase").click(function () {
+
+        var table = t;
+        var totalamt = Tprice;
+
+        if (table.rows().data().length > 0) {
+
+            var CusID = $("#CompanyID").children("option").filter(":selected").val();
+            var BillNo = $("#PNo").val();
+            var dd = table.rows().data().toArray();
+             var pODetail = new Array();
+
+            $.each(dd, function (index, value) {
+
+                var PODetail = {};
+                PODetail.Quantity = value[1];
+               // PODetail.U_price = $(value[5]).val();
+                PODetail .PDID = $(value[6]).attr('value');
+                PODetail.BatchNo = $(value[7]).attr('value');
+                pODetail.push(PODetail);
+
+            });
+            var dataToSend = {
+                items: pODetail,
+                PurchaseOrder: {
+                    BillNo: BillNo,
+                    CompanyID: CusID,
+                    GrandTotal: totalamt
+
+                }
+            };
+
+            var jsonString = JSON.stringify(dataToSend);
+            
             $.ajax({
+                type: "POST",
                 url: "/purchases/Create",
-                type: 'POST',
-                data: $('#formPurchase').serialize(),
-                async: false,
+                contentType: "application/json;",
+                //  data: { JSON.stringify(sODetail), CusID: CusID },
+                data: jsonString,
+
                 success: function (data) {
-
+                    debugger
                     if (data.success == true) {
+                        $("#BillNo").empty();
+                        $("#BillNo").append(data.dig);
+                        $('#formPurchase')[0].reset();
+                        deletedRows.length = 0;
+                        Tprice = 0;
+                        quanttt = 0;
+                        $("#PDID").empty();
+                        $("#CusID").val('');
 
+                        $("#avaq").empty();
+                        $("#ProductType").empty();
+                        $("#ProductUnit").empty();
                         toastr["success"](data.message);
+                        $('#ptable').DataTable().destroy();
+                        $('#ptable').DataTable();
                     }
                     else {
                         toastr["danger"](data.message);
                     }
-                }
+                },
+                error: function (x, xa, asd) {
 
+                    alert(x + xa + asd);
+                }
             });
+
+
+
+
         }
 
 
     });
 
+</script>
+<script>
 
 </script>
-
