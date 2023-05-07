@@ -153,10 +153,7 @@
     <Content Include="Content\Css\style.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Databasee\SmartInventory.mdf" />
-    <Content Include="Databasee\SmartInventory_log.ldf">
-      <DependentUpon>SmartInventory.mdf</DependentUpon>
-    </Content>
+    <Content Include="Databasee\script.sql" />
     <Content Include="Global.asax" />
     <Content Include="Icons\logout.png" />
     <Content Include="img\25552.jpg" />
