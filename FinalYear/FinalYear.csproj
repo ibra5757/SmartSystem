@@ -212,10 +212,14 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\AnalysisController.cs" />
     <Compile Include="Controllers\categoriesController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\LedgersController.cs" />
     <Compile Include="Controllers\ManageStockController.cs" />
     <Compile Include="Controllers\ProDetailController.cs" />
     <Compile Include="Controllers\purchasesController.cs" />
     <Compile Include="Controllers\purchasesitemsController.cs" />
+    <Compile Include="Controllers\SalesOrderMastersController.cs" />
+    <Compile Include="Controllers\SODetailsController.cs" />
     <Compile Include="Controllers\SubcategoriesController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\userlogsController.cs" />
@@ -231,12 +235,19 @@
     <Compile Include="Models\Company.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CompanyCustomerViewModel.cs" />
     <Compile Include="Models\Customer.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DbcontextPO.cs" />
+    <Compile Include="Models\ExtractTotalQuantity.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\JqueryDatatableParam.cs" />
+    <Compile Include="Models\Ledger.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginHelper.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
@@ -266,10 +277,17 @@
     <Compile Include="Models\PurchaseOrderMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuantityAva.cs" />
     <Compile Include="Models\SalesOrderMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SODetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SubCategory.cs">
@@ -367,6 +385,16 @@
     <Content Include="Views\purchases\_Detail.cshtml" />
     <Content Include="Views\purchases\Edit.cshtml" />
     <Content Include="Views\purchasesitems\_Edit.cshtml" />
+    <Content Include="Views\SalesOrderMasters\Index.cshtml" />
+    <Content Include="Views\SalesOrderMasters\Create.cshtml" />
+    <Content Include="Views\SODetails\Create.cshtml" />
+    <Content Include="Views\Customers\Create.cshtml" />
+    <Content Include="Views\Ledgers\Index.cshtml" />
+    <Content Include="Views\Ledgers\Create.cshtml" />
+    <Content Include="Views\Ledgers\ViewPage.cshtml" />
+    <Content Include="Views\SalesOrderMasters\ViewSales.cshtml" />
+    <Content Include="Views\Supplier\List.cshtml" />
+    <Content Include="Views\Customers\list.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -377,6 +405,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\NewFolder1\" />
+    <Folder Include="Views\PODetails\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

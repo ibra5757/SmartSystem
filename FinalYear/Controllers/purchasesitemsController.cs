@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinalYear.Models;
+using Newtonsoft.Json;
 
 namespace FinalYear.Controllers
 {
@@ -22,12 +23,61 @@ namespace FinalYear.Controllers
         }
 
         // GET: purchasesitems/Details/5
-        public ActionResult Details(int? id)
+         
+        public JsonResult Details(int? id)
         {
+
+
+            var purchaseOrders = (from pom in db.PurchaseOrderMasters
+                                  join u in db.Users on pom.UserID equals u.UserID
+                                  join c in db.Companies on pom.CompanyId equals c.CompanyID
+                                  join pod in db.PODetails on pom.POID equals pod.POID
+                                  join pd in db.ProDetails on pod.PDID equals pd.PDId
+                                  join p in db.Products on pd.ProId equals p.ProID
+                                  where pom.POID == id
+                                  select new
+                                  {
+                                      POID = pom.POID,
+                                      Date = pom.Date,
+                                      UserID = u.UserName,
+                                      CompanyName = c.CompanyName,
+                                      BillNo = pom.BillNo,
+                                      Podetail = new
+                                      {
+                                          ProName = p.ProName,
+                                          PODetail_Id = pod.PODetail_Id,
+                                          ProductType = pd.ProductType,
+                                          ProductUnit = pd.ProductUnit,
+                                          Packing = pd.Packing,
+                                          CostPrice = pd.CostPrice,
+                                          UnitPrice = pd.UnitPrice,
+                                          Quantity = pod.Quantity,
+                                          BatchNo = pod.BatchNo
+                                      }
+                                  }).ToList();
+
+            var result = purchaseOrders.Select(po => new {
+                POID = po.POID,
+                Date = po.Date,
+                UserID = po.UserID,
+                CompanyName = po.CompanyName,
+                BillNo = po.BillNo,
+                Podetail = new
+                {
+                    ProName = po.Podetail.ProName,
+                    PODetail_Id = po.Podetail.PODetail_Id,
+                    ProductType = po.Podetail.ProductType,
+                    ProductUnit = po.Podetail.ProductUnit,
+                    Packing = po.Podetail.Packing,
+                    CostPrice = po.Podetail.CostPrice,
+                    UnitPrice = po.Podetail.UnitPrice,
+                    Quantity = po.Podetail.Quantity,
+                    BatchNo = po.Podetail.BatchNo
+                }
+            }).ToList();
             
-                ViewBag.purchasesitemsList = db.PODetails.Where(x=>x.POID==id).ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
             
-            return PartialView();
         }
 
         // GET: purchasesitems/Create

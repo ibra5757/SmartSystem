@@ -22,13 +22,13 @@ namespace FinalYear.Models
     
         public int POID { get; set; }
         public System.DateTime Date { get; set; }
-
         public Nullable<int> UserID { get; set; }
         public Nullable<int> CompanyId { get; set; }
+        public string BillNo { get; set; }
     
         public virtual Company Company { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PODetail> PODetails { get; set; }
+        public virtual User User { get; set; }
     }
 }

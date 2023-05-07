@@ -16,22 +16,78 @@ namespace FinalYear.Controllers
         private SmartInventoryEntities db = new SmartInventoryEntities();
 
         // GET: purchases
+        _6digitRand _6DigitRand = new _6digitRand();
+        long dig = 0;
         public ActionResult Index()
         {
+            dig=_6DigitRand.GenerateRnd();
+            Session["Pno"] = "P"+dig.ToString();
             ViewBag.Unit = db.ProDetails.Select(x => x.ProductUnit).Distinct().ToList();
             ViewBag.Type = db.ProDetails.Select(x => x.ProductType).Distinct().ToList();
             ViewBag.AllProduct = db.Products.ToList();
             ViewBag.SupplierID = db.Companies.ToList();
-            var purchases = db.PurchaseOrderMasters.ToList();
-            return View(purchases.ToList());
+            return View();
         }
-
-        public ActionResult _list()
+        [System.Web.Mvc.HttpGet]
+        public JsonResult CheckQuantity(int name, string unit, string type)
         {
+            db.Configuration.ProxyCreationEnabled = false;
+            var pro_ = db.ProDetails.Where(x => x.ProId == name && x.ProductType == type && x.ProductUnit == unit).Select(x => x.PDId).ToList();
+            var alpha = pro_[0];
+            var stock = db.ProDetails.Where(x => x.PDId == alpha).FirstOrDefault();
+            var query = db.PODetails
+                              .Where(p => p.PDID == alpha)
+                              .GroupBy(p => p.PDID)
+            .Select(g => new QuantityAva
+            {
+                PDID = g.Key,
+                TotalQuantity = g.Sum(p => p.Quantity) - db.SODetails.Where(s => s.PDID == g.Key).Sum(s => s.S_Quantity),
+                Price = (int)stock.UnitPrice,
+                Packing = (int)stock.Packing
+            }).ToList();
 
-            return PartialView();
+            if (query != null)
+            {
+                return Json(query, "The requested quantity available.", JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(query, "The requested quantity is not available.", JsonRequestBehavior.AllowGet);
+
+            }
+
+
         }
-        // GET: purchases/Details/5
+
+        public PartialViewResult _list()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var purchases = db.PurchaseOrderMasters
+                 .Include(p => p.Company).Include(p => p.User) 
+                 .ToList();
+
+            return PartialView("_list", purchases.ToList());
+        }
+        public ActionResult PurchasesTabList(string tab)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            purchasesController purchasesController = new purchasesController();
+            switch (tab)
+            {
+                case "#tab2":
+                    var catlist = purchasesController._list();
+                    return catlist;
+
+                default:
+                    var plist = purchasesController._create();
+                    return plist;
+            }
+
+
+
+        }
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -47,10 +103,17 @@ namespace FinalYear.Controllers
         }
 
         // GET: purchases/Create
-        public ActionResult _create()
-        {//actual wala view konsa h tera 
+        public PartialViewResult _create()
+        {
+            dig = _6DigitRand.GenerateRnd();
+       //     Session["Pno"] = "P" + dig.ToString();
+            ViewBag.Unit = db.ProDetails.Select(x => x.ProductUnit).Distinct().ToList();
+            ViewBag.Type = db.ProDetails.Select(x => x.ProductType).Distinct().ToList();
+            ViewBag.AllProduct = db.Products.ToList();
+            ViewBag.SupplierID = db.Companies.ToList();
+            db.Configuration.ProxyCreationEnabled = false;
 
-            return PartialView();
+            return PartialView("_create");
         }
         public JsonResult  cmb(int name) {
             db.Configuration.ProxyCreationEnabled = false;
@@ -69,40 +132,80 @@ namespace FinalYear.Controllers
         // POST: purchases/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Create(PODetail pODetail,PurchaseOrderMaster purchaseOrderMaster,string ProductUnit,string ProName)
+        public class CreateSalesOrderViewModel
         {
+            public PurchaseOrderMaster PurchaseOrder { get; set; }
+            public List<PODetail> Items { get; set; }
+        }
+        [HttpPost]
+        public ActionResult Create(CreateSalesOrderViewModel model)
+        {
+            var PurchaseOrder = model.PurchaseOrder;
+            var items = model.Items;
             try
             {
-                //using (var context = new MyDbContext())
-                //{
+                var UserID = Session["UserID"].ToString();
 
-                //}
-
-                    var UserID = Session["UserID"].ToString();
 
                 if (ModelState.IsValid)
 
                 {
-                    purchaseOrderMaster.UserID = int.Parse(UserID);
-                    purchaseOrderMaster.CompanyId = int.Parse(purchaseOrderMaster.CompanyId.ToString());
-                    purchaseOrderMaster.Date = DateTime.Now;
-                    purchaseOrderMaster.PODetails = new List<PODetail>
+                    decimal DAmount = 0;
+                    foreach (var item in items)
                     {
-                        new PODetail
-                        {
-                    POID = purchaseOrderMaster.POID,
-                    PDID = int.Parse(ProductUnit),
-                    Quantity = int.Parse(pODetail.Quantity.ToString()),
-                    BatchNo= pODetail.BatchNo.ToString()
-                        }
+                        var p = db.ProDetails.Where(x => x.PDId == item.PDID).Select(y => y.UnitPrice).First();
+                        DAmount = Convert.ToDecimal(p) * Convert.ToDecimal(item.Quantity.ToString());
+                    }
+                    var balance = db.Ledgers.Where(x => x.CompID == PurchaseOrder.CompanyId)
+                      .GroupBy(x => x.CompID)
+                      .Select(g => new
+                      {
+                          CompID = g.Key,
+                          balance = g.Sum(x => x.Debit - x.Credit)
+                      })
+                      .FirstOrDefault()?.balance ?? 0.0m;
+                    Ledger ledger = new Ledger
+                    {
+                        CusID = null,
+                        CompID = int.Parse(PurchaseOrder.CompanyId.ToString()),
+                        Description = PurchaseOrder.BillNo,
 
+                        Debit = DAmount,
+                        Credit = 0,
+                        Balance = balance + DAmount,
+                        Date = DateTime.Now
+
+                    };
+                    LedgersController ledgersController = new LedgersController();
+                    ledgersController.Create(ledger, "", 0, 0, "");
+                    PurchaseOrderMaster purchaseOrderMaster = new PurchaseOrderMaster();
+                    purchaseOrderMaster.UserID = int.Parse(UserID);
+                    purchaseOrderMaster.BillNo = PurchaseOrder.BillNo;
+                    purchaseOrderMaster.CompanyId = PurchaseOrder.CompanyId;
+                    purchaseOrderMaster.Date = DateTime.Now;
+                    purchaseOrderMaster.PODetails = new List<PODetail>();
+                    foreach (var item in items)
+                    {
+                        PODetail pODetail = new PODetail
+                        {
+                            POID = purchaseOrderMaster.POID,
+                            PDID = item.PDID,
+                            Quantity = item.Quantity,
+                            BatchNo = item.BatchNo.ToString()
                         };
-                    
+                        purchaseOrderMaster.PODetails.Add(pODetail);
+                    };
+
                     db.PurchaseOrderMasters.Add(purchaseOrderMaster);
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Purcase Register Sucessfully."});
+                    dig = _6DigitRand.GenerateRnd();
+                    Session["Pno"] = dig.ToString();
+                    return Json(new { success = true, message = "Purcase Register Sucessfully.", dig = "P" + dig.ToString() });
 
+                }
+                else
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
                 }
             }
             catch (DbEntityValidationException ex)
@@ -111,11 +214,11 @@ namespace FinalYear.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        string z=string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        string z = string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }
-            return Json(new { success = false, message = "Purchase UnSucessfully." });
+            return Json(new { success = false, message = "Purchase UnSucessfully.", dig = dig.ToString() });
         }
 
         // GET: purchases/Edit/5

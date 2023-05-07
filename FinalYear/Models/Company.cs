@@ -11,27 +11,25 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Company
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Company()
         {
             this.PurchaseOrderMasters = new HashSet<PurchaseOrderMaster>();
+            this.Ledgers = new HashSet<Ledger>();
         }
     
         public int CompanyID { get; set; }
-        [Required]
         public string CompanyName { get; set; }
-        [Required]
         public string Contact { get; set; }
-        [Required]
         public string Address { get; set; }
-        [Required]
         public decimal Balance { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrderMaster> PurchaseOrderMasters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ledger> Ledgers { get; set; }
     }
 }

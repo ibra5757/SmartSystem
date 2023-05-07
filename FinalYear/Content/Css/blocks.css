@@ -6,8 +6,8 @@
             #radius-shape-1 {
                 height: 120px;
                 width: 120px;
-               top: -60px;
-                left: -130px;
+                top: 0px;
+                left: 0px;
                 background: radial-gradient(#44006b, #ad1fff);
                 overflow: hidden;
             }
@@ -15,9 +15,9 @@
             #radius-shape-2 {
                 border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
                 bottom: -60px;
-                right: -110px;
-                width: 300px;
-                height: 300px;
+                right: 0px;
+                width: 250px ;
+                height: 250px;
                 background: radial-gradient(#44006b, #ad1fff);
                 overflow: hidden;
             }
