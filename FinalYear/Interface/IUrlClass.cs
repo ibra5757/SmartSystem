@@ -1,7 +1,7 @@
-﻿namespace FinalYear.Interface
+﻿namespace FinalYear.Models
 {
-    public class IUrlClass
+    public interface IURLClass
     {
-        internal static string BaseUrl;
+        string BaseUrl();
     }
 }
