@@ -1,5 +1,4 @@
-﻿using FinalYear.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,7 +15,6 @@ namespace FinalYear
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            Console.WriteLine("App started");
            
         }
     }

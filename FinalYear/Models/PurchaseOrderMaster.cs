@@ -22,7 +22,6 @@ namespace FinalYear.Models
     
         public int POID { get; set; }
         public System.DateTime Date { get; set; }
-
         public Nullable<int> UserID { get; set; }
         public Nullable<int> CompanyId { get; set; }
     

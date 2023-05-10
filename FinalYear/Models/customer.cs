@@ -11,8 +11,7 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,13 +21,9 @@ namespace FinalYear.Models
         }
     
         public int CusID { get; set; }
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Contact { get; set; }
-        [Required]
         public string Address { get; set; }
-       
         public decimal Balance { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
