@@ -1,0 +1,498 @@
+﻿
+<form method="post" id="formSale">
+
+
+    <table class="table" id="example">
+
+
+        <tr>
+            <td>
+                <small class="control-label col-md-2">SaleNo</small>
+                <br />
+
+                <p class="col-md-10" style="color:green" id="BillNo" name="BillNo">@Session["saleno"]</p>
+               
+            </td>
+
+            <td scope="col">
+                <small class="control-label col-md-2">Product</small>
+                <div class="col-md-10">
+                    <select class="form-control" id="product__" name="ProName">
+                        <option value="" disabled selected hidden>Select your option</option>
+                        @if (ViewBag.AllProduct != null)
+                        {
+
+                            foreach (var item in ViewBag.AllProduct)
+                            {
+                                <option value="@item.ProID">@item.ProName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md-2">ProductType</small>
+                <div class="col-md-10">
+                    <select class="form-control" name="ProductType" id="ProductType">
+                        <option value="" disabled selected hidden>Select your option</option>
+
+                    </select>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td scope="col">
+                <small class="control-label col-md-2">ProductUnit</small>
+                <div class="col-md-10">
+                    <select class="form-control" name="ProductUnit" id="ProductUnit">
+                        <option value="" disabled selected hidden>Select your option</option>
+
+                    </select>
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md-2">Quantity</small>
+                <div class="input-group col-md-10">
+
+                    <input class="form-control" name="Quantity" id="Quantity" type="number" min="1" placeholder="Quantity" disabled />
+                    &nbsp;&nbsp;<small id="error"></small>
+
+
+                </div>
+                <small class="control-label col-md-2" style="color:red" id="avaq"></small>
+
+            </td>
+
+
+
+            <td scope="col">
+                <small class="control-label col-md-2">UnitPrice</small>
+                <div class="col-md-10">
+                    <input class="form-control" name="Price" id="Prices" type="number" min="1" placeholder="UnitPricePrice" />
+
+
+                </div>
+            </td>
+            <td scope="col">
+                <small class="control-label col-md-2">Packing</small>
+                <div class="col-md-3">
+                    <label class="control-label" name="Packing" id="Packing" />
+
+                </div>
+                <label name="PDID" id="PDID"  ></label>
+            </td>
+
+        </tr>
+
+    </table>
+</form>
+<script src="~/Scripts/_Detail.js"></script>
+<div class="input-group">
+
+    <button type="submit" id="addRow" class="btn btn-success col-md-2">Add To Cart</button>
+    &nbsp;&nbsp;&nbsp;
+    <div class="form-group">
+        <small  class="form-label col-md"> AddCustomer</small>
+        <div class="col-md-2">
+
+            <a class="anchorDetail btn btn-info" id="toggle-btn" data-url="/Customers/Create" data-bs-toggle="model" data-target="#myModal"> <i style="color:white" class="fa-solid fa-plus"></i></a>
+        </div>
+    </div>
+        &nbsp;&nbsp;&nbsp;
+    <div class="form-group">
+        <small class="form-label col-md">Select Customer</small>
+        <div class="col-md">
+            <select class="form-control col" name="CusID" id="CusID">
+                <option value="" class="form-control " disabled selected hidden>Select your option</option>
+
+            </select>
+            </div>
+        </div>
+    </div>
+
+<br /><br />
+
+<table id="example11" class="display-compact" >
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Type</th>
+            <th>Unit</th>
+            <th>Price</th>
+            <th>Button</th>
+        </tr>
+    </thead>
+
+</table>
+<div class="input-group">
+    <div class="form-group">
+        <small class="form-label col-md">BeforeDiscount</small>
+        <label class="form-label col-md" id="totalamount"></label>
+    </div>
+    <div class="form-group">
+        <small class="form-label col-md">AfterDiscounted</small>
+        <label class="form-label col-md" id="discountedPrice"></label>
+    </div>
+    <div class="form-group">
+        <input class="form-control col-md" type="number" name="Discount" value="" placeholder="Discount" id="Discount" />
+    </div>&nbsp;&nbsp;&nbsp;
+    <div class="form-group">
+
+        <button type="submit" id="Sale" class="btn btn-success col-md">Bill</button>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example11').DataTable();
+    });
+</script>
+
+<script>
+        $(document).ready(function () {
+    });
+
+    
+    $.ajax({
+        url: "/Customers/GetAllCustomers",
+        type: 'GET',
+        success: function (Result) {
+            $("#CusID").empty();
+            $("#CusID").append("<option disabled selected hidden>Select your option</option>");
+            Result.forEach(function (optionData) {
+                var option = "<option value=" + optionData.CusID + ">" + optionData.Name + "</option>";
+                $("#CusID").append(option);
+            });
+        },
+        error: function (a, as, ad) {
+            console.log(ad.error)
+        }
+    });
+    var custFalg = false;
+
+    var invalidquantitycheck = false;
+    var quanttt = 0;
+
+    $("#product__, #ProductType,#ProductUnit").on("input", function () {
+
+        var val1 = $("#product__").val();
+        var val2 = $("#ProductType").val();
+        var val3 = $("#ProductUnit").val();
+        if (val1 != null && val2 != null && val3 != null) {
+            $("#Quantity").prop("disabled", false);
+        } else {
+            $("#Quantity").prop("disabled", true);
+        }
+    });
+    $("#product__").change(function () {
+
+        $("#avaq").empty();
+        $("#avaq").append("Available Quantity: 0");
+        $("#ProductType").empty();
+        $("#ProductUnit").empty();
+            var url = "@Url.Content("~/purchases/cmb")";
+
+        $.getJSON(url, { name: $("#product__").val() }, function (data) {
+            $("#ProductType").empty();
+            $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+            $("#ProductUnit").empty();
+            $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
+            $.each(data, function (index, optionData) {
+
+                    var option = "<option value=" + optionData.ProId + ">" + optionData.ProductType + "</option>";
+                    $("#ProductType").append(option);
+                });
+            })
+
+
+        });
+    $("#ProductType").change(function () {
+
+            var url = "@Url.Content("~/purchases/pro")";
+
+        $.getJSON(url, { name: $("#ProductType").val(), type: $("#ProductType").children("option").filter(":selected").text()}, function (data) {
+            $("#ProductUnit").empty();
+            $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
+                $.each(data, function (index, optionData) {
+                    var option = "<option value=" + optionData.PDId + ">" + optionData.ProductUnit + "</option>";
+
+                    $("#ProductUnit").append(option);
+                });
+            })
+            });
+
+    $("#ProductUnit").change(function () {
+
+            var url = "@Url.Content("~/SalesOrderMasters/CheckQuantity")";
+
+         $.getJSON(url, { name: $("#ProductType").val(), type: $("#ProductType").children("option").filter(":selected").text(), unit: $("#ProductUnit").children("option").filter(":selected").text()}, function (data) {
+
+             $.each(data, function (index, optionData) {
+
+                 $("#avaq").empty();
+                 $("#Price").empty();
+                 $("#Packing").empty();
+                 $("#PDID").empty();
+                 $("#avaq").append("Available Quantity: " + optionData.TotalQuantity);
+                 $("#PDID").append(optionData.PDID);
+                 quanttt = optionData.TotalQuantity;
+                 $("#Prices").val(optionData.Price);
+                 $("#Packing").append(optionData.Packing);
+                });
+            })
+         });
+    $("#Quantity").on("input", function () {
+
+        var quantity = $("#Quantity").val();
+        $("#error").empty();
+        if (quantity <= quanttt) {
+            result = true;
+            invalidquantitycheck = true;
+            var tickIcon = $('<i class="fas fa-check-circle"></i>');
+            $("#error").append(tickIcon);
+        }
+        else {
+            result = false;
+            invalidquantitycheck = false;
+            var crossIcon = $('<i class="fas fa-times-circle"></i>');
+            $("#error").append(crossIcon);
+        }
+    });
+
+    var t = $('#example11').DataTable();
+    var deletedRows = [];
+    var Tprice = 0;
+    $('#addRow').on('click', function () {
+        var isValid = $("#formSale").valid();
+        if (isValid) {
+            if (invalidquantitycheck) {
+                var product = $("#product__").val();
+                var quantity = $("#Quantity").val();
+                var productType = $("#ProductType").val();
+                var productUnit = $("#ProductUnit").val();
+                var prices = $("#Prices").val();
+                var pdid = $("#PDID").text();
+                if (product && quantity && productType && productUnit && prices && invalidquantitycheck) {
+                    var newRowData = [$("#product__").children("option").filter(":selected").text(), $("#Quantity").val(), $("#ProductType").children("option").filter(":selected").text(), $("#ProductUnit").children("option").filter(":selected").text(), $("#Prices").val(), '<a href="#" class="deleteRow">Remove</a>', '<a hidden value="' + pdid + '" "></a>'];
+
+                    var exists = t.rows().data().toArray().some(function (row) {
+                        return row[0] === newRowData[0] && row[2] === newRowData[2] && row[3] === newRowData[3];
+                    });
+                    var deletedIndex = deletedRows.findIndex(function (row) {
+                        return row[0] === newRowData[0] && row[2] === newRowData[2] && row[3] === newRowData[3];
+                    });
+
+                    if (!exists && deletedIndex === -1) {
+                        t.row.add(newRowData).draw(false);
+                        var table = $('#example11').DataTable();
+                        var dd = table.rows().data().toArray();
+
+                        $.each(dd, function (index, value) {
+
+                            var quantity = value[1];
+                            var price = value[4];
+                            Tprice += quantity * price;
+                        });
+                        $("#totalamount").empty();
+                        $("#totalamount").append(Tprice);
+
+                    } else if (deletedIndex !== -1) {
+                        t.row.add(deletedRows[deletedIndex]).draw(false);
+                        deletedRows.splice(deletedIndex, 1);
+                    }
+                    else {
+                        toastr.warning("Already In Cart");
+                    }
+                }
+                else {
+                    toastr.warning("Please select all options and enter valid quantity");
+
+
+                }
+
+            }
+            else {
+                toastr.warning("Enter Valid QuantityPlease");
+            }
+        }
+        else {
+            toastr.warning("Please fill in all required fields.");
+        }
+       
+      
+
+    });
+    $("#example11").on('click', '.deleteRow', function () {
+        var row = $(this).parents('tr');
+        var rowData = t.row(row).data();
+        var quantity = rowData[1];
+        var price = rowData[4];
+        Tprice -= quantity * price;
+        $("#totalamount").empty();
+        $("#totalamount").append(Tprice);
+        deletedRows.push(rowData);
+        t.row(row).remove().draw(false);
+        toastr["success"]("Deleted Sucessfull");
+    });
+    $("#Discount").on("input", function () {
+        var discount = parseFloat($(this).val()); 
+        var totalAmount = parseFloat($("#totalamount").text()); 
+        var discountedPrice = totalAmount - (totalAmount * discount / 100); 
+        $("#discountedPrice").empty();
+        $("#discountedPrice").append(discountedPrice.toFixed(2)); // Display the discounted price in another HTML element
+    });
+    $("#Sale").click(function () {
+
+        var table = $('#example11').DataTable();
+        var Dicount = $("#Discount").val();
+        var tamount = $("#totalamount").text();
+        var totalamt = $("#discountedPrice").text();
+        if (Dicount =='') {
+            Dicount = 0;
+            totalamt = tamount;
+        }
+        if (table.rows().data().length > 0) {
+
+            var CusID = $("#CusID").children("option").filter(":selected").val();
+            var BillNo = $("#BillNo").text();
+            
+           
+
+            var dd = table.rows().data().toArray();
+
+
+            var sODetail = new Array();
+
+            $.each(dd, function (index, value) {
+
+                var SODetail = {};
+                SODetail.S_Quantity = value[1];
+                SODetail.U_price = value[4];
+                SODetail.PDID = $(value[6]).attr('value');
+
+                sODetail.push(SODetail);
+
+            });
+            var dataToSend = {
+                items: sODetail,
+                salesOrder: {
+                    BillNo: BillNo,
+                    CusID: CusID,
+                    Discount: Dicount,
+                    GrandTotal: totalamt,
+                    TotalAmount: tamount
+
+                }
+            };
+
+            var jsonString = JSON.stringify(dataToSend);
+
+            $.ajax({
+                type: "POST",
+                url: "/SalesOrderMasters/Create",
+                contentType: "application/json;",
+                //  data: { JSON.stringify(sODetail), CusID: CusID },
+                data: jsonString,
+
+                success: function (data) {
+                    if (data.success == true) {
+                        $("#BillNo").empty();
+                        $("#BillNo").append(data.dig);
+                        $("#discountedPrice").empty();
+                        $('#formSale')[0].reset();
+                        $("#error").empty();
+                        deletedRows.length = 0;
+                        Tprice = 0;
+                        invalidquantitycheck = false;
+                        quanttt = 0;
+                        $("#Packing").empty();
+                        $("#PDID").empty();
+                        $("#CusID").val('');
+                        $('#example11').DataTable().clear().draw();
+                        $("#Discount").val('');
+                        $("#totalamount").empty();
+                        $("#avaq").empty();
+                        $("#ProductType").empty();
+                        $("#ProductUnit").empty();
+                        toastr["success"](data.message);
+                    }
+                    else {
+                        toastr["danger"](data.message);
+                    }
+                },
+                error: function (x, xa, asd) {
+
+                    alert(x + xa + asd);
+                }
+            });
+
+
+
+
+        }
+
+
+    });
+</script>
+
+
+
+<script>
+     //$("#formSale").validate({
+
+        //    rules:
+        //    {
+
+        //        Quantity:
+        //        {
+        //            required: true,
+        //        },
+
+
+        //        ProName:
+        //        {
+        //            required: true,
+        //        },
+        //        ProductType:
+        //        {
+        //            required: true,
+        //        },
+        //        ProductUnit:
+        //        {
+        //            required: true,
+        //        },
+        //        Prices:
+        //        {
+        //            required: true,
+        //        },
+        //    },
+        //    messages: {
+        //        quantity: {
+        //            required: "Please enter a quantity.",
+        //        },
+        //    },
+        //    submitHandler: function (form) {
+
+        //        debugger
+
+        //    },
+        //    invalidHandler: function (event, validator) {
+        //        debugger
+        //        // Your code for handling validation errors here
+        //        toastr.warning("Please fill out all required fields and fix any validation errors.");
+        //    }
+
+
+        //});
+</script>

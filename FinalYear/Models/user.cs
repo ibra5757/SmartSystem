@@ -17,9 +17,9 @@ namespace FinalYear.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.PurchaseOrderMasters = new HashSet<PurchaseOrderMaster>();
             this.SalesOrderMasters = new HashSet<SalesOrderMaster>();
             this.UserLogs = new HashSet<UserLog>();
-            this.PurchaseOrderMasters = new HashSet<PurchaseOrderMaster>();
         }
     
         public int UserID { get; set; }
@@ -32,10 +32,10 @@ namespace FinalYear.Models
         public Nullable<bool> IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseOrderMaster> PurchaseOrderMasters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesOrderMaster> SalesOrderMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserLog> UserLogs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrderMaster> PurchaseOrderMasters { get; set; }
     }
 }

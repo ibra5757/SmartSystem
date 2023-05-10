@@ -17,8 +17,8 @@ namespace FinalYear.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProDetail()
         {
-            this.SODetails = new HashSet<SODetail>();
             this.PODetails = new HashSet<PODetail>();
+            this.SODetails = new HashSet<SODetail>();
         }
     
         public int PDId { get; set; }
@@ -26,13 +26,14 @@ namespace FinalYear.Models
         public string ProductUnit { get; set; }
         public string ProductType { get; set; }
         public Nullable<int> Packing { get; set; }
-        public Nullable<long> CostPrice { get; set; }
-        public Nullable<long> UnitPrice { get; set; }
+ 
+        public Nullable<decimal> CostPrice { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PODetail> PODetails { get; set; }
         public virtual Product Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SODetail> SODetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PODetail> PODetails { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace FinalYear.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
+            this.Ledgers = new HashSet<Ledger>();
             this.SalesOrderMasters = new HashSet<SalesOrderMaster>();
         }
     
@@ -26,6 +27,8 @@ namespace FinalYear.Models
         public string Address { get; set; }
         public decimal Balance { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ledger> Ledgers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesOrderMaster> SalesOrderMasters { get; set; }
     }

@@ -18,6 +18,7 @@ namespace FinalYear.Models
         public Company()
         {
             this.PurchaseOrderMasters = new HashSet<PurchaseOrderMaster>();
+            this.Ledgers = new HashSet<Ledger>();
         }
     
         public int CompanyID { get; set; }
@@ -28,5 +29,7 @@ namespace FinalYear.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrderMaster> PurchaseOrderMasters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ledger> Ledgers { get; set; }
     }
 }

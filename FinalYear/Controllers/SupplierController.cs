@@ -14,48 +14,43 @@ namespace FinalYear.Controllers
     public class SupplierController : Controller
     {
         private SmartInventoryEntities db = new SmartInventoryEntities();
-
-        // GET: Supplier
-        public ActionResult Index(string Sorting_Order, string Search_Data, string Filter_Value, int? Page_No)
+        public ActionResult Index()
         {
-            ViewBag.CurrentSortOrder = Sorting_Order;
-            ViewBag.SortingName = String.IsNullOrEmpty(Sorting_Order) ? "Name_Description" : "";
-            ViewBag.SortingDate = Sorting_Order == "Date_Enroll" ? "Date_Description" : "Date";
+            return View();
+        }
+        public ActionResult SupplierTabList(string tab)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
 
-            if (Search_Data != null)
+            SupplierController supplierController = new SupplierController();
+            switch (tab)
             {
-                Page_No = 1;
+                case "#tab2":
+                    var plist = supplierController.AllCustomers();
+                    return plist;
+                default:
+                    var catlist = supplierController.List();
+                    return catlist;
+
             }
-            else
-            {
-                Search_Data = Filter_Value;
-            }
 
-            ViewBag.FilterValue = Search_Data;
 
-            var students = from stu in db.Companies select stu;
 
-            if (!String.IsNullOrEmpty(Search_Data))
-            {
-                students = students.Where(stu => stu.CompanyName.ToUpper().Contains(Search_Data.ToUpper())
-                    || stu.Contact.ToUpper().Contains(Search_Data.ToUpper()));
-            }
-                switch (Sorting_Order)
-                {
-                    case "Name_Description":
-                        students = students.OrderByDescending(stu => stu.CompanyName);
-                        break;
-                    case "Date_Enroll":
-                        students = students.OrderBy(stu => stu.Contact);
-                        break;
-                    default:
-                        students = students.OrderBy(stu => stu.CompanyName);
-                        break;
-                }
+        }
+        public PartialViewResult AllCustomers()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
 
-            int Size_Of_Page = 4;
-            int No_Of_Page = (Page_No ?? 1);
-            return View(students.ToPagedList(No_Of_Page, Size_Of_Page));
+            var customer = db.Customers.ToList();
+            return PartialView("~/Views/Customers/list.cshtml", customer);
+        }
+        // GET: Supplier
+        public PartialViewResult List()
+        {
+
+            var Company = db.Companies.ToList();
+            
+            return PartialView("List",Company);
         }
 
         // GET: Supplier/Details/5

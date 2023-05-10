@@ -1,0 +1,209 @@
+﻿@model FinalYear.Models.CompanyCustomerViewModel
+
+<form id="LedgerForm" method="post">
+    <br /><div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select an option
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            @foreach (var item in Model.Companies)
+            {
+                <a class="dropdown-item company" href="#" data-type="company" data-value="@item.CompanyID">@item.CompanyName</a>
+            }
+            @foreach (var item in Model.Customers)
+            {
+                <a class="dropdown-item customer" href="#" data-type="customer" data-value="@item.CusID">@item.Name</a>
+            }
+        </div>
+    </div><br />
+
+    <p>Latest balance: <span id="balance"></span></p>
+    <br />
+
+    <div class="container">
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label col-md">Amount</label>
+                <div class="col-md">
+                    <input class="form-control" type="number" id="Amount" name="Amount" value="" placeholder="Amount" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md">Description</label>
+                <div class="col-md">
+                    <input class="form-control" type="text" id="Description" name="Description" value="" placeholder="Description" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md">Value</label>
+                <div class="col-md">
+                    <select class="form-control" name="Value" id="Value">
+                        <option value="Debit">Debit</option>
+                        <option value="Credit">Credit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md">------</label>
+                <div class="col-md">
+                    <button type="submit" class="btn btn-info">Do</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<input type="hidden" id="selectedValue" name="selectedValue" value="" />
+<input type="hidden" id="selectedType" name="selectedType" value="" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/Closebtn.js"></script>
+
+<script>
+    // Set up custom validation messages
+    $.extend($.validator.messages, {
+        required: "This field is required.",
+        number: "Please enter a valid number.",
+        minlength: $.validator.format("Please enter at least {0} characters."),
+        maxlength: $.validator.format("Please enter no more than {0} characters."),
+    });
+
+    // Validate form on submission
+    $('#LedgerForm').validate({
+        rules: {
+            Amount: {
+                required: true,
+                number: true,
+            },
+            Description: {
+                required: true,
+                minlength: 5,
+                maxlength: 50,
+            },
+            Value: {
+                required: true,
+            },
+            "dropdownMenuButton": {
+                required: true
+            },
+
+        },
+        // Set up custom error messages
+        messages: {
+            Amount: {
+                required: "Please enter the amount.",
+                number: "Please enter a valid number.",
+            },
+            Description: {
+                required: "Please enter a description.",
+                minlength: "Please enter at least 5 characters.",
+                maxlength: "Please enter no more than 50 characters.",
+            },
+            Value: {
+                required: "Please select a value.",
+            },
+            "dropdownMenuButton": {
+                required: "Please select Company or Customer."
+            }
+        },
+        // Submit form if validation passes
+        submitHandler: function (form) {
+            
+            var initialText = $('#dropdownMenuButton').text();
+            var initialValue = $('#selectedValue').val();
+            var initialType = $('#selectedType').val();
+
+            var dropdownmenuoption = $("#dropdownmenubutton").text();
+            if (dropdownmenuoption == "select an option") {
+                alert("please select company or customer.");
+                return false;
+            }
+
+            // check if value option is selected
+            var value = $("#Value").val();
+            if (value== null) {
+                alert("please select debit or credit.");
+                return false;
+            }
+
+
+            var datas = $(form).serialize();
+            // handle form submission using AJAX request
+            $.ajax({
+                url: '/Ledgers/Create',
+                type: 'POST',
+                data: $(form).serialize() + '&selectedType=' + initialType + '&selectedvalue=' + initialValue + '&value=' + value,
+                success: function (data) {
+                    form.reset();
+                    if (data.success == true) {
+                        $('#balance').text(data.NewBalance);   
+                        toastr["success"](data.message);
+                    }
+                    else {
+                        toastr["danger"](data.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // handle error response
+                    console.log(xhr.responseText);
+                }
+            });
+        },
+
+
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Update button text on dropdown item click
+        $('.dropdown-item').on('click', function () {
+            
+            var text = $(this).text();
+            var value = $(this).data('value');
+            var type = $(this).data('type');
+            $('#dropdownMenuButton').text(text);
+            $('#selectedValue').val(value); // set the value of the hidden field
+            $('#selectedType').val(type); // set the value of another hidden field for the type
+            // Send AJAX request to get latest balance
+            $.ajax({
+                url: '/Ledgers/GetBalance',
+                type: 'GET',
+                data: { id: value, type: type },
+                success: function (response) {
+                    $('#balance').text(response.balance);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+
+        // Get the initial text and value of the button
+        var initialText = $('#dropdownMenuButton').text();
+        var initialValue = $('#selectedValue').val();
+        var initialType = $('#selectedType').val();
+
+        // Add hidden fields to store the selected value and type
+        $('<input>').attr({
+            type: 'hidden',
+            id: 'selectedValue',
+            name: 'selectedValue',
+            value: initialValue
+        }).appendTo('form');
+
+        $('<input>').attr({
+             type: 'hidden',
+            id: 'selectedType',
+            name: 'selectedType',
+            value: initialType
+        }).appendTo('form');
+    });
+
+</script>
