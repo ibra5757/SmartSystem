@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.IO;
 using FinalYear.Models;
+using FinalYear.Interface;
 
 namespace FinalYear.Controllers
 {

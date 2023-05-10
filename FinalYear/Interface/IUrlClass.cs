@@ -1,5 +1,6 @@
-﻿namespace FinalYear.Models
+﻿namespace FinalYear.Interface
 {
+
     public interface IURLClass
     {
         string BaseUrl();
