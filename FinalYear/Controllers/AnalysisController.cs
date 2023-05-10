@@ -16,7 +16,9 @@ namespace FinalYear.Controllers
     {
         // GET: Analysis
 
-        string Baseurl = "http://192.168.0.108:105/";
+        //string Baseurl = "http://192.168.0.108:105/";
+
+        IURLClass baseUrl = new URLClass();
 
         [HttpGet]
         public ActionResult Index()
@@ -42,10 +44,10 @@ namespace FinalYear.Controllers
                 };
                 var myContent = JsonConvert.SerializeObject(mydat2a);
                 
-                client.BaseAddress = new Uri(Baseurl);
+                client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.PostAsJsonAsync(Baseurl+"data",mydat2a);
+                HttpResponseMessage Res = await client.PostAsJsonAsync($"{baseUrl.BaseUrl()} data" ,mydat2a);
                 if (Res.IsSuccessStatusCode)
                 {
                     var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
@@ -91,10 +93,10 @@ namespace FinalYear.Controllers
                 };
                 var myContent = JsonConvert.SerializeObject(mydat2a);
 
-                client.BaseAddress = new Uri(Baseurl);
+                client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.PostAsJsonAsync(Baseurl + "Applygradientdecent", mydat2a);
+                HttpResponseMessage Res = await client.PostAsJsonAsync(  $"{baseUrl.BaseUrl()}Applygradientdecent", mydat2a);
                 if (Res.IsSuccessStatusCode)
                 {
                     var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
