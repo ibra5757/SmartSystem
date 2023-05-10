@@ -81,6 +81,7 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Company supplier)
         {
+            supplier.Balance = 0;
             if (ModelState.IsValid)
             {
                 db.Companies.Add(supplier);

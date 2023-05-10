@@ -163,21 +163,22 @@
         $(document).ready(function () {
     });
 
-    
-    $.ajax({
-        url: "/Customers/GetAllCustomers",
-        type: 'GET',
-        success: function (Result) {
-            $("#CusID").empty();
-            $("#CusID").append("<option disabled selected hidden>Select your option</option>");
-            Result.forEach(function (optionData) {
-                var option = "<option value=" + optionData.CusID + ">" + optionData.Name + "</option>";
-                $("#CusID").append(option);
-            });
-        },
-        error: function (a, as, ad) {
-            console.log(ad.error)
-        }
+    $("#CusID").on("click focus", function () {
+        $.ajax({
+            url: "/Customers/GetAllCustomers",
+            type: 'GET',
+            success: function (Result) {
+                $("#CusID").empty();
+                $("#CusID").append("<option disabled selected hidden>Select your option</option>");
+                Result.forEach(function (optionData) {
+                    var option = "<option value=" + optionData.CusID + ">" + optionData.Name + "</option>";
+                    $("#CusID").append(option);
+                });
+            },
+            error: function (a, as, ad) {
+                console.log(ad.error)
+            }
+        });
     });
     var custFalg = false;
 

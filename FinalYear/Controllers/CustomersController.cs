@@ -50,18 +50,26 @@ namespace FinalYear.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CusID,Name,Contact,Address,Balance")] Customer customer)
+        public ActionResult Create([Bind(Include = "CusID,Name,Contact,Address")] Customer customer)
         {
+            customer.Balance = 0;
             if (ModelState.IsValid)
             {
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var all = db.Customers.ToList();
+                return Json("Customer created successfully!");
+
+                return Json(new { success = true, message = "Created Sucessfully.", all=all });
             }
 
             return View(customer);
         }
-
+        public ActionResult Success()
+        {
+            // You can perform additional logic or simply return the success view
+            return View();
+        }
         // GET: Customers/Edit/5
         public ActionResult Edit(int? id)
         {

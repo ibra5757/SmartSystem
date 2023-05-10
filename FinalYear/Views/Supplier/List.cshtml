@@ -1,26 +1,28 @@
 ﻿@model List<FinalYear.Models.Company>
 <br />
+<script src="~/Scripts/_CreateScript.js"></script>
+<script src="~/Scripts/_Detail.js"></script>
 <button href="#" class="acreate btn btn-lg" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-plus"></i></button>
 
 <br />
 <table class="table" id="example">
     <thead>
         <tr>
-            <th >Comapny Name</th>
+            <th>Comapny Name</th>
 
-            <th >Conatact</th>
+            <th>Conatact</th>
 
-            <th >Address</th>
+            <th>Address</th>
 
 
-            <th >Actions</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td >
+                <td>
                     @Html.DisplayFor(modelItem => item.CompanyName)
                 </td>
                 <td>
