@@ -224,6 +224,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="img\JqueryDatatableParam.cs" />
+    <Compile Include="Interface\IUrlClass.cs" />
     <Compile Include="Models\6digitRand.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>

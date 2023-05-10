@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FinalYear.Interface;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace FinalYear.Models
 {
-    public class URLClass
+    public class URLClass: IUrlClass
     {
 
         //private string _url= "http://192.168.0.108:105/";
