@@ -5,7 +5,7 @@
 <button href="#" class="acreate btn btn-lg" data-url="/Supplier/_Create" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-circle-plus"></i></button>
 
 <br />
-<table class="table" id="example">
+<table class="display compact" id="cmptable">
     <thead>
         <tr>
             <th>Comapny Name</th>
@@ -49,3 +49,11 @@
         }
     <tbody>
 </table>
+
+<script>
+
+    $(document).ready(function () {
+        $('#cmptable').DataTable();
+});
+
+</script>

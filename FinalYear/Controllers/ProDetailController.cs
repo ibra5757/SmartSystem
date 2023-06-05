@@ -21,12 +21,31 @@ namespace FinalYear.Controllers
         }
         public PartialViewResult prodetail()
         {
-            ViewBag.ProCmb = db.Products;
-            ViewBag.Pd_type = db.ProDetails;
-            ViewBag.proDetails = db.ProDetails.Include(p => p.Product);
+            ViewBag.ProCmb = db.Products.OrderByDescending(z => z.CreatedDate);
+            ViewBag.Pd_type = db.ProDetails.OrderByDescending(z => z.CreatedDate);
+            ViewBag.proDetails = db.ProDetails.Include(p => p.Product).OrderByDescending(z => z.CreatedDate);
             return PartialView("~/Views/ProDetail/_ListProDetail.cshtml");
         }
-        // GET: ProDetail/Details/5
+        [HttpGet]
+        public JsonResult ProdetailUpdateTable()
+        {
+            var updatedTable = db.ProDetails
+                .Include(p => p.Product)
+                .Select(p => new
+                {
+                    ProName = p.Product.ProName,
+                    ProductType = p.ProductType,
+                    ProductUnit = p.ProductUnit,
+                    Packing = p.Packing,
+                    UnitPrice = p.UnitPrice,
+                    CostPrice = p.CostPrice,
+                    CreatedDate=p.CreatedDate
+                }).OrderByDescending(z => z.CreatedDate)
+                .ToList();
+
+            return Json(updatedTable, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -56,6 +75,7 @@ namespace FinalYear.Controllers
         {
             if (ModelState.IsValid)
             {
+                proDetail.CreatedDate = DateTime.Now;
                 db.ProDetails.Add(proDetail);
                 db.SaveChanges();
                 ViewBag.ProCmb = db.Products;

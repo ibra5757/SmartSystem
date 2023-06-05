@@ -1,9 +1,13 @@
 ﻿
+<script src="~/Scripts/_CreateScript.js" defer></script>
+<script src="~/Scripts/_delete.js" defer></script>
+<script src="~/Scripts/_Detail.js" defer></script>
+
 <div class="card card-body">
     @Html.Partial("~/Views/ProDetail/_create.cshtml")
 
 
-    <table class="display compact" id="example1">
+    <table class="display compact" id="example3">
 
         <thead>
             <tr>
@@ -53,13 +57,13 @@
                         @item.CostPrice
                     </td>
                     <td>
-                        <button href="#" class="anchorDetail btn  btn-sm" data-url="/ProDetail/Edit" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        @*<button href="#" class="anchorDetail btn  btn-sm" data-url="/ProDetail/Edit" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         <button href="#" class="anchorDetail btn btn-sm" data-url="/ProDetail/Details" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">
 
                             <i class="fa-solid fa-circle-info"></i>
-                        </button>
+                        </button>*@
                         @*<button href="#" class="adelete btn btn-danger btn-sm" data-url="/ProDetail/_Delete" data-id="@item.PDId" data-bs-toggle="model" data-target="#myModal">Delete</button>*@
                     </td>
 
@@ -68,14 +72,61 @@
         </tbody>
     </table>
 </div>
+<style>
+    /* Add custom styling for the reload button */
+    #ProdetailreloadButton {
+        background: transparent;
+        border: none;
+        color: green;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 5px 10px;
+        transition: color 0.3s ease;
+    }
 
+        #ProdetailreloadButton:hover {
+            color: darkgreen;
+        }
+</style>
 <script>
     $(document).ready(function () {
-        $('#example1').DataTable();
+        $('#example3').DataTable();
+
+        $('.dataTables_filter').prepend('<button id="ProdetailreloadButton"><i class="fas fa-sync-alt"></i></button>');
+        // Use event delegation to bind the click event handler to dynamically added button
+        $(document).on('click', '#ProdetailreloadButton', function () {
+            $.ajax({
+                url: '/ProDetail/ProdetailUpdateTable',
+                method: 'GET',
+                success: function (data) {
+                    $('#example3 tbody').empty();
+
+                    // Append new data rows to the existing table
+                    for (var i = 0; i < data.length; i++) {
+                        var newRow = '<tr>' +
+                            '<td>' + data[i].ProName + '</td>' +
+                            '<td>' + data[i].ProductType + '</td>' +
+                            '<td>' + data[i].ProductUnit + '</td>' +
+                            '<td>' + data[i].Packing + '</td>' +
+                            '<td>' + data[i].UnitPrice + '</td>' +
+                            '<td>' + data[i].CostPrice + '</td>' +
+                            '<td>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/ProDetail/Edit" data-id="' + data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-pen-to-square"></i>' +
+                            '</button>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/ProDetail/Details" data-id="' + data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-circle-info"></i>' +
+                            '</button>' +
+                            '</td>' +
+                            '</tr>';
+
+                        $('#example3 tbody').append(newRow);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
     });
 </script>
-
-
-<script src="~/Scripts/_CreateScript.js"></script>
-<script src="~/Scripts/_delete.js"></script>
-<script src="~/Scripts/_Detail.js"></script>

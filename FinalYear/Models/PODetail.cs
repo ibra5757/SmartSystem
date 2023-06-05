@@ -11,13 +11,16 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class PODetail
     {
         public int PODetail_Id { get; set; }
         public int POID { get; set; }
         public int PDID { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string BatchNo { get; set; }
     
         public virtual ProDetail ProDetail { get; set; }

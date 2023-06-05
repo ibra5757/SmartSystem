@@ -15,7 +15,7 @@
 <script src="~/Scripts/_delete.js"></script>
 <script src="~/Scripts/_Detail.js"></script>
 <script src="~/Scripts/_CreateScript.js"></script>
-
+<script src="~/Scripts/ShowTbl.js"></script>
 <ul class="nav nav-tabs" id="myTabs" role="tablist">
     <li class="nav-item">
         <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Product</a>
@@ -46,7 +46,7 @@
             url: "/ManageStock/TabList",
             data: { tab: target },
             success: function (data) {
-                
+
                 $(target).html(data);
             },
             error: function (xhr, status, error) {

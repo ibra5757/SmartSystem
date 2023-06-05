@@ -10,6 +10,7 @@
 <script src="~/Scripts/_Detail.js"></script>
 <script src="~/Scripts/_CreateScript.js"></script>
 <script src="~/Scripts/ShowTbl.js"></script>
+
 <style>
     .borderless td, .borderless th {
         border: none;
@@ -27,7 +28,7 @@
 <div class="row">
     <div class="col-4">
 
-        <table class="table-sm table-xm" id="example">
+        <table class="table-sm table-xm" id="examps">
             <thead>
                 <tr>
 
@@ -45,7 +46,7 @@
                 {   
                     <tr>
                         <td>
-                            <a href="#" class="link" data-id="@item.POID">
+                            <a href="#" class="link-item" data-id="@item.POID">
                                 @item.BillNo
                             </a>
                         </td>
@@ -56,9 +57,9 @@
                         </td>
 
                         <td>
-                            <button href="#" class="anchorDetail btn btn-sm" data-url="/purchases/Edit" data-id="@item.POID" data-bs-toggle="model" data-target="#myModal">
+                            @*<button href="#" class="anchorDetail btn btn-sm" data-url="/purchases/Edit" data-id="@item.POID" data-bs-toggle="model" data-target="#myModal">
                                 <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
+                            </button>*@
 
                             @*<button href="#" class="anchorDetail btn btn-sm" data-url="/purchasesitems/Details" data-id="@item.POID" data-bs-toggle="model" data-target="#myModal">
                                 <i class="fa-solid fa-circle-info"></i>
@@ -114,7 +115,35 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('.link').click(function () {
+        $('#examps').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": false
+        });
+    });
+
+</script>
+<script>
+
+    function createTableCellWithTooltip(text, maxLength) {
+        var cell = $("<td>").attr("data-toggle", "tooltip").attr("data-placement", "bottom").text(abbreviateText(text, maxLength));
+        if (text.length > maxLength) {
+            cell.attr("title", text);
+        }
+        return cell;
+    }
+
+    function abbreviateText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.substr(0, maxLength) + '...';
+        }
+        return text;
+    }
+    $(document).ready(function () {
+        $('#examps').on('click', '.link-item', function (event) {
+            event.preventDefault();
+
             var id = $(this).data('id');
             
             var url = '/purchasesitems/Details/' + id; // replace with your detail page URL
@@ -122,7 +151,6 @@
                 url: url,
                 type: 'GET',
                 success: function (data) {
-                    
                     var POID = data[0].POID;
                     var Daate = data[0].Date;
                     var UserID = data[0].UserID;
@@ -134,27 +162,27 @@
                     $("#Date").text(formattedDate);
                     $("#UserName").text(UserID);
                     $("#CompanyName").text(CompanyName);
-                    
 
-                    $("#purchases-list tbody").empty();
+                    var tableBody = $("#purchases-list tbody");
+                    tableBody.empty();
 
                     $.each(data, function (index, item) {
-                        
-                        var row = "<tr>";
-                        row += "<td>" + item.Podetail.ProName + "</td>";
-                        row += "<td>" + item.Podetail.Quantity + "</td>";
-                        row += "<td>" + item.Podetail.BatchNo + "</td>";
-                        row += "<td>" + item.Podetail.ProductUnit + "</td>";
-                        row += "<td>" + item.Podetail.ProductType + "</td>";
-                        row += "<td>" + item.Podetail.Packing + "</td>";
-                        row += "<td>" + item.Podetail.CostPrice + "</td>";
-                        row += "<td>" + item.Podetail.UnitPrice + "</td>";
-                        row += "</tr>";
-                        $("#purchases-list tbody").append(row);
+                        var row = $("<tr>");
+                        row.append(createTableCellWithTooltip(item.Podetail.ProName, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.Quantity, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.BatchNo, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.ProductUnit, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.ProductType, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.Packing, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.CostPrice, 6));
+                        row.append(createTableCellWithTooltip(item.Podetail.UnitPrice, 6));
+                        tableBody.append(row);
                     });
 
-
+                    $('[data-toggle="tooltip"]').tooltip();
                 },
+
+
                 error: function (xhr, status, error) {
                     debugger
                     console.log(error);

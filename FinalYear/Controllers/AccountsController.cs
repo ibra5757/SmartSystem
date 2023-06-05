@@ -20,81 +20,56 @@ namespace FinalYear.Controllers
     {
         // GET: credentials
 
-        public string Baseurl = "http://192.168.0.108:105/";
+        public string Baseurl = "http://192.168.43.236:105/";
+        private static string userRole;
+
+        public static string UserRole
+        {
+            get { return userRole; }
+           private set { userRole = value; }
+        }
 
         public ActionResult Login()
         {
             return View();
         }
         [HttpPost]
-      
         public ActionResult Login(string username, string password)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                var f_password = LoginHelper.GetMD5(password);
-                using (SmartInventoryEntities db = new SmartInventoryEntities())
-                {
-                    if (username.Trim() == "" && password.Trim() == "")
-                    {
-                        TempData["loginerror"] = "Id & password is Empty";
-                    }
-                    else if (username.Trim() != "" && password.Trim() == "")
-                    {
-                        TempData["loginerror"] = "username is invalid";
-
-                    }
-                    else if (username.Trim() == "" && password.Trim() != "")
-                    {
-                        TempData["loginerror"] = "password is worng";
-                    }
-                    else if (username.Trim()!="" &&password.Trim()!="")
-                    {
-                        var obj = db.Users.Where(a => a.UserName.Equals(username) && a.Password.Equals(f_password)&& a.IsActive == true).FirstOrDefault();
-                        var unamecheck = db.Users.Where(a => a.Password.Equals(username)).FirstOrDefault();
-                        var upasswordcheck = db.Users.Where(a => a.Password.Equals(f_password)).FirstOrDefault();
-
-                        if (obj != null)
-                        {
-
-                            userlogsController userlog = new userlogsController();
-                            UserLog userlogs = new UserLog();
-                            userlogs.Activity = obj.Name.ToString() + " Register  Sucessfull";
-                            userlogs.UserID = obj.UserID;
-                            userlogs.Date = DateTime.Now;
-                            userlog.Create(userlogs);
-                            FormsAuthentication.SetAuthCookie(username, false);
-                            Session["FullName"] = obj.Name.ToString();
-                            Session["UserID"] = obj.UserID.ToString();
-                            Session["UserName"] = obj.UserName.ToString();
-                            return RedirectToAction("Dashboard");
-                            //return RedirectToAction("Index", "purchases");
-                        }
-                        else
-                        {
-                            if (unamecheck == null && upasswordcheck == null)
-                            {
-
-                                TempData["loginerror"] = "Id & password is worng";
-                            }
-                            else if (unamecheck != null && upasswordcheck == null)
-                            {
-                                TempData["loginerror"] = "username is Wrong";
-
-                            }
-                            else if (unamecheck == null && upasswordcheck != null)
-                            {
-                                TempData["loginerror"] = "password is worng";
-                            }
-                            //return Content("<script language='javascript' type='text/javascript'>alert('Invalid Login!!'); </script>");
-                            return View("Login");
-                        }
-                    }
-                    
-                }
+                TempData["loginerror"] = "Username and password are required.";
+                return View("Login");
             }
 
-            return View();
+            var hashedPassword = LoginHelper.GetMD5(password);
+
+            using (SmartInventoryEntities db = new SmartInventoryEntities())
+            {
+                var user = db.Users.FirstOrDefault(a => a.UserName.Equals(username) && a.Password.Equals(hashedPassword) && (a.IsActive == true || a.IsActive == null));
+                if (user != null)
+                {
+                    userlogsController userlog = new userlogsController();
+                    UserLog userlogs = new UserLog();
+                    userlogs.Activity = user.Name + " Login Successful";
+                    userlogs.UserID = user.UserID;
+                    userlogs.Date = DateTime.Now;
+                    userlog.Create(userlogs);
+
+                    FormsAuthentication.SetAuthCookie(username, false);
+                    Session["FullName"] = user.Name;
+                    Session["UserID"] = user.UserID.ToString();
+                    Session["UserName"] = user.UserName;
+                    userRole = user.Role;
+
+                    return RedirectToAction("Dashboard");
+                }
+                else
+                {
+                    TempData["loginerror"] = "Invalid username or password.";
+                    return View("Login");
+                }
+            }
         }
 
         public async Task<ActionResult> Dashboard()
@@ -115,10 +90,11 @@ namespace FinalYear.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Register(User user)
         {
-            user.Role = "NO";
+            user.Role = Permission.user;
             user.IsActive = false;
             if (ModelState.IsValid)
             {

@@ -18,7 +18,7 @@ namespace FinalYear.Controllers
         public ActionResult Index()
         {
             int Userid= Convert.ToInt32(Session["UserID"].ToString());
-            var userlogs = db.UserLogs.Where(x => x.UserID == Userid);
+            var userlogs = db.UserLogs.Where(x => x.UserID == Userid).OrderByDescending(z=>z.Date);
             return View("_list",userlogs.ToList());
         }
 

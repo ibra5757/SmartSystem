@@ -19,8 +19,18 @@ namespace FinalYear.Controllers
         {
             if (ModelState.IsValid)
             {
+                Category.CreatedDate = DateTime.Now; 
+
                 db.Categories.Add(Category);
                 db.SaveChanges();
+
+                userlogsController userlog = new userlogsController();
+                UserLog userlogs = new UserLog();
+                userlogs.Activity = Session["UserName"].ToString() + " Catagory Created  Sucessfully";
+                string Uid = Session["UserID"].ToString();
+                userlogs.UserID = int.Parse(Uid);
+                userlogs.Date = DateTime.Now;
+                userlog.Create(userlogs);
                 return Json(new { success = true , message = "Category Sucessfully." });
             }
 
@@ -29,9 +39,26 @@ namespace FinalYear.Controllers
         // GET: categories
         public PartialViewResult catagorylistrlist()
         {
-            ViewBag.list = db.Categories.ToList();
+            ViewBag.list = db.Categories.ToList().OrderByDescending(x => x.CreatedDate);
             return PartialView("~/Views/categories/_index.cshtml");
         }
+        [HttpGet]
+        public JsonResult UpdateTable()
+        {
+            var updatedTable = db.Categories
+       .Select(p => new
+       {
+           Id = p.CatID,
+           CategoryName = p.Catname,
+           CreatedDate = p.CreatedDate
+       })
+       .OrderByDescending(x => x.CreatedDate)
+       .ToList();
+
+
+            return Json(new { data = updatedTable }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult _index()
         {
             return PartialView();
@@ -100,11 +127,22 @@ namespace FinalYear.Controllers
         {
             if (ModelState.IsValid)
             {
+                Category.CreatedDate = DateTime.Now;
                 db.Entry(Category).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index","ManageStock");
+
+                userlogsController userlog = new userlogsController();
+                UserLog userlogs = new UserLog();
+                userlogs.Activity = Session["UserName"].ToString() + " Catagory Edit  Sucessfull";
+                string ids=Session["UserID"].ToString();
+                userlogs.UserID = int.Parse(ids);
+                userlogs.Date = DateTime.Now;
+                userlog.Create(userlogs); return Json(new { success = true, message = "Category Edit Successfully." });
             }
-            return PartialView(Category);
+            else
+            {
+                return Json(new { success = false, message = "Category Edit Unsuccessful." });
+            }
         }
 
         // GET: categories/Delete/5

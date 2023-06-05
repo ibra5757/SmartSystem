@@ -11,11 +11,13 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class UserLog
     {
         public int LogID { get; set; }
         public Nullable<int> UserID { get; set; }
+        [Required]
         public string Activity { get; set; }
         public System.DateTime Date { get; set; }
     

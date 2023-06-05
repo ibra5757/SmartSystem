@@ -1,8 +1,30 @@
-﻿<div class="card card-body">
+﻿<script src="~/Scripts/_CreateScript.js" defer></script>
+<script src="~/Scripts/ShowTbl.js" defer></script>
+<script src="~/Scripts/_delete.js" defer></script>
+<script src="~/Scripts/_Detail.js" defer></script>
+
+<div class="card card-body">
     <p>
         <button class="anchorDetail btn  btn-lg" data-url="/categories/_Create" data-bs-toggle="model" data-target="#myModal"><i class="fa-solid fa-plus"></i></button>
     </p>
-    <table class="display compact" id="example1">
+
+    <style>
+        /* Add custom styling for the reload button */
+        #ProdetailreloadButton {
+            background: transparent;
+            border: none;
+            color: green;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+            #ProdetailreloadButton:hover {
+                color: darkgreen;
+            }
+    </style>
+    <table class="display compact" id="example5">
         <thead>
             <tr>
                 <th>CatagoryName</th>
@@ -28,13 +50,44 @@
         </tbody>
     </table>
 </div>
+
 <script>
     $(document).ready(function () {
-        $('#example1').DataTable();
+        $('#example5').DataTable();
+
+        $('.dataTables_filter').prepend('<button id="ProdetailreloadButton"><i class="fas fa-sync-alt"></i></button>');
+        // Use event delegation to bind the click event handler to dynamically added button
+        $(document).on('click', '#ProdetailreloadButton', function () {
+
+            $.ajax({
+                url: '/categories/UpdateTable',
+                method: 'GET',
+                success: function (data) {
+                    $('#example5 tbody').empty();
+
+
+                    for (var i = 0; i < data.data.length; i++) {
+
+                        var newRow = '<tr>' +
+                            '<td>' + data.data[i].CategoryName + '</td>' +
+                            '<td>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/categories/Edit" data-id="' + data.data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-pen-to-square"></i>' +
+                            '</button>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/categories/Details" data-id="' + data.data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-circle-info"></i>' +
+                            '</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $('#example5 tbody').append(newRow);
+
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
     });
 </script>
-
-<script src="~/Scripts/_CreateScript.js"></script>
-<script src="~/Scripts/_delete.js"></script>
-<script src="~/Scripts/_Detail.js"></script>
-

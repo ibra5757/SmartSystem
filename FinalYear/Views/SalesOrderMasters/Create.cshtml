@@ -28,6 +28,8 @@
                             }
                         }
                     </select>
+                    <span class="control-label col-sm "  style="color:red;font-size:9px; " id="productnot"></span>
+
                 </div>
             </td>
             <td scope="col">
@@ -162,24 +164,37 @@
 <script>
         $(document).ready(function () {
     });
+    var customersLoaded = false; // Flag to track if customers data has been loaded
 
-    $("#CusID").on("click focus", function () {
-        $.ajax({
-            url: "/Customers/GetAllCustomers",
-            type: 'GET',
-            success: function (Result) {
-                $("#CusID").empty();
-                $("#CusID").append("<option disabled selected hidden>Select your option</option>");
-                Result.forEach(function (optionData) {
-                    var option = "<option value=" + optionData.CusID + ">" + optionData.Name + "</option>";
-                    $("#CusID").append(option);
-                });
-            },
-            error: function (a, as, ad) {
-                console.log(ad.error)
-            }
-        });
+    $("#CusID").on("click focus", function (event) {
+        event.preventDefault(); // Prevent form submission or page refresh
+
+        if (!customersLoaded) {
+            $.ajax({
+                url: "/Customers/GetAllCustomers",
+                type: 'GET',
+                success: function (Result) {
+                    var selectElement = $("#CusID"); // Cache the select element
+                    selectElement.empty();
+                    selectElement.append("<option disabled selected hidden>Select your option</option>");
+
+                    Result.forEach(function (optionData) {
+                        var option = $("<option></option>")
+                            .val(optionData.CusID)
+                            .text(optionData.Name);
+
+                        selectElement.append(option);
+                    });
+
+                    customersLoaded = true; // Set the flag to indicate that customers data has been loaded
+                },
+                error: function (a, as, ad) {
+                    console.log(ad.error);
+                }
+            });
+        }
     });
+
     var custFalg = false;
 
     var invalidquantitycheck = false;
@@ -202,20 +217,28 @@
         $("#avaq").append("Available Quantity: 0");
         $("#ProductType").empty();
         $("#ProductUnit").empty();
-            var url = "@Url.Content("~/purchases/cmb")";
+        var url = "@Url.Content("~/purchases/cmb")";
 
         $.getJSON(url, { name: $("#product__").val() }, function (data) {
-            $("#ProductType").empty();
-            $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
-            $("#ProductUnit").empty();
-            $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
-            $.each(data, function (index, optionData) {
+            $("#productnot").empty();
+            if (data.success === false) {
+
+                $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+                $("#productnot").append(data.message);
+            } else {
+
+                $("#ProductType").empty();
+                $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+                $("#ProductUnit").empty();
+                $("#ProductUnit").append("<option disabled selected hidden>Select your option</option>");
+                $.each(data, function (index, optionData) {
 
                     var option = "<option value=" + optionData.ProId + ">" + optionData.ProductType + "</option>";
                     $("#ProductType").append(option);
                 });
-            })
-
+            }
+        })
+    
 
         });
     $("#ProductType").change(function () {
@@ -257,7 +280,7 @@
 
         var quantity = $("#Quantity").val();
         $("#error").empty();
-        if (quantity <= quanttt) {
+        if (quantity < quanttt) {
             result = true;
             invalidquantitycheck = true;
             var tickIcon = $('<i class="fas fa-check-circle"></i>');
@@ -354,7 +377,11 @@
         $("#discountedPrice").append(discountedPrice.toFixed(2)); // Display the discounted price in another HTML element
     });
     $("#Sale").click(function () {
-
+        var CusID = $("#CusID").children("option").filter(":selected").val();
+        if (!CusID) {
+            alert("Select Customer"); // Show error message
+            return; // Prevent form submission
+        }
         var table = $('#example11').DataTable();
         var Dicount = $("#Discount").val();
         var tamount = $("#totalamount").text();
@@ -363,6 +390,7 @@
             Dicount = 0;
             totalamt = tamount;
         }
+        
         if (table.rows().data().length > 0) {
 
             var CusID = $("#CusID").children("option").filter(":selected").val();

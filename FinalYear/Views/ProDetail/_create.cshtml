@@ -167,17 +167,22 @@
 
 </script>
 <script>
-    const input = document.getElementById("ProductType");
-    input.addEventListener("input", function () {
-        const options = document.querySelectorAll("#options option");
-        let selectedId = 0;
-        for (const option of options) {
-            if (option.value === input.value) {
-                selectedId = option.id;
-                break;
+    // Check if the script has already run
+    if (!window.inputScriptExecuted) {
+        window.inputScriptExecuted = true;
+
+        const input = document.getElementById("ProductType");
+        input.addEventListener("input", function () {
+            const options = document.querySelectorAll("#options option");
+            let selectedId = 0;
+            for (const option of options) {
+                if (option.value === input.value) {
+                    selectedId = option.id;
+                    break;
+                }
             }
-        }
-        console.log("Selected id: ", selectedId);
-    });
+            console.log("Selected id: ", selectedId);
+        });
+    }
 </script>
 

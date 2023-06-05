@@ -11,15 +11,20 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Ledger
     {
         public int ID { get; set; }
         public Nullable<int> CusID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        [Required]
         public string Description { get; set; }
+        [Required]
         public Nullable<decimal> Debit { get; set; }
+        [Required]
         public Nullable<decimal> Credit { get; set; }
+        [Required]
         public Nullable<decimal> Balance { get; set; }
         public Nullable<int> CompID { get; set; }
     

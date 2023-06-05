@@ -4,13 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SmartInventoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SmartInventoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CatID" />
           </Key>
           <Property Name="CatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Catname" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -21,6 +22,7 @@
           <Property Name="Contact" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Balance" Type="money" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -31,6 +33,7 @@
           <Property Name="Contact" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Balance" Type="money" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Ledger">
           <Key>
@@ -66,6 +69,7 @@
           <Property Name="Packing" Type="int" />
           <Property Name="CostPrice" Type="money" />
           <Property Name="UnitPrice" Type="money" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -76,6 +80,7 @@
           <Property Name="CatID" Type="int" />
           <Property Name="SubCatID" Type="int" />
           <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="PurchaseOrderMaster">
           <Key>
@@ -120,6 +125,7 @@
           <Property Name="SubCatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SubCatname" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="CatID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -459,7 +465,8 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SmartInventoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -469,6 +476,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           </Key>
           <Property Name="CatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Catname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Products" Relationship="Self.FK_catpro" FromRole="Category" ToRole="Products" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_catsubcat" FromRole="Category" ToRole="SubCategory" />
         </EntityType>
@@ -481,6 +489,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <Property Name="Contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PurchaseOrderMasters" Relationship="Self.FK_companyPOM" FromRole="Company" ToRole="PurchaseOrderMaster" />
           <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_Company" FromRole="Company" ToRole="Ledger" />
         </EntityType>
@@ -493,6 +502,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <Property Name="Contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_Customer" FromRole="Customer" ToRole="Ledger" />
           <NavigationProperty Name="SalesOrderMasters" Relationship="Self.FK_SalesCustomer" FromRole="Customer" ToRole="SalesOrderMaster" />
         </EntityType>
@@ -534,6 +544,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <Property Name="Packing" Type="Int32" />
           <Property Name="CostPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PODetails" Relationship="Self.FK_PDetails" FromRole="ProDetails" ToRole="PODetails" />
           <NavigationProperty Name="Product" Relationship="Self.FK_proprodetails" FromRole="ProDetails" ToRole="Products" />
           <NavigationProperty Name="SODetails" Relationship="Self.FK_SODetailsProDetails" FromRole="ProDetails" ToRole="SODetails" />
@@ -547,6 +558,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <Property Name="CatID" Type="Int32" />
           <Property Name="SubCatID" Type="Int32" />
           <Property Name="Code" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Category" Relationship="Self.FK_catpro" FromRole="Products" ToRole="Category" />
           <NavigationProperty Name="ProDetails" Relationship="Self.FK_proprodetails" FromRole="Products" ToRole="ProDetails" />
           <NavigationProperty Name="SubCategory" Relationship="Self.FK_subcatpro" FromRole="Products" ToRole="SubCategory" />
@@ -602,6 +614,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <Property Name="SubCatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubCatname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CatID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Category" Relationship="Self.FK_catsubcat" FromRole="SubCategory" ToRole="Category" />
           <NavigationProperty Name="Products" Relationship="Self.FK_subcatpro" FromRole="SubCategory" ToRole="Products" />
         </EntityType>
@@ -924,11 +937,11 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SmartInventoryModel.sp_helpdiagramdefinition_Result)">
+          <FunctionImport Name="sp_helpdiagramdefinition">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SmartInventoryModel.sp_helpdiagrams_Result)">
+          <FunctionImport Name="sp_helpdiagrams">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -939,17 +952,6 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -961,6 +963,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
               <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="CatID" ColumnName="CatID" />
                 <ScalarProperty Name="Catname" ColumnName="Catname" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -972,6 +975,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
                 <ScalarProperty Name="Contact" ColumnName="Contact" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -983,6 +987,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
                 <ScalarProperty Name="Contact" ColumnName="Contact" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1021,6 +1026,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
                 <ScalarProperty Name="Packing" ColumnName="Packing" />
                 <ScalarProperty Name="CostPrice" ColumnName="CostPrice" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1032,6 +1038,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
                 <ScalarProperty Name="CatID" ColumnName="CatID" />
                 <ScalarProperty Name="SubCatID" ColumnName="SubCatID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1080,6 +1087,7 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
                 <ScalarProperty Name="SubCatID" ColumnName="SubCatID" />
                 <ScalarProperty Name="SubCatname" ColumnName="SubCatname" />
                 <ScalarProperty Name="CatID" ColumnName="CatID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1129,25 +1137,8 @@ warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not 
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SmartInventoryModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SmartInventoryModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SmartInventoryModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SmartInventoryModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SmartInventoryModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SmartInventoryModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SmartInventoryModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SmartInventoryModel.Store.sp_helpdiagramdefinition" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SmartInventoryModel.Store.sp_helpdiagrams" />
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SmartInventoryModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SmartInventoryModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>

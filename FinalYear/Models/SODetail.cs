@@ -11,16 +11,22 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class SODetail
     {
         public int SODetail_Id { get; set; }
         public int SOID { get; set; }
         public int PDID { get; set; }
+        [Required]
         public int S_Quantity { get; set; }
+        [Required]
         public string BatchIdNo { get; set; }
+        [Required]
         public decimal U_price { get; set; }
+        [Required]
         public decimal Discount { get; set; }
+        [Required]
         public decimal TotalPrice { get; set; }
     
         public virtual ProDetail ProDetail { get; set; }
