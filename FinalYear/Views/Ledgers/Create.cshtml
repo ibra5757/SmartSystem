@@ -17,7 +17,7 @@
         </div>
     </div><br />
 
-    <p>Latest balance: <span id="balance"></span></p>
+    <p>Latest balance: <span id="balance"></span></p><p ><span id="types" style="color:red;"></span></p>
     <br />
 
     <div class="container">
@@ -175,7 +175,9 @@
                 type: 'GET',
                 data: { id: value, type: type },
                 success: function (response) {
+                    
                     $('#balance').text(response.balance);
+                    $('#types').text(response.types);
                 },
                 error: function (xhr, status, error) {
                     console.log(error);

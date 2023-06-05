@@ -100,8 +100,10 @@ namespace FinalYear.Controllers
             db.Configuration.ProxyCreationEnabled = false;
 
             decimal balance = 0;
+            string types = "";
             if (type == "company")
             {
+                types = "COMPANY";
                 // Get the latest balance of the company with the given id
                 balance = db.Ledgers
         .Where(l => l.CompID == id)
@@ -111,6 +113,7 @@ namespace FinalYear.Controllers
             }
             else if (type == "customer")
             {
+                types = "CUSTOMER";
                 // Get the latest balance of the customer with the given id
                 balance = db.Ledgers
                     .Where(l => l.CusID == id)
@@ -118,7 +121,7 @@ namespace FinalYear.Controllers
         .Select(l => l.Balance)
         .FirstOrDefault() ?? 0;
             }
-            return Json(new { balance }, JsonRequestBehavior.AllowGet);
+            return Json(new { balance,types }, JsonRequestBehavior.AllowGet);
         }
         // POST: Ledgers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

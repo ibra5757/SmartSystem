@@ -3,6 +3,22 @@
     <p>
         <a class="anchorDetail btn" data-url="/ManageStock/_create" data-bs-toggle="model" data-target="#myModal"> <i class="fa-solid fa-plus"></i></a>
     </p>
+    <style>
+        /* Add custom styling for the reload button */
+        #reloadButton {
+            background: transparent;
+            border: none;
+            color: green;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+            #reloadButton:hover {
+                color: darkgreen;
+            }
+    </style>
     <table class="display compact" id="example1">
         <thead>
             <tr>
@@ -45,12 +61,47 @@
         </tbody>
     </table>
 </div>
-
 <script>
     $(document).ready(function () {
-        $('#example1').DataTable();
+        // Initialize the DataTable
+        var table = $('#example1').DataTable();
+
+        $('.dataTables_filter').prepend('<button id="reloadButton"><i class="fas fa-sync-alt"></i></button>');
+        $('#reloadButton').click(function () {
+            $.ajax({
+                url: '/ManageStock/UpdateTable',
+                method: 'GET',
+                success: function (data) {
+                    $('#example1 tbody').empty();
+
+                    // Append new data rows to the existing table
+                    for (var i = 0; i < data.data.length; i++) {
+                        var newRow = '<tr>' +
+                            '<td>' + data.data[i].Name + '</td>' +
+                            '<td>' + data.data[i].CategoryName + '</td>' +
+                            '<td>' + data.data[i].SubCategoryName + '</td>' +
+                            '<td>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/ManageStock/Edit" data-id="' + data.data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-pen-to-square"></i>' +
+                            '</button>' +
+                            '<button href="#" class="anchorDetail btn btn-sm" data-url="/ManageStock/Details" data-id="' + data.data[i].Id + '" data-bs-toggle="modal" data-target="#myModal">' +
+                            '<i class="fa-solid fa-circle-info"></i>' +
+                            '</button>' +
+                            '</td>' +
+                            '</tr>';
+
+                        $('#example1 tbody').append(newRow);
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
     });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 <script src="~/Scripts/_CreateScript.js"></script>

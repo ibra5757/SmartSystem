@@ -60,12 +60,21 @@ namespace FinalYear.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Company supplier = db.Companies.Find(id);
             if (supplier == null)
             {
                 return HttpNotFound();
             }
-            return PartialView("_Details",supplier);
+
+            var balanceQuery = from ledger in db.Ledgers
+                               where ledger.CompID == supplier.CompanyID
+                               orderby ledger.Date descending
+                               select ledger.Balance;
+
+            supplier.Balance = balanceQuery.FirstOrDefault()??0;
+            
+            return PartialView("_Details", supplier);
         }
 
         // GET: Supplier/Create
@@ -81,6 +90,7 @@ namespace FinalYear.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Company supplier)
         {
+            supplier.CreatedDate = DateTime.Now;
             supplier.Balance = 0;
             if (ModelState.IsValid)
             {

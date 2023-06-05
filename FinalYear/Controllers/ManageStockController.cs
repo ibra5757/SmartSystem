@@ -15,6 +15,12 @@ namespace FinalYear.Controllers
     {
         private SmartInventoryEntities db = new SmartInventoryEntities();
 
+        categoriesController categoriesController = new categoriesController();
+
+        SubcategoriesController subcategoriesController = new SubcategoriesController();
+
+
+        ProDetailController proDetailController = new ProDetailController();
         // GET: ManageStock
         _6digitRand _6DigitRand = new _6digitRand();
         long dig=0;
@@ -23,8 +29,8 @@ namespace FinalYear.Controllers
             
              dig= _6DigitRand.GenerateRnd();
             Session["Rnd"] = dig;
-            ViewBag.ProCmb = db.Products;
-            ViewBag.Pd_type = db.ProDetails;
+            ViewBag.ProCmb = db.Products.OrderByDescending(z=>z.CreatedDate);
+            ViewBag.Pd_type = db.ProDetails.OrderByDescending(z => z.CreatedDate);
             
             
             return View();
@@ -32,26 +38,42 @@ namespace FinalYear.Controllers
         
         public PartialViewResult productlist()
         {
-            ViewBag.ProductPartial = db.Products.Include(p => p.Category).Include(p => p.SubCategory);
+            ViewBag.ProductPartial = db.Products.Include(p => p.Category).Include(p => p.SubCategory).OrderByDescending(x=>x.CreatedDate);
             return PartialView("_Product");
         }
+        [HttpGet]
+        public JsonResult UpdateTable()
+        {
+            var updatedTable = db.Products
+                .Select(p => new
+                {
+                    Name = p.ProName,
+                    CategoryName = p.Category.Catname,
+                    SubCategoryName = p.SubCategory.SubCatname,
+                    Actions=p.CatID,
+                    CreatedDate=p.CreatedDate
+                }).OrderByDescending(z => z.CreatedDate)
+                .ToList();
+
+            return Json(new { data = updatedTable }, JsonRequestBehavior.AllowGet);
+        }
+
+
         public ActionResult TabList(string tab)
         {
             switch (tab)
             {
                 case "#tab2":
-                    categoriesController categoriesController = new categoriesController();
                     var catlist = categoriesController.catagorylistrlist();
                     return catlist ;
                 case "#tab3":
-                    SubcategoriesController subcategoriesController = new SubcategoriesController();
                     var subcatlist = subcategoriesController.subcatlist();
                     return subcatlist;
                 case "#tab4":
-                    ProDetailController proDetailController = new ProDetailController();
                     var prodetaillisy = proDetailController.prodetail();
                     return prodetaillisy;
                 default:
+
                     ManageStockController manageStockController = new ManageStockController();
                     var plist = manageStockController.productlist();
                     return plist;
@@ -106,8 +128,9 @@ namespace FinalYear.Controllers
         [HttpPost]
         public JsonResult Create(Product product)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
+                product.CreatedDate = DateTime.Now;
                 db.Products.Add(product);
                 db.SaveChanges();
                 dig = _6DigitRand.GenerateRnd();

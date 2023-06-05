@@ -50,6 +50,8 @@
                         }
                     </select>
                 </div>
+                <span class="control-label col-sm" style="color:red" id="productnot"></span>
+
             </td>
 
 
@@ -139,15 +141,20 @@
 
         $.getJSON(url, { name: $("#product__").val() }, function (data) {
             $("#ProductType").empty();
-            $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
-            $.each(data, function (index, optionData) {
+            $("#productnot").empty();
+            if (data.success === false) {
+                
+                $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+                $("#productnot").append(data.message);
+            } else {
 
+                $("#ProductType").append("<option disabled selected hidden>Select your option</option>");
+                $.each(data, function (index, optionData) {
                     var option = "<option value=" + optionData.ProId + ">" + optionData.ProductType + "</option>";
                     $("#ProductType").append(option);
                 });
+            }
             })
-
-
         });
     $("#ProductType").change(function () {
 
@@ -229,29 +236,7 @@
         },
         submitHandler: function (form) {
 
-            //$.ajax({
-            //    url: "/purchases/Create",
-            //    type: 'POST',
-            //    data: $('#formPurchase').serialize(),
-            //    async: false,
-            //    success: function (data) {
-
-            //        if (data.success == true) {
-            //            $('#PNo').text(data.dig);
-
-            //            // Reset the form
-            //            $('#formPurchase')[0].reset();
-            //            toastr["success"](data.message);
-            //        }
-            //        else {
-            //            toastr["danger"](data.message);
-            //        }
-            //    }
-
-            //});
-            //$('#addRow').on('click', function ()
-            //{
-
+            
                     event.preventDefault();
                     var product = $("#product__").val();
                     var quantity = $("#Quantity").val();
@@ -346,7 +331,7 @@
                 data: jsonString,
 
                 success: function (data) {
-                    debugger
+                    
                     if (data.success == true) {
                         $("#BillNo").empty();
                         $("#BillNo").append(data.dig);
@@ -361,7 +346,9 @@
                         $("#ProductType").empty();
                         $("#ProductUnit").empty();
                         toastr["success"](data.message);
-                        $('#ptable').DataTable().destroy();
+                        t.clear().draw();
+                        deletedRows = [];
+                        Tprice = 0;
                         $('#ptable').DataTable();
                     }
                     else {

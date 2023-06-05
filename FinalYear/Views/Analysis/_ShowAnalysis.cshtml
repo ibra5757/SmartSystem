@@ -3,16 +3,11 @@
     <div class="card text-white bg-danger mb-3" style="max-width: 30rem;">
         <div class="card-header">Linear Regression</div>
         <div class="card-body">
-            @if (ViewBag.Summary != null)
+            @if (ViewBag.EvaluationResult != null)
             {
-                <h4>Mean_Square_Error Before</h4>
-                <p>@ViewBag.Summary.meansquareerror</p>
-                @*<p>@item.Coefficients</p><br />*@
-                <h4>Mean_Square_Error After Gradient Decent</h4>
-                <p>@ViewBag.Summary.Intercept</p>
-                @*<h4>Coefficients</h4>
-                <p>@ViewBag.Summary.Coefficients</p>*@
-
+            <p>
+                @ViewBag.EvaluationResult
+            </p>
 
             }
         </div>

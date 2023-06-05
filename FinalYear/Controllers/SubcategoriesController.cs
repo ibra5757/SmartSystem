@@ -20,9 +20,24 @@ namespace FinalYear.Controllers
             
             return PartialView();
         }
+        [HttpGet]
+        public JsonResult UpdateTable()
+        {
+            var updatedTable = db.SubCategories
+                .Select(p => new
+                {
+                    Id=p.SubCatID,
+
+                    CategoryName=p.Category.Catname,
+                    SubCategoryName = p.SubCatname,
+                })
+                .ToList();
+
+            return Json(new { data = updatedTable }, JsonRequestBehavior.AllowGet);
+        }
         public PartialViewResult subcatlist()
         {
-            ViewBag.Subcatagory = db.SubCategories.ToList();
+            ViewBag.Subcatagory = db.SubCategories.ToList().OrderByDescending(z=>z.CreatedDate);
             return PartialView("~/Views/Subcategories/_index.cshtml");
         }
         [HttpPost]
@@ -71,6 +86,7 @@ namespace FinalYear.Controllers
         {
             if (ModelState.IsValid)
             {
+                subcategory.CreatedDate = DateTime.Now;
                 db.SubCategories.Add(subcategory);
                 db.SaveChanges();
 

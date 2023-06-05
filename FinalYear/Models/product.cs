@@ -11,7 +11,8 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,10 +22,15 @@ namespace FinalYear.Models
         }
     
         public int ProID { get; set; }
+        [Required]
         public string ProName { get; set; }
+        [Required]
         public Nullable<int> CatID { get; set; }
+        [Required]
         public Nullable<int> SubCatID { get; set; }
+        [Required]
         public string Code { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

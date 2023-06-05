@@ -32,7 +32,7 @@ namespace FinalYear.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             var sales = db.SalesOrderMasters
                  .Include(p => p.Customer).Include(p => p.User)
-                 .ToList();
+                 .ToList().OrderByDescending(z=>z.Date);
             
             return PartialView("ViewSales", sales);
         }
@@ -49,21 +49,33 @@ namespace FinalYear.Controllers
             .Select(g => new QuantityAva
             {
                 PDID = g.Key,
-                TotalQuantity = g.Sum(p => p.Quantity) - db.SODetails.Where(s => s.PDID == g.Key).Sum(s => s.S_Quantity),
-                Price = (int)stock.UnitPrice,
-                Packing = (int)stock.Packing
+                TotalQuantity = g.Sum(p => p.Quantity) - (db.SODetails.Where(s => s.PDID == g.Key).Sum(s => s.S_Quantity) != null ? (int)db.SODetails.Where(s => s.PDID == g.Key).Sum(s => s.S_Quantity) : 0),
+                Price = (int)(stock.UnitPrice),
+                Packing = (int)(stock.Packing)
             }).ToList();
 
-            if (query != null)
+            if (query.Count != 0)
             {
                 return Json(query, "The requested quantity available.", JsonRequestBehavior.AllowGet);
 
             }
             else
             {
-                return Json(query, "The requested quantity is not available.", JsonRequestBehavior.AllowGet);
+                // Create a new list with default values
+                var emptyQuery = new List<QuantityAva>
+    {
+        new QuantityAva
+        {
+            PDID = stock.PDId, // Or any appropriate default value for PDID
+            TotalQuantity = 0,
+            Price = (int)stock.UnitPrice,
+            Packing = (int)stock.Packing
+        }
+    };
 
+                return Json(emptyQuery, "The requested quantity is not available.", JsonRequestBehavior.AllowGet);
             }
+
 
 
         }

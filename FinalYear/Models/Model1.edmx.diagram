@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="18020482147848bfb147b37cc4236e05" Name="Diagram1" ZoomLevel="95">
-        <EntityTypeShape EntityType="SmartInventoryModel.Category" Width="1.5" PointX="1.5" PointY="16" IsExpanded="true" />
+      <Diagram DiagramId="bc3cce2c77cc4850a7e39a704dc41ad5" Name="Diagram1">
+        <EntityTypeShape EntityType="SmartInventoryModel.Category" Width="1.5" PointX="1.5" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.Company" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.Customer" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.Ledger" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.PODetail" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SmartInventoryModel.ProDetail" Width="1.5" PointX="6" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SmartInventoryModel.Product" Width="1.5" PointX="3.75" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartInventoryModel.ProDetail" Width="1.5" PointX="6" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SmartInventoryModel.Product" Width="1.5" PointX="3.75" PointY="16.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.PurchaseOrderMaster" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.SalesOrderMaster" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SmartInventoryModel.SODetail" Width="1.5" PointX="11.25" PointY="4.75" IsExpanded="true" />

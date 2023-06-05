@@ -20,27 +20,28 @@ namespace FinalYear.Controllers
         public ActionResult GetAllCustomers()
         {
             db.Configuration.ProxyCreationEnabled = false;
-            var cus=db.Customers.ToList();
+            var cus=db.Customers.ToList().OrderByDescending(z=>z.CreatedDate);
             return Json(cus, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Customers/Details/5
-        public ActionResult Details(int? id)
+        public PartialViewResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            
             Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
+            
+            var balanceQuery = from ledger in db.Ledgers
+                               where ledger.CusID == customer.CusID
+                               orderby ledger.Date descending
+                               select ledger.Balance;
+
+            customer.Balance = balanceQuery.FirstOrDefault() ?? 0;
+
+            return PartialView  ("Details",customer);
         }
 
         // GET: Customers/Create
-        public ActionResult Create()
+        public PartialViewResult Create()
         {
             return PartialView();
         }
@@ -55,7 +56,15 @@ namespace FinalYear.Controllers
             customer.Balance = 0;
             if (ModelState.IsValid)
             {
+                customer.CreatedDate = DateTime.Now;
                 db.Customers.Add(customer);
+
+                userlogsController userlog = new userlogsController();
+                UserLog userlogs = new UserLog();
+                userlogs.Activity = Session["UserName"].ToString() + " Customer Created  Sucessfully";
+                userlogs.UserID = (int)Session["UserID"];
+                userlogs.Date = DateTime.Now;
+                userlog.Create(userlogs);
                 db.SaveChanges();
                 var all = db.Customers.ToList();
                 return Json("Customer created successfully!");
@@ -71,18 +80,12 @@ namespace FinalYear.Controllers
             return View();
         }
         // GET: Customers/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            
             Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
+           
+            return PartialView(customer);
         }
 
         // POST: Customers/Edit/5
@@ -95,29 +98,22 @@ namespace FinalYear.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(customer);
-        }
 
-        // GET: Customers/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
+                userlogsController userlog = new userlogsController();
+                UserLog userlogs = new UserLog();
+                userlogs.Activity = Session["UserName"].ToString() + " Customer EDIT  Sucessfully";
+                string z = Session["UserID"].ToString();
+                userlogs.UserID = int.Parse(z);
+                userlogs.Date = DateTime.Now;
+                userlog.Create(userlogs);
+                db.SaveChanges();
+                return RedirectToAction("Index","Supplier");
             }
             return View(customer);
         }
+        
 
         // POST: Customers/Delete/5
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

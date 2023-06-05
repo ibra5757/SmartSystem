@@ -17,7 +17,18 @@ namespace FinalYear.Controllers
         // GET: users
         public ActionResult Indexuser()
         {
-            return View(db.Users.ToList());
+            
+            if(AccountController.UserRole != Permission.admin)
+            {
+                TempData["Permissions"] = "You don't have required permission";
+                return View("~/Views/404Error/404Page.cshtml");
+
+            }
+            else
+            {
+                return View(db.Users.ToList());
+            }
+        
         }
         [HttpPost]
         public JsonResult UpdateStatus(int id, bool isActive)
