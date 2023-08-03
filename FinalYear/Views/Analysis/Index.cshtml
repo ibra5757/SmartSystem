@@ -13,15 +13,15 @@
 
 
 <select class="form-control dropdown col-4 " id="Find">
-
-    <option value="M01AB">Panadol--M01AB</option>
-    <option value="M01AE">Calpol--M01AE</option>
-    <option value="N02BA">Kestine--N02BA</option>
-    <option value="N02BE">Declroran--N02BE</option>
-    <option value="N05B">Bruffen--N05B</option>
-    <option value="N05C">Ponstan--N05B</option>
-    <option value="R03">Risk--R03</option>
-    <option value="R06">Hydraline--R03</option>
+    <option disabled selected>Select an option</option>
+    @*<option value="M01AB">Panadol--M01AB</option>
+        <option value="M01AE">Calpol--M01AE</option>
+        <option value="N02BA">Kestine--N02BA</option>
+        <option value="N02BE">Declroran--N02BE</option>
+        <option value="N05B">Bruffen--N05B</option>
+        <option value="N05C">Ponstan--N05B</option>
+        <option value="R03">Risk--R03</option>*@
+    <option value="R06">Hydraline--R06</option>
 
 </select>
 <br /><br />
@@ -31,7 +31,7 @@
 <div id="spinner" class="spinner-grow" style="width: 3rem; height: 3rem; display:none;position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1051;" role="status">
 
 </div>
-@*<div class="row">
+<div class="row">
     <div class="col-2">
         <input type="text" class="form-control" placeholder="Temperature" id="Temperature">
     </div>
@@ -50,17 +50,24 @@
     <div class="col-2">
         <input type="text" class="form-control" placeholder="Condition_int" id="Condition_int">
     </div>
-    
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Event" id="Event">
+    </div>
+
+    <div class="col-2">
+        <input type="text" class="form-control" placeholder="Wind" id="Wind">
+    </div>
     <div class="col-2">
         <select class="form-control dropdown " id="Finds">
-            <option value="M01AB">Panadol--M01AB</option>
-            <option value="M01AE">Calpol--M01AE</option>
-            <option value="N02BA">Kestine--N02BA</option>
-            <option value="N02BE">Declroran--N02BE</option>
-            <option value="N05B">Bruffen--N05B</option>
-            <option value="N05C">Ponstan--N05B</option>
-            <option value="R03">Risk--R03</option>
-            <option value="R06">Hydraline--R03</option>
+            <option disabled selected>Select an option</option>
+            @*<option value="M01AB">Panadol--M01AB</option>
+                <option value="M01AE">Calpol--M01AE</option>
+                <option value="N02BA">Kestine--N02BA</option>
+                <option value="N02BE">Declroran--N02BE</option>
+                <option value="N05B">Bruffen--N05B</option>
+                <option value="N05C">Ponstan--N05B</option>
+                <option value="R03">Risk--R03</option>*@
+            <option value="R06">Hydraline--R06</option>
 
 
         </select>
@@ -74,7 +81,7 @@
         </select>
     </div>
     <button id="gradient" type="button" class=" btn btn-success">GradientDecent</button>
-</div>*@
+</div>
 
 <div class="" id="partial-container"></div>
 
@@ -119,11 +126,12 @@
         Humidity = $("#Humidity").val();
         Pressure = $("#Pressure").val();
         Condition_int = $("#Condition_int").val();
-
+        Event = $("#Event").val();
+        Wind = $("#Wind").val();
         $.ajax({
             type: "POST",
             url: "GetPrediction",
-            data: { MedName: MedName, typeselect: typeselect, Temperature: Temperature, Dew_Point: Dew_Point, Wind_Speed: Wind_Speed, Humidity: Humidity, Pressure: Pressure, Condition_int: Condition_int },
+            data: { MedName: MedName, typeselect: typeselect, Temperature: Temperature, Dew_Point: Dew_Point, Wind_Speed: Wind_Speed, Humidity: Humidity, Pressure: Pressure, Condition_int: Condition_int, Event: Event,Wind:Wind},
             beforeSend: function () {
                 $('#page-overlay').show();
                 $('#spinner').show();

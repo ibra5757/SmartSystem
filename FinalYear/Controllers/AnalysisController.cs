@@ -53,26 +53,33 @@ namespace FinalYear.Controllers
                 client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync("http://192.168.43.236:105/data");
+                HttpResponseMessage Res = await client.GetAsync("http://127.0.0.1:105/data");
 
                 if (Res.IsSuccessStatusCode)
                 {
                     var Datagotfromapi = await Res.Content.ReadAsStringAsync();
                     var evaluationResult = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(Datagotfromapi);
-                    string concatenatedData = "";
-
+                    List<summary> evaluationResults = new List<summary>();
                     foreach (var kvp in evaluationResult)
                     {
                         string index = kvp.Key;
                         Dictionary<string, object> values = kvp.Value;
 
-                        string concatenatedValues = string.Join(", ", values.Values);
+                        string concatenatedValues = string.Join(Environment.NewLine, values.Select(pair => $"{pair.Key}: {pair.Value}"));
+
                         string concatenatedEntry = $"{index}: {concatenatedValues}";
 
-                        concatenatedData += concatenatedEntry + Environment.NewLine;
+                        summary entry = new summary
+                        {
+                            Name = index,
+                            Values = concatenatedValues
+                        };
+                        evaluationResults.Add(entry);
                     }
-                        ViewBag.EvaluationResult = concatenatedData;
-                    
+
+                    ViewBag.EvaluationResults = evaluationResults;
+
+
                     return PartialView("_ShowAnalysis");
                 }
                 else
@@ -84,7 +91,7 @@ namespace FinalYear.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetPrediction(string MedName, string typeselect, string Temperature,string Dew_Point, string Wind_Speed, string Humidity, string Pressure,string Condition_int)
+        public async Task<ActionResult> GetPrediction(string MedName, string typeselect, string Temperature,string Dew_Point, string Wind_Speed, string Humidity, string Pressure,string Condition_int, string Event,string Wind)
         {
             //var myfilename = string.Format(@"{0}", Guid.NewGuid());
             //EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
@@ -94,38 +101,31 @@ namespace FinalYear.Controllers
 
                 object mydat2a = new
                 {
-                    MedName=MedName, typeselect= typeselect, Temperature= Temperature, Dew_Point= Dew_Point, Wind_Speed= Wind_Speed, Humidity= Humidity, Pressure= Pressure, Condition_int= Condition_int
+                    MedName=MedName, typeselect= typeselect, Temperature= Temperature, Dew_Point= Dew_Point,
+                    Wind= Wind, Wind_Speed = Wind_Speed, Humidity= Humidity, Pressure= Pressure, Condition_int= Condition_int,
+                    Event= Event
                 };
                 var myContent = JsonConvert.SerializeObject(mydat2a);
 
                 client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.PostAsJsonAsync(  $"{baseUrl.BaseUrl()}Applygradientdecent", mydat2a);
+                HttpResponseMessage Res = await client.PostAsJsonAsync("http://127.0.0.1:105/Applygradientdecent", mydat2a);
                 if (Res.IsSuccessStatusCode)
                 {
                     var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
 
-                    var news = Datagotfromapi.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+                    var predition = JsonConvert.DeserializeObject<PredictedValue>(Datagotfromapi);
 
-                    var predition = JsonConvert.DeserializeObject<PredictedValue>(news);
-
-                    PredictedValue PredictedValues = new PredictedValue()
+                    PredictedValue predictedValues = new PredictedValue()
                     {
-                        
-                        PredictedValues = predition.PredictedValues
-
+                        Predictions = predition.Predictions
                     };
 
-
-
                     ViewBag.predicted = null;
-                    ViewBag.predicted = predition;
+                    ViewBag.predicted = predictedValues;
 
-                    ////Generate unique filename
-                    //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
-                    //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
-
+                    // ...
                 }
                 return PartialView("_Aftergradientdecent");
 

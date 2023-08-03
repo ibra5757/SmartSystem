@@ -22,14 +22,11 @@ namespace FinalYear.Models
         }
     
         public int ProID { get; set; }
-        [Required]
         public string ProName { get; set; }
         [Required]
         public Nullable<int> CatID { get; set; }
-        [Required]
         public Nullable<int> SubCatID { get; set; }
-        [Required]
-        public string Code { get; set; }
+        public string Code { get; set; }[Required]
         public Nullable<System.DateTime> CreatedDate { get; set; }
     
         public virtual Category Category { get; set; }

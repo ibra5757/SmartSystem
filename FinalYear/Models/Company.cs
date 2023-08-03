@@ -23,13 +23,13 @@ namespace FinalYear.Models
         }
     
         public int CompanyID { get; set; }
-        [Required]
+        
         public string CompanyName { get; set; }
         [Required]
         public string Contact { get; set; }
         [Required]
         public string Address { get; set; }
-        [Required]
+        
         public decimal Balance { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     

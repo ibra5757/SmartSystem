@@ -11,7 +11,8 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class SalesOrderMaster
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,13 +23,17 @@ namespace FinalYear.Models
     
         public System.DateTime Date { get; set; }
         public int SOID { get; set; }
+        [Required]
         public string BillNo { get; set; }
         public Nullable<int> CusID { get; set; }
+        [Required]
         public decimal TotalAmount { get; set; }
+        [Required]
         public decimal Discount { get; set; }
+        [Required]
         public decimal GrandTotal { get; set; }
         public Nullable<int> UserID { get; set; }
-    
+        [Required]
         public virtual Customer Customer { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -17,7 +17,6 @@ namespace FinalYear.Models
     {
         public int LogID { get; set; }
         public Nullable<int> UserID { get; set; }
-        [Required]
         public string Activity { get; set; }
         public System.DateTime Date { get; set; }
     

@@ -24,17 +24,16 @@ namespace FinalYear.Models
         }
     
         public int UserID { get; set; }
-        [Required]
         public string Name { get; set; }
         [Required]
+        [RegularExpression(@"^\+92\d{9}$", ErrorMessage = "Invalid contact")]
+
         public string Contact { get; set; }
-        [Required]
+        [RegularExpression(@"^\d{5}-\d{7}-\d{1}$", ErrorMessage = "Invalid CNIC")]
+    
         public string CNIC { get; set; }
-        [Required]
         public string UserName { get; set; }
-        [Required]
         public string Password { get; set; }
-        [Required]
         public string Role { get; set; }
         public Nullable<bool> IsActive { get; set; }
     
