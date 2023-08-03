@@ -1,14 +1,13 @@
 ﻿@model FinalYear.Models.summary
 
-    <div class="card text-white bg-danger mb-3" style="max-width: 30rem;">
-        <div class="card-header">Linear Regression</div>
+@foreach (var entry in ViewBag.EvaluationResults)
+{
+    <div class="card text-white bg-danger mb-3" style="max-width: 40rem;">
+        <div class="card-header">@entry.Name</div>
         <div class="card-body">
-            @if (ViewBag.EvaluationResult != null)
-            {
             <p>
-                @ViewBag.EvaluationResult
+                @entry.Values
             </p>
-
-            }
         </div>
     </div>
+}

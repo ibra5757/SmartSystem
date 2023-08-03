@@ -38,7 +38,6 @@ namespace FinalYear.Models
         public virtual DbSet<SalesOrderMaster> SalesOrderMasters { get; set; }
         public virtual DbSet<SODetail> SODetails { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<ExtractTotalQuantity> ExtractTotalQuantities { get; set; }

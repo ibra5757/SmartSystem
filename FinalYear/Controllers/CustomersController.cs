@@ -62,7 +62,8 @@ namespace FinalYear.Controllers
                 userlogsController userlog = new userlogsController();
                 UserLog userlogs = new UserLog();
                 userlogs.Activity = Session["UserName"].ToString() + " Customer Created  Sucessfully";
-                userlogs.UserID = (int)Session["UserID"];
+                string alpha = Session["UserID"].ToString();
+                userlogs.UserID = Convert.ToInt32(alpha.ToString());
                 userlogs.Date = DateTime.Now;
                 userlog.Create(userlogs);
                 db.SaveChanges();

@@ -7,11 +7,10 @@ namespace FinalYear.Models
 {
         public class summary
         {
-            public string Coefficients { get; set; }
-            public string Intercept { get; set; }
-            public string meansquareerror { get; set; }
+        public string Name { get; set; }
+        public string Values { get; set; }
 
 
-        }
+    }
     
 }
