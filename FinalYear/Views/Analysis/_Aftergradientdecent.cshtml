@@ -1,16 +1,13 @@
 ﻿@model FinalYear.Models.PredictedValue
 
 <div class="card text-white bg-danger mb-3" style="max-width: 30rem;">
-    <div class="card-header">Weekly Base</div>
+    @if (ViewBag.predicted != null)
+    {<div class="card-header">@ViewBag.predicted.type</div>
     <div class="card-body">
-        @if (ViewBag.predicted != null)
-        {
-            <h4>Predicted Values</h4>
 
-            foreach (var prediction in ViewBag.predicted.Predictions)
-            {
-                <p>@prediction</p>
-            }
-        }
-    </div>
+        <h4>Predicted Values</h4>
+
+        <p>@ViewBag.predicted.Predictions</p>
+        
+    </div>}
 </div>

@@ -1,7 +1,0 @@
- int number = 10;  
-
-        // Check if the number is greater than //
-        if (number > 5)
-        {
-            Console.WriteLine("Number is greater than 5");  
-        }
