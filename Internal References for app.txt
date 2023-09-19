@@ -1,0 +1,16 @@
+internal references;
+
+login: Account/Login
+Registration: Account/Register
+DashBoard: Account/Dashboard
+MANAGE STOCK: ManageStock/Index
+PURCHASE: purchases/Index
+SALES: SalesOrderMasters/Index
+LEDGER: Ledgers/Index
+ANALYSIS: Analysis/Index
+SETTING: users/Indexuser
+SUPPLIER: Supplier/Index
+USERLOG: userlogs/Index
+
+127.0.0.1:105 is the flask server ip on local host
+other references are in report

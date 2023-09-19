@@ -245,6 +245,7 @@
     <Compile Include="Models\ExtractTotalQuantity.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Featurerequest.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Interface\IURLClass.cs" />
     <Compile Include="Interface\IUsers.cs" />

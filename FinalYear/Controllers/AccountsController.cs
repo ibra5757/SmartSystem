@@ -13,16 +13,16 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading;
 using System.IO;
+using FinalYear.Interface;
 
 namespace FinalYear.Controllers
 {
     public class AccountController : Controller
     {
         // GET: credentials
-
-        public string Baseurl = "http://127.0.0.1:105";
+        
         private static string userRole;
-
+        IURLClass baseUrl = new URLClass();
         public static string UserRole
         {
             get { return userRole; }
@@ -170,26 +170,16 @@ namespace FinalYear.Controllers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(Baseurl);
+                client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.PostAsJsonAsync(Baseurl + "GetGraphs", mydata);
+                HttpResponseMessage Res = await client.PostAsJsonAsync( "GetGraphs", mydata);
                 if (Res.IsSuccessStatusCode)
                 {
                     EmpRespons = Res.Content.ReadAsStringAsync().Result;
-                    //EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
-                    //var myfilename = string.Format(@"{0}", Guid.NewGuid());
                     EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
                     ViewBag.Data = EmpRespons;
-                    ////Generate unique filename
-                    //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
-                    //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
 
-                    //using (var imageFile = new FileStream(filepath, FileMode.Create))
-                    //{
-                    //    imageFile.Write(bytess, 0, bytess.Length);
-                    //    imageFile.Flush();
-                    //}
                 }
                 return EmpRespons;
             }
@@ -200,12 +190,12 @@ namespace FinalYear.Controllers
             using (var client = new HttpClient())
             {
 
-                
-                
-                client.BaseAddress = new Uri(Baseurl);
+
+
+                client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.GetAsync(Baseurl + "image");
+                HttpResponseMessage response = await client.GetAsync("image");
                 using (var stream = await response.Content.ReadAsStreamAsync())
                 {
                     using (var memoryStream = new MemoryStream())
@@ -216,44 +206,11 @@ namespace FinalYear.Controllers
                         var model = new ImageModel { ImageData = imageDataString };
                         return PartialView("_piechartview",model);
                     }
-                    // Use the Image object
+                    
                 }
             }
         }
-        //public async Task<string> get()
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        var EmpRespons="";
-        //        client.BaseAddress = new Uri(Baseurl);
-        //        client.DefaultRequestHeaders.Clear();
-        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //        HttpResponseMessage Res = await client.GetAsync("GetGraphs");
-        //        if (Res.IsSuccessStatusCode)
-        //        {
-        //            EmpRespons = Res.Content.ReadAsStringAsync().Result;
-        //            //EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
-        //            //var myfilename = string.Format(@"{0}", Guid.NewGuid());
-        //            EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
-        //            ViewBag.Data = string.Empty;
-        //            ViewBag.Data = EmpRespons;
-        //            ////Generate unique filename
-        //            //string filepath = @"C:\Users\Ibrahim\Desktop\" + myfilename + ".jpeg";
-        //            //imagebuffer.imageBuffe = Convert.FromBase64String(EmpResponse);
-
-        //            //using (var imageFile = new FileStream(filepath, FileMode.Create))
-        //            //{
-        //            //    imageFile.Write(bytess, 0, bytess.Length);
-        //            //    imageFile.Flush();
-        //            //}
-        //        }
-        //        else
-        //        {
-        //            ViewBag.Data = null;
-        //        }
-        //        return EmpRespons;
-        //    }
-        //}
+       
     }
 
 }

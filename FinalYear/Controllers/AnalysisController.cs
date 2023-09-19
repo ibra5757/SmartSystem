@@ -91,26 +91,32 @@ namespace FinalYear.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetPrediction(string MedName, string typeselect, string Temperature,string Dew_Point, string Wind_Speed, string Humidity, string Pressure,string Condition_int, string Event,string Wind)
+        public async Task<ActionResult> GetPrediction(FormCollection form)
+
         {
-            //var myfilename = string.Format(@"{0}", Guid.NewGuid());
-            //EmpRespons = EmpRespons.Replace("\"", string.Empty).Trim();
+           
 
             using (var client = new HttpClient())
             {
 
-                object mydat2a = new
+                var formData = new Featurerequest
                 {
-                    MedName=MedName, typeselect= typeselect, Temperature= Temperature, Dew_Point= Dew_Point,
-                    Wind= Wind, Wind_Speed = Wind_Speed, Humidity= Humidity, Pressure= Pressure, Condition_int= Condition_int,
-                    Event= Event
+                    target= form["Target"],
+                    Temperature = form["Temperature"],
+                    Dew_Point = form["Dew_Point"],
+                    Wind_Speed = form["Wind_Speed"],
+                    Humidity = form["Humidity"],
+                    Pressure = form["Pressure"],
+                    Condition_int = form["Condition_int"],
+                    Event = form["Event"],
+                    Seasons = form["season"],
+                    type = form["type"]
                 };
-                var myContent = JsonConvert.SerializeObject(mydat2a);
 
                 client.BaseAddress = new Uri(baseUrl.BaseUrl());
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.PostAsJsonAsync("http://127.0.0.1:105/Applygradientdecent", mydat2a);
+                HttpResponseMessage Res = await client.PostAsJsonAsync("Applygradientdecent", formData);
                 if (Res.IsSuccessStatusCode)
                 {
                     var Datagotfromapi = Res.Content.ReadAsStringAsync().Result;
@@ -119,13 +125,13 @@ namespace FinalYear.Controllers
 
                     PredictedValue predictedValues = new PredictedValue()
                     {
-                        Predictions = predition.Predictions
+                        Predictions = predition.Predictions.Split('.')[0]+"]",
+                        type= formData.type
                     };
 
                     ViewBag.predicted = null;
                     ViewBag.predicted = predictedValues;
-
-                    // ...
+                    
                 }
                 return PartialView("_Aftergradientdecent");
 

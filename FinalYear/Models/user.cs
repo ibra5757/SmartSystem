@@ -11,8 +11,7 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,12 +24,7 @@ namespace FinalYear.Models
     
         public int UserID { get; set; }
         public string Name { get; set; }
-        [Required]
-        [RegularExpression(@"^\+92\d{9}$", ErrorMessage = "Invalid contact")]
-
         public string Contact { get; set; }
-        [RegularExpression(@"^\d{5}-\d{7}-\d{1}$", ErrorMessage = "Invalid CNIC")]
-    
         public string CNIC { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }

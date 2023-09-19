@@ -11,8 +11,7 @@ namespace FinalYear.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class ProDetail
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -24,15 +23,10 @@ namespace FinalYear.Models
     
         public int PDId { get; set; }
         public Nullable<int> ProId { get; set; }
-        [Required]
         public string ProductUnit { get; set; }
-        [Required]
         public string ProductType { get; set; }
-        [Required]
         public Nullable<int> Packing { get; set; }
-        [Required]
         public Nullable<decimal> CostPrice { get; set; }
-        [Required]
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     
