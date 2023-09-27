@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="INVENTORY_SYSTEMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="CatID" />
+    </Key>
+    <Property Name="CatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Catname" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Balance" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProDetails">
+    <Key>
+      <PropertyRef Name="PDId" />
+    </Key>
+    <Property Name="PDId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProUnit" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="ProId" Type="int" />
+    <Property Name="BatchId" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Packing" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="U_Price" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="products">
+    <Key>
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="TotalQuatity" Type="int" Nullable="false" />
+    <Property Name="CatID" Type="int" Nullable="false" />
+    <Property Name="SubCatID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="purchase">
+    <Key>
+      <PropertyRef Name="PurchaseId" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PurchaseId" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="SupplierID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="purchaseledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Explanation" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Debit" Type="money" Nullable="false" />
+    <Property Name="Credit" Type="money" Nullable="false" />
+    <Property Name="Balance" Type="money" Nullable="false" />
+    <Property Name="SupID" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'INVENTORY_SYSTEM.dbo.purchasesitem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="purchasesitem">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Quantity" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PurchaseId" Type="varchar" MaxLength="30" />
+    <Property Name="ProID" Type="int" />
+    <Property Name="PDId" Type="int" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="SupplierID" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'INVENTORY_SYSTEM.dbo.returneditems' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="returneditems">
+    <Key>
+      <PropertyRef Name="Description" />
+      <PropertyRef Name="Quantity" />
+      <PropertyRef Name="price" />
+      <PropertyRef Name="Discount" />
+      <PropertyRef Name="Total" />
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="SalesID" Type="varchar" MaxLength="30" />
+    <Property Name="Description" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="ProID" Type="int" />
+    <Property Name="PDId" Type="int" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="price" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" Nullable="false" />
+    <Property Name="Total" Type="money" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sales">
+    <Key>
+      <PropertyRef Name="SalesId" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SalesId" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="InvoiceId" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="BillNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CusID" Type="int" />
+    <Property Name="TotalAmount" Type="money" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Discount" Type="money" Nullable="false" />
+    <Property Name="GrandTotal" Type="money" Nullable="false" />
+    <Property Name="PaidAmount" Type="money" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'INVENTORY_SYSTEM.dbo.salesitem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="salesitem">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Brand" />
+      <PropertyRef Name="SubBrand" />
+      <PropertyRef Name="Quantity" />
+      <PropertyRef Name="price" />
+      <PropertyRef Name="Discount" />
+      <PropertyRef Name="Total" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SalesID" Type="varchar" MaxLength="30" />
+    <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="SubBrand" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="ProID" Type="int" />
+    <Property Name="PDId" Type="int" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="price" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" Nullable="false" />
+    <Property Name="Total" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="salesledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Explanation" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Debit" Type="money" Nullable="false" />
+    <Property Name="Credit" Type="money" Nullable="false" />
+    <Property Name="Balance" Type="money" Nullable="false" />
+    <Property Name="CusID" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Subcategory">
+    <Key>
+      <PropertyRef Name="SubCatID" />
+    </Key>
+    <Property Name="SubCatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubCatname" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CatID" Type="int" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Company" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="userlog">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Activity" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="CNIC" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Role" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_BalancesheetCustomer">
+    <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
+    <End Role="salesledger" Type="Self.salesledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="salesledger">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BalancesheetSupplier">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="purchaseledger" Type="Self.purchaseledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchaseledger">
+        <PropertyRef Name="SupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProDetails">
+    <End Role="products" Type="Self.products" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="ProDetails">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSalesitem">
+    <End Role="products" Type="Self.products" Multiplicity="0..1" />
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsCat">
+    <End Role="category" Type="Self.category" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="products" Type="Self.products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="products">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsCatagory">
+    <End Role="category" Type="Self.category" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="Subcategory">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsSubCat">
+    <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="1" />
+    <End Role="products" Type="Self.products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subcategory">
+        <PropertyRef Name="SubCatID" />
+      </Principal>
+      <Dependent Role="products">
+        <PropertyRef Name="SubCatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchase_purchasesitem">
+    <End Role="purchase" Type="Self.purchase" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="purchase">
+        <PropertyRef Name="PurchaseId" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="PurchaseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchaseitemProDetails">
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchaseitemProduct">
+    <End Role="products" Type="Self.products" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReturneditemProduct">
+    <End Role="products" Type="Self.products" Multiplicity="0..1" />
+    <End Role="returneditems" Type="Self.returneditems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReturneditemSales">
+    <End Role="sales" Type="Self.sales" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="returneditems" Type="Self.returneditems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sales">
+        <PropertyRef Name="SalesId" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="SalesID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_returneditemsProDetails">
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="0..1" />
+    <End Role="returneditems" Type="Self.returneditems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesCustomer">
+    <End Role="customer" Type="Self.customer" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="sales" Type="Self.sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="sales">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesitemProDetails">
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="0..1" />
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesitemSales">
+    <End Role="sales" Type="Self.sales" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sales">
+        <PropertyRef Name="SalesId" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="SalesID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUser">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="purchase">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUsers">
+    <End Role="users" Type="Self.users" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="sales" Type="Self.sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="sales">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplierpurchase">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+    <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchase">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplierpurchaseitems">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserUserlog">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="userlog" Type="Self.userlog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="userlog">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="INVENTORY_SYSTEMModelStoreContainer">
+    <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProDetails" EntityType="Self.ProDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="products" EntityType="Self.products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="purchase" EntityType="Self.purchase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="purchaseledger" EntityType="Self.purchaseledger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sales" EntityType="Self.sales" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="salesledger" EntityType="Self.salesledger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Subcategory" EntityType="Self.Subcategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="userlog" EntityType="Self.userlog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="purchasesitem" EntityType="Self.purchasesitem" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [purchasesitem].[ID] AS [ID], 
+    [purchasesitem].[PurchaseId] AS [PurchaseId], 
+    [purchasesitem].[ProID] AS [ProID], 
+    [purchasesitem].[PDId] AS [PDId], 
+    [purchasesitem].[Quantity] AS [Quantity], 
+    [purchasesitem].[SupplierID] AS [SupplierID]
+    FROM [dbo].[purchasesitem] AS [purchasesitem]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="returneditems" EntityType="Self.returneditems" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [returneditems].[SalesID] AS [SalesID], 
+    [returneditems].[Description] AS [Description], 
+    [returneditems].[ProID] AS [ProID], 
+    [returneditems].[PDId] AS [PDId], 
+    [returneditems].[Quantity] AS [Quantity], 
+    [returneditems].[price] AS [price], 
+    [returneditems].[Discount] AS [Discount], 
+    [returneditems].[Total] AS [Total], 
+    [returneditems].[ID] AS [ID], 
+    [returneditems].[Date] AS [Date]
+    FROM [dbo].[returneditems] AS [returneditems]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="salesitem" EntityType="Self.salesitem" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [salesitem].[ID] AS [ID], 
+    [salesitem].[SalesID] AS [SalesID], 
+    [salesitem].[Brand] AS [Brand], 
+    [salesitem].[SubBrand] AS [SubBrand], 
+    [salesitem].[ProID] AS [ProID], 
+    [salesitem].[PDId] AS [PDId], 
+    [salesitem].[Quantity] AS [Quantity], 
+    [salesitem].[price] AS [price], 
+    [salesitem].[Discount] AS [Discount], 
+    [salesitem].[Total] AS [Total]
+    FROM [dbo].[salesitem] AS [salesitem]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_BalancesheetCustomer" Association="Self.FK_BalancesheetCustomer">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="salesledger" EntitySet="salesledger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BalancesheetSupplier" Association="Self.FK_BalancesheetSupplier">
+      <End Role="Supplier" EntitySet="Supplier" />
+      <End Role="purchaseledger" EntitySet="purchaseledger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProDetails" Association="Self.FK_ProDetails">
+      <End Role="products" EntitySet="products" />
+      <End Role="ProDetails" EntitySet="ProDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSalesitem" Association="Self.FK_ProductSalesitem">
+      <End Role="products" EntitySet="products" />
+      <End Role="salesitem" EntitySet="salesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsCat" Association="Self.FK_ProductsCat">
+      <End Role="category" EntitySet="category" />
+      <End Role="products" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsCatagory" Association="Self.FK_ProductsCatagory">
+      <End Role="category" EntitySet="category" />
+      <End Role="Subcategory" EntitySet="Subcategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsSubCat" Association="Self.FK_ProductsSubCat">
+      <End Role="Subcategory" EntitySet="Subcategory" />
+      <End Role="products" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchase_purchasesitem" Association="Self.FK_purchase_purchasesitem">
+      <End Role="purchase" EntitySet="purchase" />
+      <End Role="purchasesitem" EntitySet="purchasesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchaseitemProDetails" Association="Self.FK_purchaseitemProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="purchasesitem" EntitySet="purchasesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchaseitemProduct" Association="Self.FK_purchaseitemProduct">
+      <End Role="products" EntitySet="products" />
+      <End Role="purchasesitem" EntitySet="purchasesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReturneditemProduct" Association="Self.FK_ReturneditemProduct">
+      <End Role="products" EntitySet="products" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReturneditemSales" Association="Self.FK_ReturneditemSales">
+      <End Role="sales" EntitySet="sales" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_returneditemsProDetails" Association="Self.FK_returneditemsProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesCustomer" Association="Self.FK_SalesCustomer">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="sales" EntitySet="sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesitemProDetails" Association="Self.FK_SalesitemProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="salesitem" EntitySet="salesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesitemSales" Association="Self.FK_SalesitemSales">
+      <End Role="sales" EntitySet="sales" />
+      <End Role="salesitem" EntitySet="salesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUser" Association="Self.FK_SalesUser">
+      <End Role="users" EntitySet="users" />
+      <End Role="purchase" EntitySet="purchase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUsers" Association="Self.FK_SalesUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="sales" EntitySet="sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplierpurchase" Association="Self.FK_Supplierpurchase">
+      <End Role="Supplier" EntitySet="Supplier" />
+      <End Role="purchase" EntitySet="purchase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplierpurchaseitems" Association="Self.FK_Supplierpurchaseitems">
+      <End Role="Supplier" EntitySet="Supplier" />
+      <End Role="purchasesitem" EntitySet="purchasesitem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserUserlog" Association="Self.FK_UserUserlog">
+      <End Role="users" EntitySet="users" />
+      <End Role="userlog" EntitySet="userlog" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SmartInventoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CatID" />
+    </Key>
+    <Property Name="CatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Catname" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyName" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Balance" Type="money" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Balance" Type="money" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Ledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CusID" Type="int" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Description" Type="varchar" MaxLength="50" />
+    <Property Name="Debit" Type="money" />
+    <Property Name="Credit" Type="money" />
+    <Property Name="Balance" Type="money" />
+    <Property Name="CompID" Type="int" />
+  </EntityType>
+  <EntityType Name="PODetails">
+    <Key>
+      <PropertyRef Name="PODetail_Id" />
+    </Key>
+    <Property Name="PODetail_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="POID" Type="int" Nullable="false" />
+    <Property Name="PDID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="BatchNo" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProDetails">
+    <Key>
+      <PropertyRef Name="PDId" />
+    </Key>
+    <Property Name="PDId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProId" Type="int" />
+    <Property Name="ProductUnit" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="ProductType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Packing" Type="int" />
+    <Property Name="CostPrice" Type="money" />
+    <Property Name="UnitPrice" Type="money" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CatID" Type="int" />
+    <Property Name="SubCatID" Type="int" />
+    <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PurchaseOrderMaster">
+    <Key>
+      <PropertyRef Name="POID" />
+    </Key>
+    <Property Name="POID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="CompanyId" Type="int" />
+    <Property Name="BillNo" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SalesOrderMaster">
+    <Key>
+      <PropertyRef Name="SOID" />
+    </Key>
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="SOID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BillNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CusID" Type="int" />
+    <Property Name="TotalAmount" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" Nullable="false" />
+    <Property Name="GrandTotal" Type="money" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+  </EntityType>
+  <EntityType Name="SODetails">
+    <Key>
+      <PropertyRef Name="SODetail_Id" />
+    </Key>
+    <Property Name="SODetail_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SOID" Type="int" Nullable="false" />
+    <Property Name="PDID" Type="int" Nullable="false" />
+    <Property Name="S_Quantity" Type="int" Nullable="false" />
+    <Property Name="BatchIdNo" Type="varchar" MaxLength="20" />
+    <Property Name="U_price" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" Nullable="false" />
+    <Property Name="TotalPrice" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SubCategory">
+    <Key>
+      <PropertyRef Name="SubCatID" />
+    </Key>
+    <Property Name="SubCatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubCatname" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CatID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserLog">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Activity" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Contact" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="CNIC" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Role" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="IsActive" Type="bit" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'SmartInventory.dbo.ExtractTotalQuantity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="ExtractTotalQuantity">
+    <Key>
+      <PropertyRef Name="PDID" />
+    </Key>
+    <Property Name="PDID" Type="int" Nullable="false" />
+    <Property Name="TotalQuantity" Type="int" />
+  </EntityType>
+  <Association Name="FK_catpro">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_catsubcat">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="SubCategory">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_companyPOM">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="PurchaseOrderMaster">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ledger_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="Ledger">
+        <PropertyRef Name="CompID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ledger_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Ledger">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PDetails">
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="1" />
+    <End Role="PODetails" Type="Self.PODetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="PODetails">
+        <PropertyRef Name="PDID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PODetails">
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="1" />
+    <End Role="PODetails" Type="Self.PODetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseOrderMaster">
+        <PropertyRef Name="POID" />
+      </Principal>
+      <Dependent Role="PODetails">
+        <PropertyRef Name="POID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_proprodetails">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="ProDetails">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesCustomer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="SalesOrderMaster">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUser">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SalesOrderMaster">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SODetails">
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="SODetails" Type="Self.SODetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesOrderMaster">
+        <PropertyRef Name="SOID" />
+      </Principal>
+      <Dependent Role="SODetails">
+        <PropertyRef Name="SOID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SODetailsProDetails">
+    <End Role="ProDetails" Type="Self.ProDetails" Multiplicity="1" />
+    <End Role="SODetails" Type="Self.SODetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="SODetails">
+        <PropertyRef Name="PDID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_subcatpro">
+    <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubCategory">
+        <PropertyRef Name="SubCatID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="SubCatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_userPOM">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PurchaseOrderMaster">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserUserlog">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserLog">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SmartInventoryModelStoreContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ledger" EntityType="Self.Ledger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PODetails" EntityType="Self.PODetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProDetails" EntityType="Self.ProDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PurchaseOrderMaster" EntityType="Self.PurchaseOrderMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SalesOrderMaster" EntityType="Self.SalesOrderMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SODetails" EntityType="Self.SODetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubCategory" EntityType="Self.SubCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExtractTotalQuantity" EntityType="Self.ExtractTotalQuantity" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ExtractTotalQuantity].[PDID] AS [PDID], 
+    [ExtractTotalQuantity].[TotalQuantity] AS [TotalQuantity]
+    FROM [dbo].[ExtractTotalQuantity] AS [ExtractTotalQuantity]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_catpro" Association="Self.FK_catpro">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_catsubcat" Association="Self.FK_catsubcat">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="SubCategory" EntitySet="SubCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_companyPOM" Association="Self.FK_companyPOM">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ledger_Company" Association="Self.FK_Ledger_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Ledger" EntitySet="Ledger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ledger_Customer" Association="Self.FK_Ledger_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Ledger" EntitySet="Ledger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PDetails" Association="Self.FK_PDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="PODetails" EntitySet="PODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PODetails" Association="Self.FK_PODetails">
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMaster" />
+      <End Role="PODetails" EntitySet="PODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_proprodetails" Association="Self.FK_proprodetails">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ProDetails" EntitySet="ProDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesCustomer" Association="Self.FK_SalesCustomer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUser" Association="Self.FK_SalesUser">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SODetails" Association="Self.FK_SODetails">
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMaster" />
+      <End Role="SODetails" EntitySet="SODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SODetailsProDetails" Association="Self.FK_SODetailsProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="SODetails" EntitySet="SODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_subcatpro" Association="Self.FK_subcatpro">
+      <End Role="SubCategory" EntitySet="SubCategory" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_userPOM" Association="Self.FK_userPOM">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserUserlog" Association="Self.FK_UserUserlog">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserLog" EntitySet="UserLog" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
