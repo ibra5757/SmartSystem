@@ -1,0 +1,611 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="INVENTORY_SYSTEMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="CatID" />
+    </Key>
+    <Property Name="CatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Catname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="products" Relationship="Self.FK_ProductsCat" FromRole="category" ToRole="products" />
+    <NavigationProperty Name="Subcategories" Relationship="Self.FK_ProductsCatagory" FromRole="category" ToRole="Subcategory" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="salesledgers" Relationship="Self.FK_BalancesheetCustomer" FromRole="customer" ToRole="salesledger" />
+    <NavigationProperty Name="sales" Relationship="Self.FK_SalesCustomer" FromRole="customer" ToRole="sales" />
+  </EntityType>
+  <EntityType Name="ProDetail">
+    <Key>
+      <PropertyRef Name="PDId" />
+    </Key>
+    <Property Name="PDId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProUnit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProId" Type="Int32" />
+    <Property Name="BatchId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Packing" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="U_Price" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="product" Relationship="Self.FK_ProDetails" FromRole="ProDetails" ToRole="products" />
+    <NavigationProperty Name="purchasesitems" Relationship="Self.FK_purchaseitemProDetails" FromRole="ProDetails" ToRole="purchasesitem" />
+    <NavigationProperty Name="returneditems" Relationship="Self.FK_returneditemsProDetails" FromRole="ProDetails" ToRole="returneditems" />
+    <NavigationProperty Name="salesitems" Relationship="Self.FK_SalesitemProDetails" FromRole="ProDetails" ToRole="salesitem" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TotalQuatity" Type="Int32" Nullable="false" />
+    <Property Name="CatID" Type="Int32" Nullable="false" />
+    <Property Name="SubCatID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="category" Relationship="Self.FK_ProductsCat" FromRole="products" ToRole="category" />
+    <NavigationProperty Name="ProDetails" Relationship="Self.FK_ProDetails" FromRole="products" ToRole="ProDetails" />
+    <NavigationProperty Name="salesitems" Relationship="Self.FK_ProductSalesitem" FromRole="products" ToRole="salesitem" />
+    <NavigationProperty Name="Subcategory" Relationship="Self.FK_ProductsSubCat" FromRole="products" ToRole="Subcategory" />
+    <NavigationProperty Name="purchasesitems" Relationship="Self.FK_purchaseitemProduct" FromRole="products" ToRole="purchasesitem" />
+    <NavigationProperty Name="returneditems" Relationship="Self.FK_ReturneditemProduct" FromRole="products" ToRole="returneditems" />
+  </EntityType>
+  <EntityType Name="purchase">
+    <Key>
+      <PropertyRef Name="PurchaseId" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PurchaseId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="SupplierID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="purchasesitems" Relationship="Self.FK_purchase_purchasesitem" FromRole="purchase" ToRole="purchasesitem" />
+    <NavigationProperty Name="user" Relationship="Self.FK_SalesUser" FromRole="purchase" ToRole="users" />
+    <NavigationProperty Name="Supplier" Relationship="Self.FK_Supplierpurchase" FromRole="purchase" ToRole="Supplier" />
+  </EntityType>
+  <EntityType Name="purchaseledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Explanation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Debit" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Credit" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="SupID" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Supplier" Relationship="Self.FK_BalancesheetSupplier" FromRole="purchaseledger" ToRole="Supplier" />
+  </EntityType>
+  <EntityType Name="sale">
+    <Key>
+      <PropertyRef Name="SalesId" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SalesId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="InvoiceId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BillNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CusID" Type="Int32" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="GrandTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="UserID" Type="Int32" />
+    <NavigationProperty Name="customer" Relationship="Self.FK_SalesCustomer" FromRole="sales" ToRole="customer" />
+    <NavigationProperty Name="returneditems" Relationship="Self.FK_ReturneditemSales" FromRole="sales" ToRole="returneditems" />
+    <NavigationProperty Name="salesitems" Relationship="Self.FK_SalesitemSales" FromRole="sales" ToRole="salesitem" />
+    <NavigationProperty Name="user" Relationship="Self.FK_SalesUsers" FromRole="sales" ToRole="users" />
+  </EntityType>
+  <EntityType Name="salesledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Explanation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Debit" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Credit" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="CusID" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="customer" Relationship="Self.FK_BalancesheetCustomer" FromRole="salesledger" ToRole="customer" />
+  </EntityType>
+  <EntityType Name="Subcategory">
+    <Key>
+      <PropertyRef Name="SubCatID" />
+    </Key>
+    <Property Name="SubCatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubCatname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CatID" Type="Int32" />
+    <NavigationProperty Name="category" Relationship="Self.FK_ProductsCatagory" FromRole="Subcategory" ToRole="category" />
+    <NavigationProperty Name="products" Relationship="Self.FK_ProductsSubCat" FromRole="Subcategory" ToRole="products" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Company" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="purchases" Relationship="Self.FK_Supplierpurchase" FromRole="Supplier" ToRole="purchase" />
+    <NavigationProperty Name="purchaseledgers" Relationship="Self.FK_BalancesheetSupplier" FromRole="Supplier" ToRole="purchaseledger" />
+    <NavigationProperty Name="purchasesitems" Relationship="Self.FK_Supplierpurchaseitems" FromRole="Supplier" ToRole="purchasesitem" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="userlog">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Activity" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="user" Relationship="Self.FK_UserUserlog" FromRole="userlog" ToRole="users" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="purchases" Relationship="Self.FK_SalesUser" FromRole="users" ToRole="purchase" />
+    <NavigationProperty Name="sales" Relationship="Self.FK_SalesUsers" FromRole="users" ToRole="sales" />
+    <NavigationProperty Name="userlogs" Relationship="Self.FK_UserUserlog" FromRole="users" ToRole="userlog" />
+  </EntityType>
+  <EntityType Name="purchasesitem">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Quantity" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PurchaseId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ProID" Type="Int32" />
+    <Property Name="PDId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="SupplierID" Type="Int32" />
+    <NavigationProperty Name="ProDetail" Relationship="Self.FK_purchaseitemProDetails" FromRole="purchasesitem" ToRole="ProDetails" />
+    <NavigationProperty Name="product" Relationship="Self.FK_purchaseitemProduct" FromRole="purchasesitem" ToRole="products" />
+    <NavigationProperty Name="purchase" Relationship="Self.FK_purchase_purchasesitem" FromRole="purchasesitem" ToRole="purchase" />
+    <NavigationProperty Name="Supplier" Relationship="Self.FK_Supplierpurchaseitems" FromRole="purchasesitem" ToRole="Supplier" />
+  </EntityType>
+  <EntityType Name="returneditem">
+    <Key>
+      <PropertyRef Name="Description" />
+      <PropertyRef Name="Quantity" />
+      <PropertyRef Name="price" />
+      <PropertyRef Name="Discount" />
+      <PropertyRef Name="Total" />
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="SalesID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProID" Type="Int32" />
+    <Property Name="PDId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Total" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ProDetail" Relationship="Self.FK_returneditemsProDetails" FromRole="returneditems" ToRole="ProDetails" />
+    <NavigationProperty Name="product" Relationship="Self.FK_ReturneditemProduct" FromRole="returneditems" ToRole="products" />
+    <NavigationProperty Name="sale" Relationship="Self.FK_ReturneditemSales" FromRole="returneditems" ToRole="sales" />
+  </EntityType>
+  <EntityType Name="salesitem">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Brand" />
+      <PropertyRef Name="SubBrand" />
+      <PropertyRef Name="Quantity" />
+      <PropertyRef Name="price" />
+      <PropertyRef Name="Discount" />
+      <PropertyRef Name="Total" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SalesID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Brand" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SubBrand" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProID" Type="Int32" />
+    <Property Name="PDId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Total" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="ProDetail" Relationship="Self.FK_SalesitemProDetails" FromRole="salesitem" ToRole="ProDetails" />
+    <NavigationProperty Name="product" Relationship="Self.FK_ProductSalesitem" FromRole="salesitem" ToRole="products" />
+    <NavigationProperty Name="sale" Relationship="Self.FK_SalesitemSales" FromRole="salesitem" ToRole="sales" />
+  </EntityType>
+  <Association Name="FK_ProductsCat">
+    <End Role="category" Type="Self.category" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="products" Type="Self.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="products">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsCatagory">
+    <End Role="category" Type="Self.category" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="Subcategory">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BalancesheetCustomer">
+    <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
+    <End Role="salesledger" Type="Self.salesledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="salesledger">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesCustomer">
+    <End Role="customer" Type="Self.customer" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="sales" Type="Self.sale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="sales">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProDetails">
+    <End Role="products" Type="Self.product" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="ProDetails">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchaseitemProDetails">
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_returneditemsProDetails">
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="0..1" />
+    <End Role="returneditems" Type="Self.returneditem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesitemProDetails">
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="0..1" />
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="PDId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSalesitem">
+    <End Role="products" Type="Self.product" Multiplicity="0..1" />
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsSubCat">
+    <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="1" />
+    <End Role="products" Type="Self.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subcategory">
+        <PropertyRef Name="SubCatID" />
+      </Principal>
+      <Dependent Role="products">
+        <PropertyRef Name="SubCatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchaseitemProduct">
+    <End Role="products" Type="Self.product" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReturneditemProduct">
+    <End Role="products" Type="Self.product" Multiplicity="0..1" />
+    <End Role="returneditems" Type="Self.returneditem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_purchase_purchasesitem">
+    <End Role="purchase" Type="Self.purchase" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="purchase">
+        <PropertyRef Name="PurchaseId" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="PurchaseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUser">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="purchase">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplierpurchase">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+    <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchase">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BalancesheetSupplier">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="purchaseledger" Type="Self.purchaseledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchaseledger">
+        <PropertyRef Name="SupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReturneditemSales">
+    <End Role="sales" Type="Self.sale" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="returneditems" Type="Self.returneditem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sales">
+        <PropertyRef Name="SalesId" />
+      </Principal>
+      <Dependent Role="returneditems">
+        <PropertyRef Name="SalesID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesitemSales">
+    <End Role="sales" Type="Self.sale" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="salesitem" Type="Self.salesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sales">
+        <PropertyRef Name="SalesId" />
+      </Principal>
+      <Dependent Role="salesitem">
+        <PropertyRef Name="SalesID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUsers">
+    <End Role="users" Type="Self.user" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="sales" Type="Self.sale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="sales">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplierpurchaseitems">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="purchasesitem" Type="Self.purchasesitem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="purchasesitem">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserUserlog">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="userlog" Type="Self.userlog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="userlog">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="INVENTORY_SYSTEMEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="customers" EntityType="Self.customer" />
+    <EntitySet Name="ProDetails" EntityType="Self.ProDetail" />
+    <EntitySet Name="products" EntityType="Self.product" />
+    <EntitySet Name="purchases" EntityType="Self.purchase" />
+    <EntitySet Name="purchaseledgers" EntityType="Self.purchaseledger" />
+    <EntitySet Name="sales" EntityType="Self.sale" />
+    <EntitySet Name="salesledgers" EntityType="Self.salesledger" />
+    <EntitySet Name="Subcategories" EntityType="Self.Subcategory" />
+    <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="userlogs" EntityType="Self.userlog" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <EntitySet Name="purchasesitems" EntityType="Self.purchasesitem" />
+    <EntitySet Name="returneditems" EntityType="Self.returneditem" />
+    <EntitySet Name="salesitems" EntityType="Self.salesitem" />
+    <AssociationSet Name="FK_ProductsCat" Association="Self.FK_ProductsCat">
+      <End Role="category" EntitySet="categories" />
+      <End Role="products" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsCatagory" Association="Self.FK_ProductsCatagory">
+      <End Role="category" EntitySet="categories" />
+      <End Role="Subcategory" EntitySet="Subcategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BalancesheetCustomer" Association="Self.FK_BalancesheetCustomer">
+      <End Role="customer" EntitySet="customers" />
+      <End Role="salesledger" EntitySet="salesledgers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesCustomer" Association="Self.FK_SalesCustomer">
+      <End Role="customer" EntitySet="customers" />
+      <End Role="sales" EntitySet="sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProDetails" Association="Self.FK_ProDetails">
+      <End Role="products" EntitySet="products" />
+      <End Role="ProDetails" EntitySet="ProDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchaseitemProDetails" Association="Self.FK_purchaseitemProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="purchasesitem" EntitySet="purchasesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_returneditemsProDetails" Association="Self.FK_returneditemsProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesitemProDetails" Association="Self.FK_SalesitemProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="salesitem" EntitySet="salesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSalesitem" Association="Self.FK_ProductSalesitem">
+      <End Role="products" EntitySet="products" />
+      <End Role="salesitem" EntitySet="salesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsSubCat" Association="Self.FK_ProductsSubCat">
+      <End Role="Subcategory" EntitySet="Subcategories" />
+      <End Role="products" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchaseitemProduct" Association="Self.FK_purchaseitemProduct">
+      <End Role="products" EntitySet="products" />
+      <End Role="purchasesitem" EntitySet="purchasesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReturneditemProduct" Association="Self.FK_ReturneditemProduct">
+      <End Role="products" EntitySet="products" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_purchase_purchasesitem" Association="Self.FK_purchase_purchasesitem">
+      <End Role="purchase" EntitySet="purchases" />
+      <End Role="purchasesitem" EntitySet="purchasesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUser" Association="Self.FK_SalesUser">
+      <End Role="users" EntitySet="users" />
+      <End Role="purchase" EntitySet="purchases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplierpurchase" Association="Self.FK_Supplierpurchase">
+      <End Role="Supplier" EntitySet="Suppliers" />
+      <End Role="purchase" EntitySet="purchases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BalancesheetSupplier" Association="Self.FK_BalancesheetSupplier">
+      <End Role="Supplier" EntitySet="Suppliers" />
+      <End Role="purchaseledger" EntitySet="purchaseledgers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReturneditemSales" Association="Self.FK_ReturneditemSales">
+      <End Role="sales" EntitySet="sales" />
+      <End Role="returneditems" EntitySet="returneditems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesitemSales" Association="Self.FK_SalesitemSales">
+      <End Role="sales" EntitySet="sales" />
+      <End Role="salesitem" EntitySet="salesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUsers" Association="Self.FK_SalesUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="sales" EntitySet="sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplierpurchaseitems" Association="Self.FK_Supplierpurchaseitems">
+      <End Role="Supplier" EntitySet="Suppliers" />
+      <End Role="purchasesitem" EntitySet="purchasesitems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserUserlog" Association="Self.FK_UserUserlog">
+      <End Role="users" EntitySet="users" />
+      <End Role="userlog" EntitySet="userlogs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

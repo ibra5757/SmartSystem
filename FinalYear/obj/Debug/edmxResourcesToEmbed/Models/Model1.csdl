@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SmartInventoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CatID" />
+    </Key>
+    <Property Name="CatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Catname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_catpro" FromRole="Category" ToRole="Products" />
+    <NavigationProperty Name="SubCategories" Relationship="Self.FK_catsubcat" FromRole="Category" ToRole="SubCategory" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PurchaseOrderMasters" Relationship="Self.FK_companyPOM" FromRole="Company" ToRole="PurchaseOrderMaster" />
+    <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_Company" FromRole="Company" ToRole="Ledger" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_Customer" FromRole="Customer" ToRole="Ledger" />
+    <NavigationProperty Name="SalesOrderMasters" Relationship="Self.FK_SalesCustomer" FromRole="Customer" ToRole="SalesOrderMaster" />
+  </EntityType>
+  <EntityType Name="Ledger">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Debit" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Credit" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CompID" Type="Int32" />
+    <NavigationProperty Name="Company" Relationship="Self.FK_Ledger_Company" FromRole="Ledger" ToRole="Company" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_Ledger_Customer" FromRole="Ledger" ToRole="Customer" />
+  </EntityType>
+  <EntityType Name="PODetail">
+    <Key>
+      <PropertyRef Name="PODetail_Id" />
+    </Key>
+    <Property Name="PODetail_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="POID" Type="Int32" Nullable="false" />
+    <Property Name="PDID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="BatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="ProDetail" Relationship="Self.FK_PDetails" FromRole="PODetails" ToRole="ProDetails" />
+    <NavigationProperty Name="PurchaseOrderMaster" Relationship="Self.FK_PODetails" FromRole="PODetails" ToRole="PurchaseOrderMaster" />
+  </EntityType>
+  <EntityType Name="ProDetail">
+    <Key>
+      <PropertyRef Name="PDId" />
+    </Key>
+    <Property Name="PDId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProId" Type="Int32" />
+    <Property Name="ProductUnit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Packing" Type="Int32" />
+    <Property Name="CostPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PODetails" Relationship="Self.FK_PDetails" FromRole="ProDetails" ToRole="PODetails" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_proprodetails" FromRole="ProDetails" ToRole="Products" />
+    <NavigationProperty Name="SODetails" Relationship="Self.FK_SODetailsProDetails" FromRole="ProDetails" ToRole="SODetails" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CatID" Type="Int32" />
+    <Property Name="SubCatID" Type="Int32" />
+    <Property Name="Code" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Category" Relationship="Self.FK_catpro" FromRole="Products" ToRole="Category" />
+    <NavigationProperty Name="ProDetails" Relationship="Self.FK_proprodetails" FromRole="Products" ToRole="ProDetails" />
+    <NavigationProperty Name="SubCategory" Relationship="Self.FK_subcatpro" FromRole="Products" ToRole="SubCategory" />
+  </EntityType>
+  <EntityType Name="PurchaseOrderMaster">
+    <Key>
+      <PropertyRef Name="POID" />
+    </Key>
+    <Property Name="POID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="CompanyId" Type="Int32" />
+    <Property Name="BillNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Company" Relationship="Self.FK_companyPOM" FromRole="PurchaseOrderMaster" ToRole="Company" />
+    <NavigationProperty Name="PODetails" Relationship="Self.FK_PODetails" FromRole="PurchaseOrderMaster" ToRole="PODetails" />
+    <NavigationProperty Name="User" Relationship="Self.FK_userPOM" FromRole="PurchaseOrderMaster" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="SalesOrderMaster">
+    <Key>
+      <PropertyRef Name="SOID" />
+    </Key>
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="SOID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BillNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CusID" Type="Int32" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="GrandTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="UserID" Type="Int32" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_SalesCustomer" FromRole="SalesOrderMaster" ToRole="Customer" />
+    <NavigationProperty Name="User" Relationship="Self.FK_SalesUser" FromRole="SalesOrderMaster" ToRole="Users" />
+    <NavigationProperty Name="SODetails" Relationship="Self.FK_SODetails" FromRole="SalesOrderMaster" ToRole="SODetails" />
+  </EntityType>
+  <EntityType Name="SODetail">
+    <Key>
+      <PropertyRef Name="SODetail_Id" />
+    </Key>
+    <Property Name="SODetail_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SOID" Type="Int32" Nullable="false" />
+    <Property Name="PDID" Type="Int32" Nullable="false" />
+    <Property Name="S_Quantity" Type="Int32" Nullable="false" />
+    <Property Name="BatchIdNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="U_price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="ProDetail" Relationship="Self.FK_SODetailsProDetails" FromRole="SODetails" ToRole="ProDetails" />
+    <NavigationProperty Name="SalesOrderMaster" Relationship="Self.FK_SODetails" FromRole="SODetails" ToRole="SalesOrderMaster" />
+  </EntityType>
+  <EntityType Name="SubCategory">
+    <Key>
+      <PropertyRef Name="SubCatID" />
+    </Key>
+    <Property Name="SubCatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubCatname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CatID" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Category" Relationship="Self.FK_catsubcat" FromRole="SubCategory" ToRole="Category" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_subcatpro" FromRole="SubCategory" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="UserLog">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Activity" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK_UserUserlog" FromRole="UserLog" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contact" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsActive" Type="Boolean" />
+    <NavigationProperty Name="PurchaseOrderMasters" Relationship="Self.FK_userPOM" FromRole="Users" ToRole="PurchaseOrderMaster" />
+    <NavigationProperty Name="SalesOrderMasters" Relationship="Self.FK_SalesUser" FromRole="Users" ToRole="SalesOrderMaster" />
+    <NavigationProperty Name="UserLogs" Relationship="Self.FK_UserUserlog" FromRole="Users" ToRole="UserLog" />
+  </EntityType>
+  <EntityType Name="ExtractTotalQuantity">
+    <Key>
+      <PropertyRef Name="PDID" />
+    </Key>
+    <Property Name="PDID" Type="Int32" Nullable="false" />
+    <Property Name="TotalQuantity" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_catpro">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_catsubcat">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CatID" />
+      </Principal>
+      <Dependent Role="SubCategory">
+        <PropertyRef Name="CatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_companyPOM">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="PurchaseOrderMaster">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ledger_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="Ledger">
+        <PropertyRef Name="CompID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ledger_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Ledger">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesCustomer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="SalesOrderMaster">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PDetails">
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="1" />
+    <End Role="PODetails" Type="Self.PODetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="PODetails">
+        <PropertyRef Name="PDID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PODetails">
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="1" />
+    <End Role="PODetails" Type="Self.PODetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseOrderMaster">
+        <PropertyRef Name="POID" />
+      </Principal>
+      <Dependent Role="PODetails">
+        <PropertyRef Name="POID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_proprodetails">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="ProDetails">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SODetailsProDetails">
+    <End Role="ProDetails" Type="Self.ProDetail" Multiplicity="1" />
+    <End Role="SODetails" Type="Self.SODetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProDetails">
+        <PropertyRef Name="PDId" />
+      </Principal>
+      <Dependent Role="SODetails">
+        <PropertyRef Name="PDID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_subcatpro">
+    <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubCategory">
+        <PropertyRef Name="SubCatID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="SubCatID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_userPOM">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="PurchaseOrderMaster" Type="Self.PurchaseOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PurchaseOrderMaster">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SalesUser">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SalesOrderMaster">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SODetails">
+    <End Role="SalesOrderMaster" Type="Self.SalesOrderMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="SODetails" Type="Self.SODetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesOrderMaster">
+        <PropertyRef Name="SOID" />
+      </Principal>
+      <Dependent Role="SODetails">
+        <PropertyRef Name="SOID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserUserlog">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserLog">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SmartInventoryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Companies" EntityType="Self.Company" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Ledgers" EntityType="Self.Ledger" />
+    <EntitySet Name="PODetails" EntityType="Self.PODetail" />
+    <EntitySet Name="ProDetails" EntityType="Self.ProDetail" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="PurchaseOrderMasters" EntityType="Self.PurchaseOrderMaster" />
+    <EntitySet Name="SalesOrderMasters" EntityType="Self.SalesOrderMaster" />
+    <EntitySet Name="SODetails" EntityType="Self.SODetail" />
+    <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
+    <EntitySet Name="UserLogs" EntityType="Self.UserLog" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="ExtractTotalQuantities" EntityType="Self.ExtractTotalQuantity" />
+    <AssociationSet Name="FK_catpro" Association="Self.FK_catpro">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_catsubcat" Association="Self.FK_catsubcat">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="SubCategory" EntitySet="SubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_companyPOM" Association="Self.FK_companyPOM">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ledger_Company" Association="Self.FK_Ledger_Company">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Ledger" EntitySet="Ledgers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ledger_Customer" Association="Self.FK_Ledger_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Ledger" EntitySet="Ledgers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesCustomer" Association="Self.FK_SalesCustomer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PDetails" Association="Self.FK_PDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="PODetails" EntitySet="PODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PODetails" Association="Self.FK_PODetails">
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMasters" />
+      <End Role="PODetails" EntitySet="PODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_proprodetails" Association="Self.FK_proprodetails">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ProDetails" EntitySet="ProDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SODetailsProDetails" Association="Self.FK_SODetailsProDetails">
+      <End Role="ProDetails" EntitySet="ProDetails" />
+      <End Role="SODetails" EntitySet="SODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_subcatpro" Association="Self.FK_subcatpro">
+      <End Role="SubCategory" EntitySet="SubCategories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_userPOM" Association="Self.FK_userPOM">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PurchaseOrderMaster" EntitySet="PurchaseOrderMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SalesUser" Association="Self.FK_SalesUser">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SODetails" Association="Self.FK_SODetails">
+      <End Role="SalesOrderMaster" EntitySet="SalesOrderMasters" />
+      <End Role="SODetails" EntitySet="SODetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserUserlog" Association="Self.FK_UserUserlog">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserLog" EntitySet="UserLogs" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+</Schema>
