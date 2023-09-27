@@ -7,7 +7,9 @@ namespace FinalYear.Models
 {
     public class PredictedValue
     {
-        public List<double> Predictions { get; set; }
+        public string Predictions { get; set; }
+        public string type { get; set; }
+
     }
 
 }
